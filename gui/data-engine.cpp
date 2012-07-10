@@ -7,9 +7,7 @@ DataEngine::DataEngine(QObject *parent) :
     dbus_error_init(&err);
 
     // connect to the DBUS system bus, and check for errors
-    //conn = dbus_bus_get(DBUS_BUS_SYSTEM, &err);
-    conn = dbus_connection_open("tcp:host=10.162.242.236,port=0",&err);
-    dbus_bus_register(conn, &err);
+    conn = dbus_bus_get(DBUS_BUS_SYSTEM, &err);
     if (dbus_error_is_set(&err)) {
         log_message( "GUI: DATA-ENGINE: Connection Error (%s)\n", err.message);
         dbus_error_free(&err);
