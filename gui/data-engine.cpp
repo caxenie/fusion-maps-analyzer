@@ -66,7 +66,7 @@ void DataEngine::send_method_call(const char *param)
     }
 
     // send message and get a handle for a reply
-    if (!dbus_connection_send_with_reply (conn, msg, &pending, DATA_REQ_FREQ)) { // -1 is default timeout
+    if (!dbus_connection_send_with_reply (conn, msg, &pending, -1)) { // -1 is default timeout
         log_message( "GUI: DATA-ENGINE: METHOD CALLS: Out Of Memory!: %s\n", "send_method_call");
         exit(EXIT_FAILURE);
     }
@@ -85,7 +85,7 @@ void DataEngine::send_method_call(const char *param)
    dbus_pending_call_block(pending);
 
     // get the reply message
-    msg = dbus_pending_call_steal_reply(pending);
+   msg = dbus_pending_call_steal_reply(pending);
     if (NULL == msg) {
         log_message( "GUI: DATA-ENGINE: METHOD CALLS: Reply Null: %s\n", "send_method_call");
         exit(EXIT_FAILURE);

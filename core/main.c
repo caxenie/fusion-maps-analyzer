@@ -329,9 +329,6 @@ main (int argc, char **argv)
 
         }
 
-
-       usleep(200000); // 500ms
-
         log_message
                 ("===================================================================%s\n",
                  "=");
@@ -363,6 +360,9 @@ main (int argc, char **argv)
 
             }
         }
+
+        // sync with analyzer
+        usleep(100000); // 100ms
 
     }
     return 0;

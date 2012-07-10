@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <qobject.h>
+#include <time.h>
 
 #define SERVER_BUS_NAME 			"org.fusionmaps.network"
 #define CLIENT_BUS_NAME 			"org.fusionmaps.visualizer"
@@ -23,7 +24,7 @@
 #define MAPS_NUM    6
 #define ERR_NUM     8
 
-#define DATA_REQ_FREQ    1000   //ms
+#define DATA_REQ_FREQ    200   //ms
 
 #define VERBOSE 0
 
