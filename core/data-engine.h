@@ -23,6 +23,8 @@
 #define SIGNAL4 "update_user_data_changed"
 
 #define MAPS_NUM 6
+#define SYNC_DATA  100000 // us
+
 /* thread id for data engine thread */
 pthread_t data_engine_thread;
 /* connection to the DBus system bus */

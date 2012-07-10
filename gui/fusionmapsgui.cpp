@@ -681,6 +681,8 @@ void FusionMapsGui::update_visuals()
     s.sprintf("%.4f", this->data_engine->map_err[7]);
     ui->err_r3_val6->setText("Error value with respect to R3:  " + s);
 
+    QApplication::processEvents(QEventLoop::ExcludeUserInputEvents, DATA_REQ_FREQ);
+
 }
 
 void FusionMapsGui::send_data_request()

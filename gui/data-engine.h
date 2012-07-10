@@ -24,7 +24,7 @@
 #define MAPS_NUM    6
 #define ERR_NUM     8
 
-#define DATA_REQ_FREQ    200   //ms
+#define DATA_REQ_FREQ    500   //ms
 
 #define VERBOSE 0
 

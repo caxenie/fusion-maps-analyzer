@@ -362,7 +362,7 @@ main (int argc, char **argv)
         }
 
         // sync with analyzer
-        usleep(100000); // 100ms
+        usleep(SYNC_DATA);
 
     }
     return 0;
