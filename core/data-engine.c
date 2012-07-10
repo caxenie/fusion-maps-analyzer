@@ -16,7 +16,7 @@ void init_system_bus_connection()
    
    // connect to the bus and check for errors
    conn = dbus_bus_get(DBUS_BUS_SYSTEM, &err);
-   if (dbus_error_is_set(&err)) { 
+   if (dbus_error_is_set(&err)) {
       printf("CORE: DATA-ENGINE: Connection Error (%s)\n", err.message);
       dbus_error_free(&err); 
    }

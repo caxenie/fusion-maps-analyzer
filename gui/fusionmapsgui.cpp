@@ -753,6 +753,9 @@ void FusionMapsGui::on_actionRestart_triggered()
 {
     this->data_engine->running = 0;
     kill(net_pid, SIGUSR1);
+    /* start timer to get data from the net process */
+    this->dbus_timer->start(DATA_REQ_FREQ);
+    this->data_engine->running =1;
 }
 
 void FusionMapsGui::on_actionStop_triggered()

@@ -95,7 +95,7 @@ resume_network()
 void 
 restart_network()
 {
-	siglongjmp(jmpbuf,2);
+    siglongjmp(jmpbuf, 2);
 }
 
 /* stops the network by exiting the main loop */

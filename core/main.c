@@ -7,7 +7,7 @@
 #include "data-engine.h"
 #include "core.h"
 
-short g_verbose = 0;
+short g_verbose = 1;
 
 #define log_message(format,args...) \
     do{ \
@@ -19,14 +19,7 @@ short g_verbose = 0;
 int
 main (int argc, char **argv)
 {
-    /* non local goto for self-restarting */
-    if(sigsetjmp(jmpbuf,1)) {
-        fprintf(stderr, "\nCORE: RESTARTED NETWORK\n");
-    }
-
     /* register signals */
-
-    /* SIGSTOP - pauses the network */
     signal(SIGCONT, resume_network);
     signal(SIGUSR1, restart_network);
     signal(SIGTERM, stop_network);
@@ -47,26 +40,24 @@ main (int argc, char **argv)
     M6 = init_map (6, 1, MAP_1D);
 
     E1 = (double *) calloc (MAP_1D, sizeof (double));
-    E2 = (double *) calloc (2, sizeof (double));
+    E2 = (double *) calloc (MAP_2D, sizeof (double));
     E3 = (double *) calloc (MAP_1D, sizeof (double));
-    E4 = (double *) calloc (2, sizeof (double));
+    E4 = (double *) calloc (MAP_2D, sizeof (double));
     E5 = (double *) calloc (MAP_1D, sizeof (double));
     E6 = (double *) calloc (MAP_1D, sizeof (double));
 
-    E1[0] = randomize();
-    E2[0] = randomize();
-    E2[1] = randomize();
-    E3[0] = randomize();
-    E4[0] = randomize();
-    E4[1] = randomize();
-    E5[0] = randomize();
-    E6[0] = randomize();
+    E1[0] = 0.0;
+    E2[0] = 0.0;
+    E2[1] = 0.0;
+    E3[0] = 0.0;
+    E4[0] = 0.0;
+    E4[1] = 0.0;
+    E5[0] = 0.0;
+    E6[0] = 0.0;
 
     e1 = 0, e2 = 0, e3 = 0, e4 = 0, e5 = 0, e6 = 0;
 
     double M1ant = 0.0f, M2ant = 0.0f, M3ant = 0.0f, M4ant = 0.0f, M5ant = 0.0f, M6ant = 0.0f;
-
-    srand (time (NULL));
 
     /* starts the data transfer engine */
     start_data_transfer_engine();
@@ -74,6 +65,25 @@ main (int argc, char **argv)
     /* loop the network */
     while (1)
     {
+        /* non local goto for self-restarting */
+        if(sigsetjmp(jmpbuf, 2)) {
+            fprintf(stderr, "\nCORE: RESTARTED NETWORK\n");
+            srand (time (NULL));
+            rand_map = 0;
+            for(int i=0;i<MAPS_NUM+1;i++){
+                    update_state[i] = 0;
+            }
+            M1 = init_map (1, 1, MAP_1D);
+            M2 = init_map (2, 1, MAP_1D);
+            M3 = init_map (3, 1, MAP_1D);
+            M4 = init_map (4, 1, MAP_1D);
+            M5 = init_map (5, 1, MAP_1D);
+            M6 = init_map (6, 1, MAP_1D);
+
+            E1[0] = 0.0; E2[0] = 0.0; E2[1] = 0.0; E3[0] = 0.0; E4[0] = 0.0; E4[1] = 0.0; E5[0] = 0.0; E6[0] = 0.0;
+            e1 = 0, e2 = 0, e3 = 0, e4 = 0, e5 = 0, e6 = 0;
+            M1ant = 0.0f, M2ant = 0.0f, M3ant = 0.0f, M4ant = 0.0f, M5ant = 0.0f, M6ant = 0.0f;
+        }
 
         /*
           The relationships hardcoded in the network:

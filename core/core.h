@@ -58,7 +58,7 @@ double *E1, *E2, *E3, *E4, *E4, *E5, *E6;
 /* error marking how close is a map to the good value */
 double e1, e2, e3, e4, e5, e6;
 /* for self-restarting the app */
-static sigjmp_buf jmpbuf;
+sigjmp_buf jmpbuf;
 
 /* random number generator */
 double randomize();
