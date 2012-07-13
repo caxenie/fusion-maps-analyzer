@@ -25,6 +25,7 @@
 
 #define MAPS_NUM 6
 #define SYNC_DATA  100000 // us
+#define US_TO_MS 1000
 
 /* thread id for data engine thread */
 pthread_t data_engine_thread;
