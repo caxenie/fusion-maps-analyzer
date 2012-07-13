@@ -11,6 +11,7 @@
 #include <pthread.h>
 #include <dbus/dbus.h>
 #include <string.h>
+#include <signal.h>
 
 #define SERVER_BUS_NAME 			"org.fusionmaps.network"
 #define SERVER_SIGNAL_INTERFACE 	"org.fusionmaps.signals"
@@ -18,7 +19,7 @@
 
 #define METHOD1 "update_values"
 #define SIGNAL1 "sensor_data_connected" 
-#define SIGNAL2 "update_sensor_rate_changed"
+#define SIGNAL2 "update_rate_changed"
 #define SIGNAL3 "user_data_connected"
 #define SIGNAL4 "update_user_data_changed"
 
@@ -36,7 +37,9 @@ DBusError err;
 int user_connected[MAPS_NUM+1];
 int sensor_connected[MAPS_NUM+1];
 /* stores the data update rate for sensors */
-double update_rate[MAPS_NUM+1];
+double update_rate_sensor[MAPS_NUM+1];
+/* stores the data update rate for user data */
+double update_rate_user[MAPS_NUM+1];
 /* stores the data from the user */
 double user_data[MAPS_NUM+1];
 /* stores the data from the connected sensor */
@@ -59,3 +62,20 @@ void* data_engine_functionality(void *data);
 void start_data_transfer_engine();
 /* cancel the data engine thread */
 void cancel_data_transfer_engine();
+/*
+  signal handler for the timers when capturing the SIGRTMIN signal.
+  the function takes a pointer to a timer_t variable that will be filled with the timer ID created by timer_create().  .
+  this pointer is also saved in the sival_ptr variable right before calling timer_create().
+  in this function notice that we always use the SIGRTMIN signal, so expiration of any timer causes this signal to be raised.
+*/
+void rate_timer_handler( int sig, siginfo_t *si, void *uc );
+/* timing interface for updating the maps value when we have user/sensor
+   connection activated. Create timers for both user and sensor interfaces
+   on a per-map and per-rate basis.
+*/
+
+int create_rate_timer(timer_t *timer_id, int max_val, int interval );
+/* timers for maps update - we need timers for updating from user data or from sensor input */
+timer_t timer_user_m1, timer_user_m2, timer_user_m3, timer_user_m4, timer_user_m5, timer_user_m6;
+timer_t timer_sensor_m1, timer_sensor_m2, timer_sensor_m3, timer_sensor_m4, timer_sensor_m5, timer_sensor_m6;
+

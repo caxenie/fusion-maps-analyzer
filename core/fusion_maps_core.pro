@@ -3,7 +3,7 @@ CONFIG += console
 CONFIG -= qt
 CONFIG += debug
 
-LIBS+=-lpthread `pkg-config --cflags --libs dbus-1`
+LIBS+=-lpthread -lrt `pkg-config --cflags --libs dbus-1`
 
 SOURCES += data-engine.c \
     core.c \

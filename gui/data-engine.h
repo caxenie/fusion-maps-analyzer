@@ -17,7 +17,7 @@
 
 #define REFRESH_METHOD_CALL         "update_values"
 #define SENSOR_CONNECT_SIGNAL       "sensor_data_connected"
-#define SENSOR_RATE_CHANGED_SIGNAL  "update_sensor_rate_changed"
+#define SENSOR_RATE_CHANGED_SIGNAL  "update_rate_changed"
 #define USER_CONNECT_SIGNAL         "user_data_connected"
 #define USER_DATA_CHANGED_SIGNAL    "update_user_data_changed"
 

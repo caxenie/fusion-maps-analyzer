@@ -7,13 +7,14 @@
 #include "data-engine.h"
 #include "core.h"
 
-short g_verbose = 1;
+short g_verbose = 0;
 
 #define log_message(format,args...) \
     do{ \
     if(g_verbose) \
     fprintf(stderr,format,args); \
     } while(0);
+
 
 /* entry point */
 int
@@ -62,9 +63,18 @@ main (int argc, char **argv)
     /* starts the data transfer engine */
     start_data_transfer_engine();
 
+    /* some timing info */
+    struct timespec start, stop;
+
     /* loop the network */
     while (1)
     {
+        /* start time */
+        if( clock_gettime( CLOCK_REALTIME , &start) == -1 ) {
+              printf( "clock gettime" );
+              exit( EXIT_FAILURE );
+            }
+
         /* non local goto for self-restarting */
         if(sigsetjmp(jmpbuf, 2)) {
             fprintf(stderr, "\nCORE: RESTARTED NETWORK\n");
@@ -361,8 +371,16 @@ main (int argc, char **argv)
             }
         }
 
+
         // sync with analyzer
         usleep(SYNC_DATA);
+
+        if( clock_gettime( CLOCK_REALTIME, &stop) == -1 ) {
+          perror( "clock gettime" );
+          exit( EXIT_FAILURE );
+        }
+
+        log_message("Loop time: %f ms\n",(double) (stop.tv_nsec-start.tv_nsec)/1000000); // get time in ms
 
     }
     return 0;

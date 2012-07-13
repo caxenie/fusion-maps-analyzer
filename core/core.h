@@ -14,6 +14,7 @@
 #include <sys/types.h>
 #include <signal.h>
 #include <stdbool.h>
+#include <sys/time.h>
 
 #define MAP_SIZE 					1
 #define MAPS_NUMBER 				6
