@@ -27,6 +27,10 @@
 #define SYNC_DATA  100000 // us
 #define US_TO_MS 1000
 
+enum{
+  ONE_SHOT,
+  PERIODIC
+};
 /* thread id for data engine thread */
 pthread_t data_engine_thread;
 /* connection to the DBus system bus */
@@ -75,7 +79,7 @@ void rate_timer_handler( int sig, siginfo_t *si, void *uc );
    on a per-map and per-rate basis.
 */
 
-int create_rate_timer(timer_t *timer_id, int max_val, int interval );
+int create_rate_timer(timer_t *timer_id, int max_val, int interval, int mode );
 /* timers for maps update - we need timers for updating from user data or from sensor input */
 timer_t timer_user_m1, timer_user_m2, timer_user_m3, timer_user_m4, timer_user_m5, timer_user_m6;
 timer_t timer_sensor_m1, timer_sensor_m2, timer_sensor_m3, timer_sensor_m4, timer_sensor_m5, timer_sensor_m6;

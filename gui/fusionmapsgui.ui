@@ -81,13 +81,13 @@
       </rect>
      </property>
      <property name="minimum">
-      <number>0</number>
+      <number>1</number>
      </property>
      <property name="maximum">
       <number>3</number>
      </property>
      <property name="value">
-      <number>0</number>
+      <number>1</number>
      </property>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -181,7 +181,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>0</string>
+      <string>1</string>
      </property>
     </widget>
     <widget class="QwtPlot" name="graphicsView_m1">
@@ -294,13 +294,13 @@
       </rect>
      </property>
      <property name="minimum">
-      <number>0</number>
+      <number>1</number>
      </property>
      <property name="maximum">
       <number>3</number>
      </property>
      <property name="value">
-      <number>0</number>
+      <number>1</number>
      </property>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -407,7 +407,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>0</string>
+      <string>1</string>
      </property>
     </widget>
     <widget class="QwtPlot" name="graphicsView_m2">
@@ -510,13 +510,13 @@
       </rect>
      </property>
      <property name="minimum">
-      <number>0</number>
+      <number>1</number>
      </property>
      <property name="maximum">
       <number>3</number>
      </property>
      <property name="value">
-      <number>0</number>
+      <number>1</number>
      </property>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -610,7 +610,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>0</string>
+      <string>1</string>
      </property>
     </widget>
     <widget class="QwtPlot" name="graphicsView_m3">
@@ -723,16 +723,16 @@
       </rect>
      </property>
      <property name="minimum">
-      <number>0</number>
+      <number>1</number>
      </property>
      <property name="maximum">
       <number>3</number>
      </property>
      <property name="value">
-      <number>0</number>
+      <number>1</number>
      </property>
      <property name="sliderPosition">
-      <number>0</number>
+      <number>1</number>
      </property>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -839,7 +839,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>0</string>
+      <string>1</string>
      </property>
     </widget>
     <widget class="QwtPlot" name="graphicsView_m4">
@@ -942,7 +942,7 @@
       </rect>
      </property>
      <property name="minimum">
-      <number>0</number>
+      <number>1</number>
      </property>
      <property name="maximum">
       <number>3</number>
@@ -1042,7 +1042,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>0</string>
+      <string>1</string>
      </property>
     </widget>
     <widget class="QwtPlot" name="graphicsView_m5">
@@ -1135,13 +1135,13 @@
       </rect>
      </property>
      <property name="minimum">
-      <number>0</number>
+      <number>1</number>
      </property>
      <property name="maximum">
       <number>3</number>
      </property>
      <property name="value">
-      <number>0</number>
+      <number>1</number>
      </property>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -1235,7 +1235,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>0</string>
+      <string>1</string>
      </property>
     </widget>
     <widget class="QwtPlot" name="error_r3_plot6">
