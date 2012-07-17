@@ -52,8 +52,8 @@ void init_system_bus_connection()
        user_connected[i] = 0;
        sensor_data[i] = 0.0f;
        user_data[i] = 0.0f;
-       update_rate_user[i] = 0;
-       update_rate_sensor[i] = 0;
+       update_rate_user[i] = 1.0;
+       update_rate_sensor[i] = 1.0;
    }
 }
 
@@ -227,49 +227,44 @@ void handle_client_signals(DBusMessage *msg)
             // validate sensor interface
             map_idx = map_id;
             sensor_connected[map_idx] = 1;
+            int i=0, j=0;
             // invalidate user connection
             user_connected[map_idx] = 0;
             switch(map_id){
             case 1:
             {
-                if((rc=create_rate_timer(&timer_sensor_m1, SYNC_DATA/US_TO_MS, SYNC_DATA/US_TO_MS, PERIODIC))==-1){
-                    printf("Error setting timer for the user data update in map %d \n", map_id);
-                }
+                sensor_data[map_id] = (double)rand()/(double)RAND_MAX;
+                M1.data.cells[i][j].val[0] =  sensor_data[map_id];
             }
             break;
             case 2:
             {
-                  if((rc=create_rate_timer(&timer_sensor_m2, SYNC_DATA/US_TO_MS, SYNC_DATA/US_TO_MS, PERIODIC))==-1){
-                      printf("Error setting timer for the user data update in map %d \n", map_id);
-                  }
+                sensor_data[map_id] = (double)rand()/(double)RAND_MAX;
+                M2.data.cells[i][j].val[0] =  sensor_data[map_id];
             }
             break;
             case 3:
             {
-                  if((rc=create_rate_timer(&timer_sensor_m3, SYNC_DATA/US_TO_MS, SYNC_DATA/US_TO_MS, PERIODIC))==-1){
-                      printf("Error setting timer for the user data update in map %d \n", map_id);
-                  }
+                sensor_data[map_id] = (double)rand()/(double)RAND_MAX;
+                M3.data.cells[i][j].val[0] =  sensor_data[map_id];
             }
             break;
             case 4:
             {
-                  if((rc=create_rate_timer(&timer_sensor_m4, SYNC_DATA/US_TO_MS, SYNC_DATA/US_TO_MS, PERIODIC))==-1){
-                      printf("Error setting timer for the user data update in map %d \n", map_id);
-                  }
+                sensor_data[map_id] = (double)rand()/(double)RAND_MAX;
+                M4.data.cells[i][j].val[0] =  sensor_data[map_id];
             }
             break;
             case 5:
             {
-                  if((rc=create_rate_timer(&timer_sensor_m5, SYNC_DATA/US_TO_MS, SYNC_DATA/US_TO_MS, PERIODIC))==-1){
-                      printf("Error setting timer for the user data update in map %d \n", map_id);
-                 }
+                sensor_data[map_id] = (double)rand()/(double)RAND_MAX;
+                M5.data.cells[i][j].val[0] =  sensor_data[map_id];
             }
             break;
             case 6:
             {
-                  if((rc=create_rate_timer(&timer_sensor_m6, SYNC_DATA/US_TO_MS, SYNC_DATA/US_TO_MS, PERIODIC))==-1){
-                      printf("Error setting timer for the user data update in map %d \n", map_id);
-                  }
+                sensor_data[map_id] = (double)rand()/(double)RAND_MAX;
+                M6.data.cells[i][j].val[0] =  sensor_data[map_id];
             }
             break;
             default:
@@ -284,48 +279,37 @@ void handle_client_signals(DBusMessage *msg)
             user_connected[map_idx] = 1;
             // invalidate sensor connection
             sensor_connected[map_idx] = 0;
+            int i = 0, j = 0;
             // start timer for data update rate
              switch(map_id){
              case 1:
              {
-                 if((rc=create_rate_timer(&timer_user_m1, SYNC_DATA/US_TO_MS, SYNC_DATA/US_TO_MS, ONE_SHOT))==-1){
-                     printf("Error setting timer for the user data update in map %d \n", map_id);
-                 }
+                 M1.data.cells[i][j].val[0] =  user_data[map_id];
              }
              break;
              case 2:
              {
-                   if((rc=create_rate_timer(&timer_user_m2, SYNC_DATA/US_TO_MS, SYNC_DATA/US_TO_MS, ONE_SHOT))==-1){
-                       printf("Error setting timer for the user data update in map %d \n", map_id);
-                   }
+                 M2.data.cells[i][j].val[0] =  user_data[map_id];
              }
              break;
              case 3:
              {
-                   if((rc=create_rate_timer(&timer_user_m3, SYNC_DATA/US_TO_MS, SYNC_DATA/US_TO_MS, ONE_SHOT))==-1){
-                       printf("Error setting timer for the user data update in map %d \n", map_id);
-                   }
+                   M3.data.cells[i][j].val[0] =  user_data[map_id];
              }
              break;
              case 4:
              {
-                   if((rc=create_rate_timer(&timer_user_m4, SYNC_DATA/US_TO_MS, SYNC_DATA/US_TO_MS, ONE_SHOT))==-1){
-                       printf("Error setting timer for the user data update in map %d \n", map_id);
-                   }
+                   M4.data.cells[i][j].val[0] =  user_data[map_id];
              }
              break;
              case 5:
              {
-                   if((rc=create_rate_timer(&timer_user_m5, SYNC_DATA/US_TO_MS, SYNC_DATA/US_TO_MS, ONE_SHOT))==-1){
-                       printf("Error setting timer for the user data update in map %d \n", map_id);
-                  }
+                   M5.data.cells[i][j].val[0] =  user_data[map_id];
              }
              break;
              case 6:
              {
-                   if((rc=create_rate_timer(&timer_user_m6, SYNC_DATA/US_TO_MS, SYNC_DATA/US_TO_MS, ONE_SHOT))==-1){
-                       printf("Error setting timer for the user data update in map %d \n", map_id);
-                   }
+                   M6.data.cells[i][j].val[0] =  user_data[map_id];
              }
              break;
              default:
@@ -339,103 +323,20 @@ void handle_client_signals(DBusMessage *msg)
         if(user_connected[map_idx]==1){
             update_rate_user[map_idx] = data;
            // start timer for data update rate
-            switch(map_id){
-            case 1:
-            {
-                if((rc=create_rate_timer(&timer_user_m1, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, ONE_SHOT))==-1){
+            if((rc=create_rate_timer(&user_timer[map_id], SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, ONE_SHOT))==-1){
                     printf("Error setting timer for the user data update in map %d \n", map_id);
                 }
-            }
-            break;
-            case 2:
-            {
-                  if((rc=create_rate_timer(&timer_user_m2, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, ONE_SHOT))==-1){
-                      printf("Error setting timer for the user data update in map %d \n", map_id);
-                  }
-            }
-            break;
-            case 3:
-            {
-                  if((rc=create_rate_timer(&timer_user_m3, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, ONE_SHOT))==-1){
-                      printf("Error setting timer for the user data update in map %d \n", map_id);
-                  }
-            }
-            break;
-            case 4:
-            {
-                  if((rc=create_rate_timer(&timer_user_m4, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, ONE_SHOT))==-1){
-                      printf("Error setting timer for the user data update in map %d \n", map_id);
-                  }
-            }
-            break;
-            case 5:
-            {
-                  if((rc=create_rate_timer(&timer_user_m5, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, ONE_SHOT))==-1){
-                      printf("Error setting timer for the user data update in map %d \n", map_id);
-                 }
-            }
-            break;
-            case 6:
-            {
-                  if((rc=create_rate_timer(&timer_user_m6, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, ONE_SHOT))==-1){
-                      printf("Error setting timer for the user data update in map %d \n", map_id);
-                  }
-            }
-            break;
-            default:
-            break;
-            }
+
+
         }
         else{
             // connect sensor to the map
             update_rate_sensor[map_idx] = data;
             // start timer for data update rate
-             switch(map_id){
-             case 1:
-             {
-                 if((rc=create_rate_timer(&timer_sensor_m1, SYNC_DATA*(int)update_rate_sensor[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_sensor[map_id]/US_TO_MS, PERIODIC))==-1){
+            if((rc=create_rate_timer(&sensor_timer[map_id], SYNC_DATA*(int)update_rate_sensor[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_sensor[map_id]/US_TO_MS, PERIODIC))==-1){
                      printf("Error setting timer for the user data update in map %d \n", map_id);
                  }
-             }
-             break;
-             case 2:
-             {
-                   if((rc=create_rate_timer(&timer_sensor_m2, SYNC_DATA*(int)update_rate_sensor[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_sensor[map_id]/US_TO_MS, PERIODIC))==-1){
-                       printf("Error setting timer for the user data update in map %d \n", map_id);
-                   }
-             }
-             break;
-             case 3:
-             {
-                   if((rc=create_rate_timer(&timer_sensor_m3, SYNC_DATA*(int)update_rate_sensor[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_sensor[map_id]/US_TO_MS, PERIODIC))==-1){
-                       printf("Error setting timer for the user data update in map %d \n", map_id);
-                   }
-             }
-             break;
-             case 4:
-             {
-                   if((rc=create_rate_timer(&timer_sensor_m4, SYNC_DATA*(int)update_rate_sensor[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_sensor[map_id]/US_TO_MS, PERIODIC))==-1){
-                       printf("Error setting timer for the user data update in map %d \n", map_id);
-                   }
-             }
-             break;
-             case 5:
-             {
-                   if((rc=create_rate_timer(&timer_sensor_m5, SYNC_DATA*(int)update_rate_sensor[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_sensor[map_id]/US_TO_MS, PERIODIC))==-1){
-                       printf("Error setting timer for the user data update in map %d \n", map_id);
-                  }
-             }
-             break;
-             case 6:
-             {
-                   if((rc=create_rate_timer(&timer_sensor_m6, SYNC_DATA*(int)update_rate_sensor[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_sensor[map_id]/US_TO_MS, PERIODIC))==-1){
-                       printf("Error setting timer for the user data update in map %d \n", map_id);
-                   }
-             }
-             break;
-             default:
-             break;
-             }
+
 
         }
     }
@@ -444,52 +345,10 @@ void handle_client_signals(DBusMessage *msg)
     if(strcmp(sigvalue, SIGNAL4) == 0){
         user_data[map_idx] = data;
         // start timer for data update rate
-         switch(map_id){
-         case 1:
-         {
-             if((rc=create_rate_timer(&timer_user_m1, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, ONE_SHOT))==-1){
+        if((rc=create_rate_timer(&user_timer[map_id], SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, ONE_SHOT))==-1){
                  printf("Error setting timer for the user data update in map %d \n", map_id);
              }
-         }
-         break;
-         case 2:
-         {
-               if((rc=create_rate_timer(&timer_user_m2, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, ONE_SHOT))==-1){
-                   printf("Error setting timer for the user data update in map %d \n", map_id);
-               }
-         }
-         break;
-         case 3:
-         {
-               if((rc=create_rate_timer(&timer_user_m3, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, ONE_SHOT))==-1){
-                   printf("Error setting timer for the user data update in map %d \n", map_id);
-               }
-         }
-         break;
-         case 4:
-         {
-               if((rc=create_rate_timer(&timer_user_m4, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, ONE_SHOT))==-1){
-                   printf("Error setting timer for the user data update in map %d \n", map_id);
-               }
-         }
-         break;
-         case 5:
-         {
-               if((rc=create_rate_timer(&timer_user_m5, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, ONE_SHOT))==-1){
-                   printf("Error setting timer for the user data update in map %d \n", map_id);
-              }
-         }
-         break;
-         case 6:
-         {
-               if((rc=create_rate_timer(&timer_user_m6, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, ONE_SHOT))==-1){
-                   printf("Error setting timer for the user data update in map %d \n", map_id);
-               }
-         }
-         break;
-         default:
-         break;
-         }
+
     }
 
 }
@@ -584,75 +443,75 @@ void rate_timer_handler( int sig, siginfo_t *si, void *uc )
     tidp = si->si_value.sival_ptr;
 
     // chech which timer has expored so that the value in the map will be updated
-    if ( *tidp == timer_user_m1)
+    if ( *tidp == user_timer[1])
     {
         // handle m1 user data rate
         M1.data.cells[0][0].val[0] = user_data[1];
     }
-    else if ( *tidp == timer_user_m2 )
+    else if ( *tidp == user_timer[2] )
     {
         // handle m2 user data rate
         M2.data.cells[0][0].val[0] = user_data[2];
     }
-    else if ( *tidp == timer_user_m3 )
+    else if ( *tidp == user_timer[3] )
     {
         // handle m3 user data rate
         M3.data.cells[0][0].val[0] = user_data[3];
     }
-    else if ( *tidp == timer_user_m4 )
+    else if ( *tidp == user_timer[4] )
     {
         // handle m4 user data rate
         M4.data.cells[0][0].val[0] = user_data[4];
     }
-    else if ( *tidp == timer_user_m5 )
+    else if ( *tidp == user_timer[5] )
     {
         // handle m5 user data rate
         M5.data.cells[0][0].val[0] = user_data[5];
     }
-    else if ( *tidp == timer_user_m6 )
+    else if ( *tidp == user_timer[6] )
     {
         // handle m6 user data rate
         M6.data.cells[0][0].val[0] = user_data[6];
     }
-    else if ( *tidp == timer_sensor_m1 )
+    else if ( *tidp == sensor_timer[1] )
     {
         // read the sensor
-        sensor_data[1] = rand();
+        sensor_data[1] = (double)rand()/(double)RAND_MAX;
         // handle m1 sensor data rate
         M1.data.cells[0][0].val[0] = sensor_data[1];
     }
-    else if ( *tidp == timer_sensor_m2 )
+    else if ( *tidp == sensor_timer[2] )
     {
         // read the sensor
-        sensor_data[2] = rand();
+        sensor_data[2] = (double)rand()/(double)RAND_MAX;
         // handle m2 sensor data rate
         M2.data.cells[0][0].val[0] = sensor_data[2];
     }
-    else if ( *tidp == timer_sensor_m3 )
+    else if ( *tidp == sensor_timer[3] )
     {
         // read the sensor
-        sensor_data[3] = rand();
+        sensor_data[3] = (double)rand()/(double)RAND_MAX;
         // handle m3 sensor data rate
         M3.data.cells[0][0].val[0] = sensor_data[3];
     }
-    else if ( *tidp == timer_sensor_m4 )
+    else if ( *tidp == sensor_timer[4] )
     {
         // read the sensor
-        sensor_data[4] = rand();
+        sensor_data[4] = (double)rand()/(double)RAND_MAX;
         // handle m4 sensor data rate
         M4.data.cells[0][0].val[0] = sensor_data[4];
     }
-    else if ( *tidp == timer_sensor_m5 )
+    else if ( *tidp == sensor_timer[5] )
     {
         // read the sensor
-        sensor_data[5] = rand();
+        sensor_data[5] = (double)rand()/(double)RAND_MAX;
         // handle m5 sensor data rate
         M5.data.cells[0][0].val[0] = sensor_data[5];
     }
-    else if ( *tidp == timer_sensor_m6 )
+    else if ( *tidp == sensor_timer[6] )
     {
         // read the sensor
-        sensor_data[6] = rand();
+        sensor_data[6] = (double)rand()/(double)RAND_MAX;
         // handle m6 sensor data rate
         M6.data.cells[0][0].val[0] = sensor_data[6];
     }

@@ -81,6 +81,6 @@ void rate_timer_handler( int sig, siginfo_t *si, void *uc );
 
 int create_rate_timer(timer_t *timer_id, int max_val, int interval, int mode );
 /* timers for maps update - we need timers for updating from user data or from sensor input */
-timer_t timer_user_m1, timer_user_m2, timer_user_m3, timer_user_m4, timer_user_m5, timer_user_m6;
-timer_t timer_sensor_m1, timer_sensor_m2, timer_sensor_m3, timer_sensor_m4, timer_sensor_m5, timer_sensor_m6;
+timer_t user_timer[MAPS_NUM+1];
+timer_t sensor_timer[MAPS_NUM+1];
 
