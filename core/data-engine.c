@@ -230,46 +230,9 @@ void handle_client_signals(DBusMessage *msg)
             int i=0, j=0;
             // invalidate user connection
             user_connected[map_idx] = 0;
-            switch(map_id){
-            case 1:
-            {
-                sensor_data[map_id] = (double)rand()/(double)RAND_MAX;
-                M1.data.cells[i][j].val[0] =  sensor_data[map_id];
-            }
-            break;
-            case 2:
-            {
-                sensor_data[map_id] = (double)rand()/(double)RAND_MAX;
-                M2.data.cells[i][j].val[0] =  sensor_data[map_id];
-            }
-            break;
-            case 3:
-            {
-                sensor_data[map_id] = (double)rand()/(double)RAND_MAX;
-                M3.data.cells[i][j].val[0] =  sensor_data[map_id];
-            }
-            break;
-            case 4:
-            {
-                sensor_data[map_id] = (double)rand()/(double)RAND_MAX;
-                M4.data.cells[i][j].val[0] =  sensor_data[map_id];
-            }
-            break;
-            case 5:
-            {
-                sensor_data[map_id] = (double)rand()/(double)RAND_MAX;
-                M5.data.cells[i][j].val[0] =  sensor_data[map_id];
-            }
-            break;
-            case 6:
-            {
-                sensor_data[map_id] = (double)rand()/(double)RAND_MAX;
-                M6.data.cells[i][j].val[0] =  sensor_data[map_id];
-            }
-            break;
-            default:
-            break;
-            }
+            if((rc=create_rate_timer(&sensor_timer[map_id], SYNC_DATA*US_TO_MS, SYNC_DATA/US_TO_MS, ONE_SHOT))==-1){
+                     printf("Error setting timer for the user data update in map %d \n", map_id);
+                 }
     }
 
     // user data is connected to the map
@@ -281,40 +244,9 @@ void handle_client_signals(DBusMessage *msg)
             sensor_connected[map_idx] = 0;
             int i = 0, j = 0;
             // start timer for data update rate
-             switch(map_id){
-             case 1:
-             {
-                 M1.data.cells[i][j].val[0] =  user_data[map_id];
-             }
-             break;
-             case 2:
-             {
-                 M2.data.cells[i][j].val[0] =  user_data[map_id];
-             }
-             break;
-             case 3:
-             {
-                   M3.data.cells[i][j].val[0] =  user_data[map_id];
-             }
-             break;
-             case 4:
-             {
-                   M4.data.cells[i][j].val[0] =  user_data[map_id];
-             }
-             break;
-             case 5:
-             {
-                   M5.data.cells[i][j].val[0] =  user_data[map_id];
-             }
-             break;
-             case 6:
-             {
-                   M6.data.cells[i][j].val[0] =  user_data[map_id];
-             }
-             break;
-             default:
-             break;
-             }
+            if((rc=create_rate_timer(&user_timer[map_id], SYNC_DATA/US_TO_MS, SYNC_DATA/US_TO_MS, ONE_SHOT))==-1){
+                    printf("Error setting timer for the user data update in map %d \n", map_id);
+                }
     }
 
     // input data rate changed
