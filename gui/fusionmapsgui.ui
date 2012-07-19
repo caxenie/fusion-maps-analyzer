@@ -1744,22 +1744,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>groupBox_map6</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>user_data_slider6</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1438</x>
-     <y>700</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1379</x>
-     <y>602</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>user_connect_button_m3</sender>
    <signal>toggled(bool)</signal>
    <receiver>user_data_slider3</receiver>

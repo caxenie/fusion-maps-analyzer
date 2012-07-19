@@ -6,6 +6,9 @@
 #include "data-engine.h"
 #include "core.h"
 
+/* mutex to access the network data safely when requested by analyzer */
+static pthread_mutex_t net_data_mutex = PTHREAD_MUTEX_INITIALIZER;
+
 /* init connection to the system bus and add signal filters */
 void init_system_bus_connection()
 {
@@ -55,6 +58,8 @@ void init_system_bus_connection()
        update_rate_user[i] = 1.0;
        update_rate_sensor[i] = 1.0;
    }
+
+
 }
 
 /* handle client method calls coming on the system bus to request data updates */
@@ -229,6 +234,8 @@ void handle_client_signals(DBusMessage *msg)
             map_idx = map_id;
             sensor_connected[map_id] = 1;
             int i=0, j=0;
+            // disarm user timer for the current map if one was created
+            cancel_rate_timer(user_timer[map_id]);
             // invalidate user connection
             user_connected[map_id] = 0;
             if((rc=create_rate_timer(&sensor_timer[map_id], SYNC_DATA*US_TO_MS, SYNC_DATA/US_TO_MS, ONE_SHOT))==-1){
@@ -244,6 +251,8 @@ void handle_client_signals(DBusMessage *msg)
             // invalidate sensor connection
             sensor_connected[map_id] = 0;
             int i = 0, j = 0;
+            // disarm sensor timer for the current map if one was created
+            cancel_rate_timer(sensor_timer[map_id]);
             // start timer for data update rate
             if((rc=create_rate_timer(&user_timer[map_id], SYNC_DATA/US_TO_MS, SYNC_DATA/US_TO_MS, ONE_SHOT))==-1){
                     printf("Error setting timer for the user data update in map %d \n", map_id);
@@ -253,7 +262,7 @@ void handle_client_signals(DBusMessage *msg)
     // input data rate changed
     if(strcmp(sigvalue, SIGNAL2) == 0){
         // check if we modify the sensor or the user data rate
-        if(user_connected[map_id]==1){
+        if(user_connected[map_id]==1 && sensor_connected[map_id] == 0){
             update_rate_user[map_id] = data;
            // start timer for data update rate
             if((rc=create_rate_timer(&user_timer[map_id], SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, ONE_SHOT))==-1){
@@ -262,7 +271,7 @@ void handle_client_signals(DBusMessage *msg)
 
 
         }
-        else{
+        if(user_connected[map_id]==0 && sensor_connected[map_id] == 1){
             // connect sensor to the map
             update_rate_sensor[map_id] = data;
             // start timer for data update rate
@@ -494,4 +503,18 @@ int create_rate_timer(timer_t *timer_id, int expire_val, int interval, int mode 
     /* arm timer */
     timer_settime(*timer_id, 0, &its, NULL);
     return(0);
+}
+
+/* disarms a rate timer created apriori for the user / sensor data update rate */
+int cancel_rate_timer(timer_t timer_id)
+{
+    struct itimerspec  its;
+    its.it_interval.tv_sec = 0;
+    its.it_interval.tv_nsec = 0;
+    its.it_value.tv_sec = 0;
+    its.it_value.tv_nsec = 0;
+    if(timer_id!=NULL){
+        timer_settime(timer_id, 0, &its, NULL);
+        timer_delete(timer_id);
+    }
 }

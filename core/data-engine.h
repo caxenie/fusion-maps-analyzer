@@ -12,6 +12,7 @@
 #include <dbus/dbus.h>
 #include <string.h>
 #include <signal.h>
+#include <time.h>
 
 #define SERVER_BUS_NAME 			"org.fusionmaps.network"
 #define SERVER_SIGNAL_INTERFACE 	"org.fusionmaps.signals"
@@ -26,9 +27,6 @@
 #define MAPS_NUM    6
 #define SYNC_DATA   10000 // us
 #define US_TO_MS    1000
-
-/* mutex to access the network data safely when requested by analyzer */
-static pthread_mutex_t net_data_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 /* timer types */
 enum{
@@ -73,6 +71,9 @@ void* data_engine_functionality(void *data);
 void start_data_transfer_engine();
 /* cancel the data engine thread */
 void cancel_data_transfer_engine();
+/* timers for maps update - we need timers for updating from user data or from sensor input */
+timer_t user_timer[MAPS_NUM+1];
+timer_t sensor_timer[MAPS_NUM+1];
 /*
   signal handler for the timers when capturing the SIGRTMIN signal.
   the function takes a pointer to a timer_t variable that will be filled with the timer ID created by timer_create().  .
@@ -84,9 +85,7 @@ void rate_timer_handler( int sig, siginfo_t *si, void *uc );
    connection activated. Create timers for both user and sensor interfaces
    on a per-map and per-rate basis.
 */
-
 int create_rate_timer(timer_t *timer_id, int max_val, int interval, int mode );
-/* timers for maps update - we need timers for updating from user data or from sensor input */
-timer_t user_timer[MAPS_NUM+1];
-timer_t sensor_timer[MAPS_NUM+1];
+/* disarms a rate timer created apriori for the user / sensor data update rate */
+int cancel_rate_timer(timer_t timer_id);
 

@@ -8,7 +8,6 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <math.h>
-#include <time.h>
 #include <setjmp.h>
 #include <pthread.h>
 #include <sys/types.h>
