@@ -15,10 +15,11 @@ randomize ()
 
 /* initialize a map with size, state and type */
 map
-init_map (int id, int sz, int tp)
+init_map (int id, int sz, int tp, int lnk)
 {
   map in;
   in.id = id;
+  in.links = lnk;
   in.data.size = sz;
   in.data.cells = (cell **) calloc (sz, sizeof (cell *));
   for (int i = 0; i < sz; i++)
@@ -26,17 +27,17 @@ init_map (int id, int sz, int tp)
       in.data.cells[i] = (cell *) calloc (sz, sizeof (cell));
     }
   for (int i = 0; i < sz; i++)
-    {
+  {
       for (int j = 0; j < sz; j++)
-	{
-	  in.data.cells[i][j].type = tp;
-	  in.data.cells[i][j].val = (double *) calloc (tp, sizeof (double));
-	  for (int t = 0; t < tp; t++)
-	    {
-	      in.data.cells[i][j].val[0] = randomize ();
-	    }
-	}
-    }
+      {
+          in.data.cells[i][j].type = tp;
+          in.data.cells[i][j].val = (double *) calloc (tp, sizeof (double));
+          for (int t = 0; t < tp; t++)
+          {
+              in.data.cells[i][j].val[0] = randomize ();
+          }
+      }
+  }
   return in;
 }
 

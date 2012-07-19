@@ -36,18 +36,18 @@ void init_system_bus_connection()
       exit(EXIT_FAILURE);
    }
 
-	   // add a rule for which messages we want to see
+   // add a rule for which messages we want to see
    dbus_bus_add_match(conn, 
 					 "type='signal',interface='org.fusionmaps.signals'", 
-					  &err); 
+                      NULL);
+   dbus_bus_add_match(conn,
+                     "type='method_call',interface='org.fusionmaps.methods'",
+                      NULL);
+   // activate filters by flushing the connection
    dbus_connection_flush(conn);
-   if (dbus_error_is_set(&err)) { 
-      printf("CORE: DATA-ENGINE: Match Error (%s)\n", err.message);
-      exit(EXIT_FAILURE); 
-   }
+
     // init the global user / sensor interaction vars
-   int i;
-   for(i = 0;i<=MAPS_NUM;i++){
+   for(int i = 0;i<=MAPS_NUM;i++){
        sensor_connected[i] = 0;
        user_connected[i] = 0;
        sensor_data[i] = 0.0f;
@@ -68,7 +68,7 @@ void handle_client_methods(DBusMessage *msg)
    char* param = "";
 
    /* get data from the map thread */
-   /* FIXME just a hack to check communication - Make it SAFER */
+   pthread_mutex_lock(&net_data_mutex);
    map1_val = M1.data.cells[0][0].val[0];
    map2_val = M2.data.cells[0][0].val[0];
    map3_val = M3.data.cells[0][0].val[0];
@@ -84,6 +84,7 @@ void handle_client_methods(DBusMessage *msg)
    map4_r3 = E4[1];
    map5_r3 = E5[0];
    map6_r3 = E6[0];
+   pthread_mutex_unlock(&net_data_mutex);
  
    // read the arguments
    if (!dbus_message_iter_init(msg, &args))
@@ -226,10 +227,10 @@ void handle_client_signals(DBusMessage *msg)
     if(strcmp(sigvalue, SIGNAL1)==0){
             // validate sensor interface
             map_idx = map_id;
-            sensor_connected[map_idx] = 1;
+            sensor_connected[map_id] = 1;
             int i=0, j=0;
             // invalidate user connection
-            user_connected[map_idx] = 0;
+            user_connected[map_id] = 0;
             if((rc=create_rate_timer(&sensor_timer[map_id], SYNC_DATA*US_TO_MS, SYNC_DATA/US_TO_MS, ONE_SHOT))==-1){
                      printf("Error setting timer for the user data update in map %d \n", map_id);
                  }
@@ -239,9 +240,9 @@ void handle_client_signals(DBusMessage *msg)
     if(strcmp(sigvalue, SIGNAL3)==0){
             // validate user connection
             map_idx = map_id;
-            user_connected[map_idx] = 1;
+            user_connected[map_id] = 1;
             // invalidate sensor connection
-            sensor_connected[map_idx] = 0;
+            sensor_connected[map_id] = 0;
             int i = 0, j = 0;
             // start timer for data update rate
             if((rc=create_rate_timer(&user_timer[map_id], SYNC_DATA/US_TO_MS, SYNC_DATA/US_TO_MS, ONE_SHOT))==-1){
@@ -252,8 +253,8 @@ void handle_client_signals(DBusMessage *msg)
     // input data rate changed
     if(strcmp(sigvalue, SIGNAL2) == 0){
         // check if we modify the sensor or the user data rate
-        if(user_connected[map_idx]==1){
-            update_rate_user[map_idx] = data;
+        if(user_connected[map_id]==1){
+            update_rate_user[map_id] = data;
            // start timer for data update rate
             if((rc=create_rate_timer(&user_timer[map_id], SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, ONE_SHOT))==-1){
                     printf("Error setting timer for the user data update in map %d \n", map_id);
@@ -263,7 +264,7 @@ void handle_client_signals(DBusMessage *msg)
         }
         else{
             // connect sensor to the map
-            update_rate_sensor[map_idx] = data;
+            update_rate_sensor[map_id] = data;
             // start timer for data update rate
             if((rc=create_rate_timer(&sensor_timer[map_id], SYNC_DATA*(int)update_rate_sensor[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_sensor[map_id]/US_TO_MS, PERIODIC))==-1){
                      printf("Error setting timer for the user data update in map %d \n", map_id);
@@ -275,7 +276,7 @@ void handle_client_signals(DBusMessage *msg)
 
     // user data value changed
     if(strcmp(sigvalue, SIGNAL4) == 0){
-        user_data[map_idx] = data;
+        user_data[map_id] = data;
         // start timer for data update rate
         if((rc=create_rate_timer(&user_timer[map_id], SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, ONE_SHOT))==-1){
                  printf("Error setting timer for the user data update in map %d \n", map_id);
@@ -304,7 +305,7 @@ void listen_to_data_clients()
 
       // loop again if we haven't got a message
       if (NULL == msg) { 
-         sleep(1); 
+         usleep(1);
          continue; 
       }
       
@@ -353,7 +354,6 @@ void start_data_transfer_engine()
 		printf("CORE: DATA-ENGINE: Cannot start data transfer engine!\n");
 		exit(EXIT_FAILURE);
 	}
-
 }
 
 /* cancel the data engine thread */

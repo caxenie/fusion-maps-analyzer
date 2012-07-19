@@ -15,7 +15,7 @@
 
 #define SERVER_BUS_NAME 			"org.fusionmaps.network"
 #define SERVER_SIGNAL_INTERFACE 	"org.fusionmaps.signals"
-#define SERVER_METHOD_INTERFACE    "org.fusionmaps.methods"
+#define SERVER_METHOD_INTERFACE     "org.fusionmaps.methods"
 
 #define METHOD1 "update_values"
 #define SIGNAL1 "sensor_data_connected" 
@@ -23,14 +23,19 @@
 #define SIGNAL3 "user_data_connected"
 #define SIGNAL4 "update_user_data_changed"
 
-#define MAPS_NUM 6
-#define SYNC_DATA  100000 // us
-#define US_TO_MS 1000
+#define MAPS_NUM    6
+#define SYNC_DATA   10000 // us
+#define US_TO_MS    1000
 
+/* mutex to access the network data safely when requested by analyzer */
+static pthread_mutex_t net_data_mutex = PTHREAD_MUTEX_INITIALIZER;
+
+/* timer types */
 enum{
   ONE_SHOT,
   PERIODIC
 };
+
 /* thread id for data engine thread */
 pthread_t data_engine_thread;
 /* connection to the DBus system bus */
@@ -38,7 +43,7 @@ DBusConnection* conn;
 /* error handler */
 DBusError err;
 
-/* switches for user data or sensor data inputs */
+/* mask arrays for user data or sensor data inputs */
 int user_connected[MAPS_NUM+1];
 int sensor_connected[MAPS_NUM+1];
 /* stores the data update rate for sensors */
@@ -50,7 +55,8 @@ double user_data[MAPS_NUM+1];
 /* stores the data from the connected sensor */
 double sensor_data[MAPS_NUM+1];
 
-/* stores the map id to be connected to user / sensor data */
+/* stores the map id to be currently connected to user / sensor data
+   useful when receiving a signal as temporary storage */
 int map_idx;
 
 /* init connection to the system bus and add signal filters */

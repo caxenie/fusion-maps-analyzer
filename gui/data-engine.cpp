@@ -66,7 +66,7 @@ void DataEngine::send_method_call(const char *param)
     }
 
     // send message and get a handle for a reply
-    if (!dbus_connection_send_with_reply (conn, msg, &pending, -1)) { // -1 is default timeout
+    if (!dbus_connection_send_with_reply (conn, msg, &pending, DBUS_TIMEOUT_USE_DEFAULT)) { // -1 is default timeout
         log_message( "GUI: DATA-ENGINE: METHOD CALLS: Out Of Memory!: %s\n", "send_method_call");
         exit(EXIT_FAILURE);
     }
