@@ -14,6 +14,9 @@
 #include <signal.h>
 #include <stdbool.h>
 #include <sys/time.h>
+#include <ucontext.h>
+#define _GNU_SOURCE
+#include <fenv.h> /* kind of C99 specific */
 
 #define MAP_SIZE 					1
 #define MAPS_NUMBER 				6
@@ -84,7 +87,6 @@ void restart_network();
 /* stops the network by exiting the main loop */
 void stop_network();
 /* the other commands (e.g.: pause, quit) are already embedded in the slots from the analyzer GUI */
-
 
 
 

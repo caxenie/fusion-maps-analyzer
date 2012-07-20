@@ -308,6 +308,19 @@ main (int argc, char **argv)
             }
         }
 
+         /* check for floating point exceptions and fix the representation */
+        for (int i = 0; i < MAP_SIZE; i++)
+        {
+            for (int j = 0; j < MAP_SIZE; j++)
+            {
+                if(isnan(M1.data.cells[i][j].val[0])!=0 || isinf(M1.data.cells[i][j].val[0])!=0) M1.data.cells[i][j].val[0] = 0.0000001;
+                if(isnan(M2.data.cells[i][j].val[0])!=0 || isinf(M2.data.cells[i][j].val[0])!=0) M2.data.cells[i][j].val[0] = 0.0000001;
+                if(isnan(M3.data.cells[i][j].val[0])!=0 || isinf(M3.data.cells[i][j].val[0])!=0) M3.data.cells[i][j].val[0] = 0.0000001;
+                if(isnan(M4.data.cells[i][j].val[0])!=0 || isinf(M4.data.cells[i][j].val[0])!=0) M4.data.cells[i][j].val[0] = 0.0000001;
+                if(isnan(M5.data.cells[i][j].val[0])!=0 || isinf(M5.data.cells[i][j].val[0])!=0) M5.data.cells[i][j].val[0] = 0.0000001;
+                if(isnan(M6.data.cells[i][j].val[0])!=0 || isinf(M6.data.cells[i][j].val[0])!=0) M6.data.cells[i][j].val[0] = 0.0000001;
+            }
+        }
 
         log_message
                 ("\nCORE: Errors: E1 = %lf | E2 = %lf | E3 = %lf | E4 = %lf | E5 = %lf | E6 = %lf \n",
@@ -335,6 +348,7 @@ main (int argc, char **argv)
                 E4[1] = pow(M4.data.cells[i][j].val[0]-M5.data.cells[i][j].val[0] - 2*M6.data.cells[i][j].val[0], 2);
                 E5[0] = pow(M5.data.cells[i][j].val[0]-M4.data.cells[i][j].val[0] - 2*M6.data.cells[i][j].val[0], 2);
                 E6[0] = pow(M6.data.cells[i][j].val[0]-(M4.data.cells[i][j].val[0]-M5.data.cells[i][j].val[0])/2, 2);
+
             }
 
         }
