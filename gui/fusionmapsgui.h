@@ -99,7 +99,7 @@ private slots:
 
     void on_user_data_slider2_valueChanged(double value);
 
-    void on_data_update_rate2_val_valueChanged(int value);
+    void on_data_update_rate2_valueChanged(int value);
 
     void on_user_connect_button_m3_clicked();
 
@@ -107,7 +107,7 @@ private slots:
 
     void on_user_data_slider3_valueChanged(double value);
 
-    void on_data_update_rate3_val_valueChanged(int value);
+    void on_data_update_rate3_valueChanged(int value);
 
     void on_user_connect_button_m4_clicked();
 
@@ -131,7 +131,7 @@ private slots:
 
     void on_user_data_slider6_valueChanged(double value);
 
-    void on_data_update_rate6_val_valueChanged(int value);
+    void on_data_update_rate6_valueChanged(int value);
 
     void update_visuals();
 

@@ -53,10 +53,6 @@ double user_data[MAPS_NUM+1];
 /* stores the data from the connected sensor */
 double sensor_data[MAPS_NUM+1];
 
-/* stores the map id to be currently connected to user / sensor data
-   useful when receiving a signal as temporary storage */
-int map_idx;
-
 /* init connection to the system bus and add signal filters */
 void init_system_bus_connection();
 /* handle client method calls coming on the system bus to request data updates */

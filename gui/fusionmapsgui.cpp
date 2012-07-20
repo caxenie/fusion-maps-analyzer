@@ -22,7 +22,7 @@ FusionMapsGui::FusionMapsGui(QWidget *parent) :
     repr_m1 = new QwtPlotSpectrogram();
     repr_m1->setRenderThreadCount(0); // system specific thread count
     repr_m1->setColorMap(new ColorMap());
-    repr_m1->setData( new RasterData(0.0f));
+    repr_m1->setData( new RasterData(init_val));
     repr_m1->attach(ui->graphicsView_m1);
     zInterval = repr_m1->data()->interval(Qt::ZAxis);
     color_interval = ui->graphicsView_m1->axisWidget(QwtPlot::yRight);
@@ -796,22 +796,39 @@ void FusionMapsGui::on_actionInstructions_triggered()
             " important instead the relationships and mutual influence "
             " between the maps is determining the network dynamics. \n"
             "\n The visualized is an external process that is able to: \n"
+            "\n"
             " -> Start a new instance of the converging network: \n"
+            "\n"
             " ---> spawns the new process that will run detached from the visualizer\n"
+            "\n"
             " ---> saves the PID in order to control the execution states \n"
+            "\n"
             " -> Pause a started instance and it's context is saved: \n"
+            "\n"
             " ---> the context of the running network process is saved \n"
+            "\n"
             " -> Resume a paused instance and it's context is restored: \n"
+            "\n"
             " ---> the context of the paused network process is restored \n"
+            "\n"
             " ---> the network loops from the point it was paused \n"
+            "\n"
             " -> Stop a running instance and it's context is dumped: \n"
+            "\n"
             " ---> the context of the running network process is dumped \n"
+            "\n"
             " -> Restart a running instance and it's context is re-initialized: \n"
+            "\n"
             " ---> the context of the running network is flushed and re-initialized \n"
+            "\n"
             " -> Quit a started instance of the visualizer\n"
+            "\n"
             "\n The visualizer is able to: \n"
+            "\n"
             "--> Visualize the current value in a map (1-D) / map cell (multi-D) \n"
+            "\n"
             "--> Visualize the errors with respect to the relationships in the network \n"
+            "\n"
             "--> Connect to the maps input artificial user data or live sensory data \n";
 
     QMessageBox::information(0,INFO_HEADER_MSG,inst_str);
@@ -868,7 +885,9 @@ void FusionMapsGui::on_user_connect_button_m1_clicked()
 {
   if(net_pid!=0){
       if(ui->user_connect_button_m1->isChecked()==true)
-            this->data_engine->send_signal(0.0f, USER_CONNECT_SIGNAL, 1);
+            this->data_engine->send_signal(1.0f, USER_CONNECT_SIGNAL, 1);
+      else
+              this->data_engine->send_signal(0.0f, USER_CONNECT_SIGNAL, 1);
     }
 }
 
@@ -876,7 +895,9 @@ void FusionMapsGui::on_sensor_connect_button_m1_clicked()
 {
   if(net_pid!=0){
       if(ui->sensor_connect_button_m1->isChecked()==true)
-            this->data_engine->send_signal(0.0f, SENSOR_CONNECT_SIGNAL, 1);
+            this->data_engine->send_signal(1.0f, SENSOR_CONNECT_SIGNAL, 1);
+      else
+              this->data_engine->send_signal(0.0f, SENSOR_CONNECT_SIGNAL, 1);
     }
 }
 
@@ -892,6 +913,8 @@ void FusionMapsGui::on_user_connect_button_m2_clicked()
 {
   if(net_pid!=0){
       if(ui->user_connect_button_m2->isChecked()==true)
+            this->data_engine->send_signal(1.0f, USER_CONNECT_SIGNAL, 2);
+      else
             this->data_engine->send_signal(0.0f, USER_CONNECT_SIGNAL, 2);
     }
 }
@@ -900,7 +923,9 @@ void FusionMapsGui::on_sensor_connect_button_m2_clicked()
 {
   if(net_pid!=0){
       if(ui->sensor_connect_button_m2->isChecked()==true)
-            this->data_engine->send_signal(0.0f, SENSOR_CONNECT_SIGNAL, 2);
+            this->data_engine->send_signal(1.0f, SENSOR_CONNECT_SIGNAL, 2);
+      else
+              this->data_engine->send_signal(0.0f, SENSOR_CONNECT_SIGNAL, 2);
     }
 }
 
@@ -911,7 +936,7 @@ void FusionMapsGui::on_user_data_slider2_valueChanged(double value)
     }
 }
 
-void FusionMapsGui::on_data_update_rate2_val_valueChanged(int value)
+void FusionMapsGui::on_data_update_rate2_valueChanged(int value)
 {
   if(net_pid!=0){
     this->data_engine->send_signal(value, SENSOR_RATE_CHANGED_SIGNAL, 2);
@@ -923,7 +948,9 @@ void FusionMapsGui::on_user_connect_button_m3_clicked()
 {
   if(net_pid!=0){
       if(ui->user_connect_button_m3->isChecked()==true)
-            this->data_engine->send_signal(0.0f, USER_CONNECT_SIGNAL, 3);
+            this->data_engine->send_signal(1.0f, USER_CONNECT_SIGNAL, 3);
+      else
+              this->data_engine->send_signal(0.0f, USER_CONNECT_SIGNAL, 3);
     }
 }
 
@@ -931,7 +958,9 @@ void FusionMapsGui::on_sensor_connect_button_m3_clicked()
 {
   if(net_pid!=0){
       if(ui->sensor_connect_button_m3->isChecked()==true)
-            this->data_engine->send_signal(0.0f, SENSOR_CONNECT_SIGNAL, 3);
+            this->data_engine->send_signal(1.0f, SENSOR_CONNECT_SIGNAL, 3);
+      else
+              this->data_engine->send_signal(0.0f, SENSOR_CONNECT_SIGNAL, 3);
     }
 }
 
@@ -942,7 +971,7 @@ void FusionMapsGui::on_user_data_slider3_valueChanged(double value)
     }
 }
 
-void FusionMapsGui::on_data_update_rate3_val_valueChanged(int value)
+void FusionMapsGui::on_data_update_rate3_valueChanged(int value)
 {
   if(net_pid!=0){
     this->data_engine->send_signal(value, SENSOR_RATE_CHANGED_SIGNAL, 3);
@@ -954,7 +983,9 @@ void FusionMapsGui::on_user_connect_button_m4_clicked()
 {
   if(net_pid!=0){
       if(ui->user_connect_button_m4->isChecked()==true)
-             this->data_engine->send_signal(0.0f, USER_CONNECT_SIGNAL, 4);
+             this->data_engine->send_signal(1.0f, USER_CONNECT_SIGNAL, 4);
+      else
+              this->data_engine->send_signal(0.0f, USER_CONNECT_SIGNAL, 4);
     }
 }
 
@@ -962,7 +993,9 @@ void FusionMapsGui::on_sensor_connect_button_m4_clicked()
 {
   if(net_pid!=0){
       if(ui->sensor_connect_button_m4->isChecked()==true)
-             this->data_engine->send_signal(0.0f, SENSOR_CONNECT_SIGNAL, 4);
+             this->data_engine->send_signal(1.0f, SENSOR_CONNECT_SIGNAL, 4);
+      else
+              this->data_engine->send_signal(0.0f, SENSOR_CONNECT_SIGNAL, 4);
     }
 }
 
@@ -986,7 +1019,9 @@ void FusionMapsGui::on_user_connect_button_m5_clicked()
 {
   if(net_pid!=0){
       if(ui->user_connect_button_m5->isChecked()==true)
-            this->data_engine->send_signal(0.0f, USER_CONNECT_SIGNAL, 5);
+            this->data_engine->send_signal(1.0f, USER_CONNECT_SIGNAL, 5);
+      else
+              this->data_engine->send_signal(0.0f, USER_CONNECT_SIGNAL, 5);
     }
 }
 
@@ -994,7 +1029,9 @@ void FusionMapsGui::on_sensor_connect_button_m5_clicked()
 {
   if(net_pid!=0){
       if(ui->sensor_connect_button_m5->isChecked()==true)
-                this->data_engine->send_signal(0.0f, SENSOR_CONNECT_SIGNAL, 5);
+                this->data_engine->send_signal(1.0f, SENSOR_CONNECT_SIGNAL, 5);
+      else
+              this->data_engine->send_signal(0.0f, SENSOR_CONNECT_SIGNAL, 5);
     }
 }
 
@@ -1019,16 +1056,20 @@ void FusionMapsGui::on_user_connect_button_m6_clicked()
 {
   if(net_pid!=0){
       if(ui->user_connect_button_m6->isChecked()==true)
-            this->data_engine->send_signal(0.0f, USER_CONNECT_SIGNAL, 6);
+            this->data_engine->send_signal(1.0f, USER_CONNECT_SIGNAL, 6);
+      else
+              this->data_engine->send_signal(0.0f, USER_CONNECT_SIGNAL, 6);
     }
 }
 
 void FusionMapsGui::on_sensor_connect_button_m6_clicked()
 {
   if(net_pid!=0){
-      if(ui->sensor_connect_button_m6->isChecked()==true)
+    if(ui->sensor_connect_button_m6->isChecked()==true)
+            this->data_engine->send_signal(1.0f, SENSOR_CONNECT_SIGNAL, 6);
+    else
             this->data_engine->send_signal(0.0f, SENSOR_CONNECT_SIGNAL, 6);
-    }
+    }  
 }
 
 void FusionMapsGui::on_user_data_slider6_valueChanged(double value)
@@ -1038,7 +1079,7 @@ void FusionMapsGui::on_user_data_slider6_valueChanged(double value)
     }
 }
 
-void FusionMapsGui::on_data_update_rate6_val_valueChanged(int value)
+void FusionMapsGui::on_data_update_rate6_valueChanged(int value)
 {
   if(net_pid!=0){
     this->data_engine->send_signal(value, SENSOR_RATE_CHANGED_SIGNAL, 6);

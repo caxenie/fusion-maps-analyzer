@@ -281,7 +281,7 @@
       </rect>
      </property>
     </widget>
-    <widget class="QSlider" name="data_update_rate2_val">
+    <widget class="QSlider" name="data_update_rate2">
      <property name="enabled">
       <bool>false</bool>
      </property>
@@ -332,7 +332,7 @@
       <string>User data:</string>
      </property>
     </widget>
-    <widget class="QLabel" name="data_update_rate2">
+    <widget class="QLabel" name="data_update_rate2_label">
      <property name="geometry">
       <rect>
        <x>370</x>
@@ -497,7 +497,7 @@
       </rect>
      </property>
     </widget>
-    <widget class="QSlider" name="data_update_rate3_val">
+    <widget class="QSlider" name="data_update_rate3">
      <property name="enabled">
       <bool>false</bool>
      </property>
@@ -548,7 +548,7 @@
       <string>User data:</string>
      </property>
     </widget>
-    <widget class="QLabel" name="data_update_rate3">
+    <widget class="QLabel" name="data_update_rate3_label">
      <property name="geometry">
       <rect>
        <x>380</x>
@@ -764,7 +764,7 @@
       <string>User data:</string>
      </property>
     </widget>
-    <widget class="QLabel" name="data_update_rate4_val">
+    <widget class="QLabel" name="data_update_rate4_label">
      <property name="geometry">
       <rect>
        <x>380</x>
@@ -980,7 +980,7 @@
       <string>User data:</string>
      </property>
     </widget>
-    <widget class="QLabel" name="data_update_rate5_val">
+    <widget class="QLabel" name="data_update_rate5_label">
      <property name="geometry">
       <rect>
        <x>370</x>
@@ -1122,7 +1122,7 @@
       <string>User</string>
      </property>
     </widget>
-    <widget class="QSlider" name="data_update_rate6_val">
+    <widget class="QSlider" name="data_update_rate6">
      <property name="enabled">
       <bool>false</bool>
      </property>
@@ -1173,7 +1173,7 @@
       <string>User data:</string>
      </property>
     </widget>
-    <widget class="QLabel" name="data_update_rate6">
+    <widget class="QLabel" name="data_update_rate6_label">
      <property name="geometry">
       <rect>
        <x>380</x>
@@ -1842,7 +1842,7 @@
   <connection>
    <sender>user_connect_button_m6</sender>
    <signal>toggled(bool)</signal>
-   <receiver>data_update_rate6_val</receiver>
+   <receiver>data_update_rate6</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -1858,7 +1858,7 @@
   <connection>
    <sender>sensor_connect_button_m6</sender>
    <signal>toggled(bool)</signal>
-   <receiver>data_update_rate6_val</receiver>
+   <receiver>data_update_rate6</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -1872,7 +1872,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>data_update_rate6_val</sender>
+   <sender>data_update_rate6</sender>
    <signal>valueChanged(int)</signal>
    <receiver>rate_label6</receiver>
    <slot>setNum(int)</slot>
@@ -1888,7 +1888,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>data_update_rate3_val</sender>
+   <sender>data_update_rate3</sender>
    <signal>valueChanged(int)</signal>
    <receiver>rate_label3</receiver>
    <slot>setNum(int)</slot>
@@ -1906,7 +1906,7 @@
   <connection>
    <sender>sensor_connect_button_m3</sender>
    <signal>toggled(bool)</signal>
-   <receiver>data_update_rate3_val</receiver>
+   <receiver>data_update_rate3</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -1922,7 +1922,7 @@
   <connection>
    <sender>user_connect_button_m3</sender>
    <signal>toggled(bool)</signal>
-   <receiver>data_update_rate3_val</receiver>
+   <receiver>data_update_rate3</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -2032,7 +2032,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>data_update_rate2_val</sender>
+   <sender>data_update_rate2</sender>
    <signal>valueChanged(int)</signal>
    <receiver>rate_label2</receiver>
    <slot>setNum(int)</slot>
@@ -2050,7 +2050,7 @@
   <connection>
    <sender>sensor_connect_button_m2</sender>
    <signal>toggled(bool)</signal>
-   <receiver>data_update_rate2_val</receiver>
+   <receiver>data_update_rate2</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -2066,7 +2066,7 @@
   <connection>
    <sender>user_connect_button_m2</sender>
    <signal>toggled(bool)</signal>
-   <receiver>data_update_rate2_val</receiver>
+   <receiver>data_update_rate2</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
