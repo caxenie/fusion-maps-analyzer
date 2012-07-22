@@ -41,7 +41,7 @@ void init_system_bus_connection()
 
    // add a rule for which messages we want to see
    dbus_bus_add_match(conn, 
-					 "type='signal',interface='org.fusionmaps.signals'", 
+                      "type='signal',interface='org.fusionmaps.signals'",
                       NULL);
    dbus_bus_add_match(conn,
                      "type='method_call',interface='org.fusionmaps.methods'",
@@ -234,7 +234,10 @@ void handle_client_signals(DBusMessage *msg)
             sensor_connected[map_id] = 1;
             if(user_connected[map_id]==1){
                 // disarm sensor timer for the current map if one was created
-                cancel_rate_timer(user_timer[map_id]);
+                for(int j=1;j<=MAPS_NUM;j++){
+                  cancel_rate_timer(user_timer[j]);
+                  cancel_rate_timer(sensor_timer[j]);
+                }
                 // invalidate sensor connection
                 user_connected[map_id] = 0;
             }
@@ -249,7 +252,11 @@ void handle_client_signals(DBusMessage *msg)
             user_connected[map_id] = 1;
             if(sensor_connected[map_id]==1){
                 // disarm sensor timer for the current map if one was created
-                cancel_rate_timer(sensor_timer[map_id]);
+                for(int j=1;j<=MAPS_NUM;j++){
+                  cancel_rate_timer(user_timer[j]);
+                  cancel_rate_timer(sensor_timer[j]);
+                }
+                // cancel_rate_timer(sensor_timer[map_id]);
                 // invalidate sensor connection
                 sensor_connected[map_id] = 0;
             }
@@ -267,7 +274,11 @@ void handle_client_signals(DBusMessage *msg)
             // diasrm the existing timer for the sensor data
             if(sensor_connected[map_id]==1){
                 // disarm sensor timer for the current map if one was created
-                cancel_rate_timer(sensor_timer[map_id]);
+                //cancel_rate_timer(sensor_timer[map_id]);
+                for(int j=1;j<=MAPS_NUM;j++){
+                  cancel_rate_timer(user_timer[j]);
+                  cancel_rate_timer(sensor_timer[j]);
+                }
                 // invalidate sensor connection
                 sensor_connected[map_id] = 0;
             }
@@ -284,7 +295,11 @@ void handle_client_signals(DBusMessage *msg)
             // diasrm the existing timer for the user data
             if(user_connected[map_id]==1){
                 // disarm user timer for the current map if one was created
-                cancel_rate_timer(user_timer[map_id]);
+                //cancel_rate_timer(user_timer[map_id]);
+                for(int j=1;j<=MAPS_NUM;j++){
+                  cancel_rate_timer(user_timer[j]);
+                  cancel_rate_timer(sensor_timer[j]);
+                }
                 // invalidate user connection
                 user_connected[map_id] = 0;
             }
@@ -292,16 +307,19 @@ void handle_client_signals(DBusMessage *msg)
             if((rc=create_rate_timer(&sensor_timer[map_id], SYNC_DATA*(int)update_rate_sensor[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_sensor[map_id]/US_TO_MS, PERIODIC))==-1){
                      printf("Error setting timer for the user data update in map %d \n", map_id);
                  }
-
-
         }
     }
 
     // user data value changed
     if(strcmp(sigvalue, SIGNAL4) == 0){
         user_data[map_id] = data;
+        // disarm user timer for the current map if one was created
+        for(int j=1;j<=MAPS_NUM;j++){
+          cancel_rate_timer(user_timer[j]);
+          cancel_rate_timer(sensor_timer[j]);
+        }
         // start timer for data update rate
-        if((rc=create_rate_timer(&user_timer[map_id], SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, PERIODIC))==-1){
+        if((rc=create_rate_timer(&user_timer[map_id], SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, ONE_SHOT))==-1){
                  printf("Error setting timer for the user data update in map %d \n", map_id);
              }
 

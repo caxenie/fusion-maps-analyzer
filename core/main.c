@@ -313,12 +313,19 @@ main (int argc, char **argv)
         {
             for (int j = 0; j < MAP_SIZE; j++)
             {
-                if(isnan(M1.data.cells[i][j].val[0])!=0 || isinf(M1.data.cells[i][j].val[0])!=0) M1.data.cells[i][j].val[0] = 0.0000001;
-                if(isnan(M2.data.cells[i][j].val[0])!=0 || isinf(M2.data.cells[i][j].val[0])!=0) M2.data.cells[i][j].val[0] = 0.0000001;
-                if(isnan(M3.data.cells[i][j].val[0])!=0 || isinf(M3.data.cells[i][j].val[0])!=0) M3.data.cells[i][j].val[0] = 0.0000001;
-                if(isnan(M4.data.cells[i][j].val[0])!=0 || isinf(M4.data.cells[i][j].val[0])!=0) M4.data.cells[i][j].val[0] = 0.0000001;
-                if(isnan(M5.data.cells[i][j].val[0])!=0 || isinf(M5.data.cells[i][j].val[0])!=0) M5.data.cells[i][j].val[0] = 0.0000001;
-                if(isnan(M6.data.cells[i][j].val[0])!=0 || isinf(M6.data.cells[i][j].val[0])!=0) M6.data.cells[i][j].val[0] = 0.0000001;
+                if(isnan(M1.data.cells[i][j].val[0])!=0) M1.data.cells[i][j].val[0] = 0.0000001;
+                if(isnan(M2.data.cells[i][j].val[0])!=0) M2.data.cells[i][j].val[0] = 0.0000001;
+                if(isnan(M3.data.cells[i][j].val[0])!=0) M3.data.cells[i][j].val[0] = 0.0000001;
+                if(isnan(M4.data.cells[i][j].val[0])!=0) M4.data.cells[i][j].val[0] = 0.0000001;
+                if(isnan(M5.data.cells[i][j].val[0])!=0) M5.data.cells[i][j].val[0] = 0.0000001;
+                if(isnan(M6.data.cells[i][j].val[0])!=0) M6.data.cells[i][j].val[0] = 0.0000001;
+
+                if(isinf(M1.data.cells[i][j].val[0])!=0) M1.data.cells[i][j].val[0] = 1.0000001;
+                if(isinf(M2.data.cells[i][j].val[0])!=0) M2.data.cells[i][j].val[0] = 1.0000001;
+                if(isinf(M3.data.cells[i][j].val[0])!=0) M3.data.cells[i][j].val[0] = 1.0000001;
+                if(isinf(M4.data.cells[i][j].val[0])!=0) M4.data.cells[i][j].val[0] = 1.0000001;
+                if(isinf(M5.data.cells[i][j].val[0])!=0) M5.data.cells[i][j].val[0] = 1.0000001;
+                if(isinf(M6.data.cells[i][j].val[0])!=0) M6.data.cells[i][j].val[0] = 1.0000001;
             }
         }
 
