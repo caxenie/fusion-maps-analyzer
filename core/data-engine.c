@@ -235,8 +235,8 @@ void handle_client_signals(DBusMessage *msg)
             if(user_connected[map_id]==1){
                 // disarm sensor timer for the current map if one was created
                 for(int j=1;j<=MAPS_NUM;j++){
-                  cancel_rate_timer(user_timer[j]);
-                  cancel_rate_timer(sensor_timer[j]);
+                        cancel_rate_timer(user_timer[j]);
+                        cancel_rate_timer(sensor_timer[j]);
                 }
                 // invalidate sensor connection
                 user_connected[map_id] = 0;
@@ -253,10 +253,9 @@ void handle_client_signals(DBusMessage *msg)
             if(sensor_connected[map_id]==1){
                 // disarm sensor timer for the current map if one was created
                 for(int j=1;j<=MAPS_NUM;j++){
-                  cancel_rate_timer(user_timer[j]);
-                  cancel_rate_timer(sensor_timer[j]);
+                        cancel_rate_timer(user_timer[j]);
+                        cancel_rate_timer(sensor_timer[j]);
                 }
-                // cancel_rate_timer(sensor_timer[map_id]);
                 // invalidate sensor connection
                 sensor_connected[map_id] = 0;
             }
@@ -276,14 +275,14 @@ void handle_client_signals(DBusMessage *msg)
                 // disarm sensor timer for the current map if one was created
                 //cancel_rate_timer(sensor_timer[map_id]);
                 for(int j=1;j<=MAPS_NUM;j++){
-                  cancel_rate_timer(user_timer[j]);
-                  cancel_rate_timer(sensor_timer[j]);
+                        cancel_rate_timer(user_timer[j]);
+                        cancel_rate_timer(sensor_timer[j]);
                 }
                 // invalidate sensor connection
                 sensor_connected[map_id] = 0;
             }
            // start timer for data update rate
-            if((rc=create_rate_timer(&user_timer[map_id], SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, PERIODIC))==-1){
+            if((rc=create_rate_timer(&user_timer[map_id], SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, ONE_SHOT))==-1){
                     printf("Error setting timer for the user data update in map %d \n", map_id);
                 }
 
@@ -297,14 +296,14 @@ void handle_client_signals(DBusMessage *msg)
                 // disarm user timer for the current map if one was created
                 //cancel_rate_timer(user_timer[map_id]);
                 for(int j=1;j<=MAPS_NUM;j++){
-                  cancel_rate_timer(user_timer[j]);
-                  cancel_rate_timer(sensor_timer[j]);
+                        cancel_rate_timer(user_timer[j]);
+                        cancel_rate_timer(sensor_timer[j]);
                 }
                 // invalidate user connection
                 user_connected[map_id] = 0;
             }
             // start timer for data update rate
-            if((rc=create_rate_timer(&sensor_timer[map_id], SYNC_DATA*(int)update_rate_sensor[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_sensor[map_id]/US_TO_MS, PERIODIC))==-1){
+            if((rc=create_rate_timer(&sensor_timer[map_id], SYNC_DATA*(int)update_rate_sensor[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_sensor[map_id]/US_TO_MS, ONE_SHOT))==-1){
                      printf("Error setting timer for the user data update in map %d \n", map_id);
                  }
         }
@@ -315,8 +314,8 @@ void handle_client_signals(DBusMessage *msg)
         user_data[map_id] = data;
         // disarm user timer for the current map if one was created
         for(int j=1;j<=MAPS_NUM;j++){
-          cancel_rate_timer(user_timer[j]);
-          cancel_rate_timer(sensor_timer[j]);
+                cancel_rate_timer(user_timer[j]);
+                cancel_rate_timer(sensor_timer[j]);
         }
         // start timer for data update rate
         if((rc=create_rate_timer(&user_timer[map_id], SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, ONE_SHOT))==-1){
@@ -449,42 +448,42 @@ void rate_timer_handler( int sig, siginfo_t *si, void *uc )
     else if ( *tidp == sensor_timer[1] )
     {
         // read the sensor
-        sensor_data[1] = (double)rand()/(double)RAND_MAX;
+        sensor_data[1] += 0.0123;
         // handle m1 sensor data rate
         M1.data.cells[0][0].val[0] = sensor_data[1];
     }
     else if ( *tidp == sensor_timer[2] )
     {
         // read the sensor
-        sensor_data[2] = (double)rand()/(double)RAND_MAX;
+        sensor_data[2] += 0.2313;
         // handle m2 sensor data rate
         M2.data.cells[0][0].val[0] = sensor_data[2];
     }
     else if ( *tidp == sensor_timer[3] )
     {
         // read the sensor
-        sensor_data[3] = (double)rand()/(double)RAND_MAX;
+        sensor_data[3] += 0.2131;
         // handle m3 sensor data rate
         M3.data.cells[0][0].val[0] = sensor_data[3];
     }
     else if ( *tidp == sensor_timer[4] )
     {
         // read the sensor
-        sensor_data[4] = (double)rand()/(double)RAND_MAX;
+        sensor_data[4] += 0.0023;
         // handle m4 sensor data rate
         M4.data.cells[0][0].val[0] = sensor_data[4];
     }
     else if ( *tidp == sensor_timer[5] )
     {
         // read the sensor
-        sensor_data[5] = (double)rand()/(double)RAND_MAX;
+        sensor_data[5] += 0.7868;
         // handle m5 sensor data rate
         M5.data.cells[0][0].val[0] = sensor_data[5];
     }
     else if ( *tidp == sensor_timer[6] )
     {
         // read the sensor
-        sensor_data[6] = (double)rand()/(double)RAND_MAX;
+        sensor_data[6] += 0.911;
         // handle m6 sensor data rate
         M6.data.cells[0][0].val[0] = sensor_data[6];
     }
@@ -547,6 +546,6 @@ int cancel_rate_timer(timer_t timer_id)
     its.it_value.tv_nsec = 0;
     if(timer_id!=NULL){
         timer_settime(timer_id, 0, &its, NULL);
-        timer_delete(timer_id);
+        timer_id = NULL;
     }
 }
