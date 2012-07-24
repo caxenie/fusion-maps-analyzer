@@ -83,5 +83,5 @@ void rate_timer_handler( int sig, siginfo_t *si, void *uc );
 */
 int create_rate_timer(timer_t *timer_id, int max_val, int interval, int mode );
 /* disarms a rate timer created apriori for the user / sensor data update rate */
-int cancel_rate_timer(timer_t timer_id);
+int cancel_rate_timer(timer_t *timer_id);
 
