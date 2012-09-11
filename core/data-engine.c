@@ -237,7 +237,7 @@ void handle_client_signals(DBusMessage *msg)
         // check if the button is checked or released
         if(data==1.0){
             // the button was activated and so, start the timer
-            if((rc=create_rate_timer(&sensor_timer[map_id], SYNC_DATA*US_TO_MS, SYNC_DATA/US_TO_MS, ONE_SHOT))==-1){
+            if((rc=create_rate_timer(&sensor_timer[map_id], SYNC_DATA/US_TO_MS, SYNC_DATA/US_TO_MS, PERIODIC))==-1){
                 printf("Error setting timer for the user data update in map %d \n", map_id);
             }
         }
