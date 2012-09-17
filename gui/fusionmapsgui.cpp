@@ -1,3 +1,9 @@
+/**
+ * Distributed cognitive systems design demo.
+ * Simple recurrent network that converges to a stable state
+ * in which each of the defined relationships are satisfied.
+ * Main functionality implementation.
+ */
 #include "fusionmapsgui.h"
 #include "ui_fusionmapsgui.h"
 

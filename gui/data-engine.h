@@ -1,3 +1,9 @@
+/**
+ * Distributed cognitive systems design demo - data analyzer GUI.
+ * Simple recurrent network that converges to a stable state
+ * in which each of the defined relationships are satisfied.
+ * Data engine functionality.
+ */
 #ifndef DATAENGINE_H
 #define DATAENGINE_H
 
@@ -10,8 +16,8 @@
 
 #define SERVER_BUS_NAME 			"org.fusionmaps.network"
 #define CLIENT_BUS_NAME 			"org.fusionmaps.visualizer"
-#define SERVER_SIGNAL_INTERFACE     "org.fusionmaps.signals"
-#define SERVER_METHOD_INTERFACE     "org.fusionmaps.methods"
+#define SERVER_SIGNAL_INTERFACE                 "org.fusionmaps.signals"
+#define SERVER_METHOD_INTERFACE                 "org.fusionmaps.methods"
 #define BUS_METHODS_OBJECT 			"/org/fusionmaps/methods/object"
 #define BUS_SIGNALS_OBJECT 			"/org/fusionmaps/signals/object"
 

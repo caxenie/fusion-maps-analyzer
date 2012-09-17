@@ -1,3 +1,9 @@
+/**
+ * Distributed cognitive systems design demo - data analyzer GUI.
+ * Simple recurrent network that converges to a stable state
+ * in which each of the defined relationships are satisfied.
+ * Main definitions.
+ */
 #ifndef FUSIONMAPSGUI_H
 #define FUSIONMAPSGUI_H
 
@@ -141,8 +147,4 @@ public slots:
 private:
     Ui::FusionMapsGui *ui;
 };
-
-
-
-
 #endif // FUSIONMAPSGUI_H

@@ -1,9 +1,8 @@
-/* Data transfer engine between the core network and the
+/**
+ * Data transfer engine between the core network and the
  * visualizer using the DBud system bus.
- * Data engine definition.
+ * Data engine functionality definition.
  */
-
-
 #include <stdbool.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -15,8 +14,8 @@
 #include <time.h>
 
 #define SERVER_BUS_NAME 			"org.fusionmaps.network"
-#define SERVER_SIGNAL_INTERFACE 	"org.fusionmaps.signals"
-#define SERVER_METHOD_INTERFACE     "org.fusionmaps.methods"
+#define SERVER_SIGNAL_INTERFACE                 "org.fusionmaps.signals"
+#define SERVER_METHOD_INTERFACE                 "org.fusionmaps.methods"
 
 #define METHOD1 "update_values"
 #define SIGNAL1 "sensor_data_connected" 
@@ -28,7 +27,7 @@
 #define SYNC_DATA   10000 // us
 #define US_TO_MS    1000
 
-/* timer types */
+/* update rate timer types */
 enum{
   ONE_SHOT,
   PERIODIC

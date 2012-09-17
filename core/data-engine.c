@@ -1,6 +1,7 @@
-/* Data transfer engine between the core network and the
- * visualizer using the DBud system bus.
- * Data engine implementation.
+/**
+ * Data transfer engine between the core network and the
+ * visualizer using the DBus system bus.
+ * Data engine functionality implementation.
  */
 
 #include "data-engine.h"
@@ -53,7 +54,7 @@ void init_system_bus_connection()
     for(int i = 0;i<=MAPS_NUM;i++){
         sensor_connected[i] = 0;
         user_connected[i] = 0;
-        sensor_data[i] = 0.0f;
+        sensor_data[i] = randomize();
         user_data[i] = 0.0f;
         update_rate_user[i] = 1.0;
         update_rate_sensor[i] = 1.0;
@@ -444,43 +445,43 @@ void rate_timer_handler( int sig, siginfo_t *si, void *uc )
     }
     else if ( *tidp == sensor_timer[1] )
     {
-        // read the sensor
-        sensor_data[1] += 0.0123;
+        // read the sensor - dummy sensor read
+        sensor_data[1] += 0.000002;
         // handle m1 sensor data rate
         M1.data.cells[0][0].val[0] = sensor_data[1];
     }
     else if ( *tidp == sensor_timer[2] )
     {
-        // read the sensor
-        sensor_data[2] += 0.2313;
+        // read the sensor - dummy sensor read
+        sensor_data[2] += 0.000002;
         // handle m2 sensor data rate
         M2.data.cells[0][0].val[0] = sensor_data[2];
     }
     else if ( *tidp == sensor_timer[3] )
     {
-        // read the sensor
-        sensor_data[3] += 0.2131;
+        // read the sensor - dummy sensor read
+        sensor_data[3] += 0.000002;
         // handle m3 sensor data rate
         M3.data.cells[0][0].val[0] = sensor_data[3];
     }
     else if ( *tidp == sensor_timer[4] )
     {
-        // read the sensor
-        sensor_data[4] += 0.0023;
+        // read the sensor - dummy sensor read
+        sensor_data[4] += 0.000002;
         // handle m4 sensor data rate
         M4.data.cells[0][0].val[0] = sensor_data[4];
     }
     else if ( *tidp == sensor_timer[5] )
     {
-        // read the sensor
-        sensor_data[5] += 0.7868;
+        // read the sensor - dummy sensor read
+        sensor_data[5] += 0.000002;
         // handle m5 sensor data rate
         M5.data.cells[0][0].val[0] = sensor_data[5];
     }
     else if ( *tidp == sensor_timer[6] )
     {
-        // read the sensor
-        sensor_data[6] += 0.911;
+        // read the sensor - dummy sensor read
+        sensor_data[6] += 0.000002;
         // handle m6 sensor data rate
         M6.data.cells[0][0].val[0] = sensor_data[6];
     }

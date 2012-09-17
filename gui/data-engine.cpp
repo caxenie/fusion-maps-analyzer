@@ -1,3 +1,9 @@
+/**
+* Distributed cognitive systems design demo - data analyzer GUI.
+* Simple recurrent network that converges to a stable state
+* in which each of the defined relationships are satisfied.
+* Data engine functionality implementation.
+*/
 #include "data-engine.h"
 
 DataEngine::DataEngine(QObject *parent) :

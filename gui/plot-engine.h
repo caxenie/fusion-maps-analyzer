@@ -1,3 +1,9 @@
+/**
+* Distributed cognitive systems design demo - data analyzer GUI.
+* Simple recurrent network that converges to a stable state
+* in which each of the defined relationships are satisfied.
+* Plot engine functionality.
+*/
 #ifndef PLOTENGINE_H
 #define PLOTENGINE_H
 
