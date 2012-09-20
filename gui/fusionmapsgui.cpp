@@ -153,8 +153,8 @@ FusionMapsGui::FusionMapsGui(QWidget *parent) :
     int i;
     // map 1 error
     err_m1_r1 = new error_plot_data;
-    err_m1_r1->duration = 1;
-    err_m1_r1->period = 10;
+    err_m1_r1->duration = 5;
+    err_m1_r1->period = 100;
     per_sec = err_m1_r1->period/1000.0;
     freq = 1/per_sec;
     err_m1_r1->nb_points = int(err_m1_r1->duration * freq + 1);
@@ -187,9 +187,9 @@ FusionMapsGui::FusionMapsGui(QWidget *parent) :
 
     // map 2 errors
     // error to R1
-       err_m2_r1 = new error_plot_data;
-    err_m2_r1->duration = 1;
-    err_m2_r1->period = 10;
+    err_m2_r1 = new error_plot_data;
+    err_m2_r1->duration = 5;
+    err_m2_r1->period = 100;
     per_sec = err_m2_r1->period/1000.0;
     freq = 1/per_sec;
     err_m2_r1->nb_points = int(err_m2_r1->duration * freq + 1);
@@ -222,8 +222,8 @@ FusionMapsGui::FusionMapsGui(QWidget *parent) :
 
     // error to R2
     err_m2_r2 = new error_plot_data;
-    err_m2_r2->duration = 1;
-    err_m2_r2->period = 10;
+    err_m2_r2->duration = 5;
+    err_m2_r2->period = 100;
     per_sec = err_m2_r2->period/1000.0;
     freq = 1/per_sec;
     err_m2_r2->nb_points = int(err_m2_r2->duration * freq + 1);
@@ -257,8 +257,8 @@ FusionMapsGui::FusionMapsGui(QWidget *parent) :
     // map 3 error to R2
 
     err_m3_r2 = new error_plot_data;
-    err_m3_r2->duration = 1;
-    err_m3_r2->period = 10;
+    err_m3_r2->duration = 5;
+    err_m3_r2->period = 100;
     per_sec = err_m3_r2->period/1000.0;
     freq = 1/per_sec;
     err_m3_r2->nb_points = int(err_m3_r2->duration * freq + 1);
@@ -293,8 +293,8 @@ FusionMapsGui::FusionMapsGui(QWidget *parent) :
 
     // error to R2
     err_m4_r2 = new error_plot_data;
-    err_m4_r2->duration = 1;
-    err_m4_r2->period = 10;
+    err_m4_r2->duration = 5;
+    err_m4_r2->period = 100;
     per_sec = err_m4_r2->period/1000.0;
     freq = 1/per_sec;
     err_m4_r2->nb_points = int(err_m4_r2->duration * freq + 1);
@@ -327,8 +327,8 @@ FusionMapsGui::FusionMapsGui(QWidget *parent) :
 
     // error to R3
     err_m4_r3 = new error_plot_data;
-    err_m4_r3->duration = 1;
-    err_m4_r3->period = 10;
+    err_m4_r3->duration = 5;
+    err_m4_r3->period = 100;
     per_sec = err_m4_r3->period/1000.0;
     freq = 1/per_sec;
     err_m4_r3->nb_points = int(err_m4_r3->duration * freq + 1);
@@ -361,8 +361,8 @@ FusionMapsGui::FusionMapsGui(QWidget *parent) :
 
     // map 5 error to R3
     err_m5_r3 = new error_plot_data;
-    err_m5_r3->duration = 1;
-    err_m5_r3->period = 10;
+    err_m5_r3->duration = 5;
+    err_m5_r3->period = 100;
     per_sec = err_m5_r3->period/1000.0;
     freq = 1/per_sec;
     err_m5_r3->nb_points = int(err_m5_r3->duration * freq + 1);
@@ -395,8 +395,8 @@ FusionMapsGui::FusionMapsGui(QWidget *parent) :
 
     // map 6 error to R3
     err_m6_r3 = new error_plot_data;
-    err_m6_r3->duration = 1;
-    err_m6_r3->period = 10;
+    err_m6_r3->duration = 5;
+    err_m6_r3->period = 100;
     per_sec = err_m6_r3->period/1000.0;
     freq = 1/per_sec;
     err_m6_r3->nb_points = int(err_m6_r3->duration * freq + 1);

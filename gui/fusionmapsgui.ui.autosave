@@ -1019,8 +1019,15 @@
     <addaction name="separator"/>
     <addaction name="actionAbout"/>
    </widget>
+   <widget class="QMenu" name="menuGlobal_visualizer">
+    <property name="title">
+     <string>Global visualizer</string>
+    </property>
+    <addaction name="actionOpen"/>
+   </widget>
    <addaction name="menuSimulation"/>
    <addaction name="menuHelp"/>
+   <addaction name="menuGlobal_visualizer"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionStart">
@@ -1061,6 +1068,11 @@
   <action name="actionAbout">
    <property name="text">
     <string>About</string>
+   </property>
+  </action>
+  <action name="actionOpen">
+   <property name="text">
+    <string>Start</string>
    </property>
   </action>
  </widget>

@@ -23,7 +23,7 @@
 #define MAPS_NUMBER 				6
 #define RELAXATION_THRESHOLD        0.0001f
 #define VERBOSE 					1
-#define ETA                         0.002f
+#define ETA                         0.0165f
 
 /* fusion maps network code */
 
