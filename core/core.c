@@ -1,7 +1,6 @@
 /**
- * Distributed cognitive systems design demo.
- * Simple recurrent network that converges to a stable state
- * in which each of the defined relationships are satisfied.
+ * Simple recurrent network that converges
+ * so that each of the relations to be satisfied.
  * Core functionality implementation.
  */
 

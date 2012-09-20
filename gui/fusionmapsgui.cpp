@@ -181,7 +181,7 @@ FusionMapsGui::FusionMapsGui(QWidget *parent) :
     err_m1_r1->data_curve->setRawSamples(err_m1_r1->datax, err_m1_r1->datay, err_m1_r1->idx);
     ui->error_r1_plot1->setAxisScale(QwtPlot::yLeft, -10*BOUND, 10*BOUND);
     ui->error_r1_plot1->setAxisScale(QwtPlot::xBottom, err_m1_r1->datax[0], err_m1_r1->datax[err_m1_r1->nb_points - 1]);
-    ui->error_r1_plot1->enableAxis(QwtPlot::xBottom, false);
+    ui->error_r1_plot1->enableAxis(QwtPlot::xBottom, true);
     ui->error_r1_plot1->setAutoReplot(true);
     grid->attach(ui->error_r1_plot1);
 
@@ -216,7 +216,7 @@ FusionMapsGui::FusionMapsGui(QWidget *parent) :
     err_m2_r1->data_curve->setRawSamples(err_m2_r1->datax, err_m2_r1->datay, err_m2_r1->idx);
     ui->error_r1_plot2->setAxisScale(QwtPlot::yLeft, -10*BOUND, 10*BOUND);
     ui->error_r1_plot2->setAxisScale(QwtPlot::xBottom, err_m2_r1->datax[0], err_m2_r1->datax[err_m2_r1->nb_points - 1]);
-    ui->error_r1_plot2->enableAxis(QwtPlot::xBottom, false);
+    ui->error_r1_plot2->enableAxis(QwtPlot::xBottom, true);
     ui->error_r1_plot2->setAutoReplot(true);
     grid->attach(ui->error_r1_plot2);
 
@@ -250,7 +250,7 @@ FusionMapsGui::FusionMapsGui(QWidget *parent) :
     err_m2_r2->data_curve->setRawSamples(err_m2_r2->datax, err_m2_r2->datay, err_m2_r2->idx);
     ui->error_r2_plot2->setAxisScale(QwtPlot::yLeft, -10*BOUND, 10*BOUND);
     ui->error_r2_plot2->setAxisScale(QwtPlot::xBottom, err_m2_r2->datax[0], err_m2_r2->datax[err_m2_r2->nb_points - 1]);
-    ui->error_r2_plot2->enableAxis(QwtPlot::xBottom, false);
+    ui->error_r2_plot2->enableAxis(QwtPlot::xBottom, true);
     ui->error_r2_plot2->setAutoReplot(true);
     grid->attach(ui->error_r2_plot2);
 
@@ -285,7 +285,7 @@ FusionMapsGui::FusionMapsGui(QWidget *parent) :
     err_m3_r2->data_curve->setRawSamples(err_m3_r2->datax, err_m3_r2->datay, err_m3_r2->idx);
     ui->error_r2_plot3->setAxisScale(QwtPlot::yLeft, -10*BOUND, 10*BOUND);
     ui->error_r2_plot3->setAxisScale(QwtPlot::xBottom, err_m3_r2->datax[0], err_m3_r2->datax[err_m3_r2->nb_points - 1]);
-    ui->error_r2_plot3->enableAxis(QwtPlot::xBottom, false);
+    ui->error_r2_plot3->enableAxis(QwtPlot::xBottom, true);
     ui->error_r2_plot3->setAutoReplot(true);
     grid->attach(ui->error_r2_plot3);
 
@@ -321,7 +321,7 @@ FusionMapsGui::FusionMapsGui(QWidget *parent) :
     err_m4_r2->data_curve->setRawSamples(err_m4_r2->datax, err_m4_r2->datay, err_m4_r2->idx);
     ui->error_r2_plot4->setAxisScale(QwtPlot::yLeft, -10*BOUND, 10*BOUND);
     ui->error_r2_plot4->setAxisScale(QwtPlot::xBottom, err_m4_r2->datax[0], err_m4_r2->datax[err_m4_r2->nb_points - 1]);
-    ui->error_r2_plot4->enableAxis(QwtPlot::xBottom, false);
+    ui->error_r2_plot4->enableAxis(QwtPlot::xBottom, true);
     ui->error_r2_plot4->setAutoReplot(true);
     grid->attach(ui->error_r2_plot4);
 
@@ -355,7 +355,7 @@ FusionMapsGui::FusionMapsGui(QWidget *parent) :
     err_m4_r3->data_curve->setRawSamples(err_m4_r3->datax, err_m4_r3->datay, err_m4_r3->idx);
     ui->error_r3_plot4->setAxisScale(QwtPlot::yLeft, -10*BOUND, 10*BOUND);
     ui->error_r3_plot4->setAxisScale(QwtPlot::xBottom, err_m4_r3->datax[0], err_m4_r3->datax[err_m4_r3->nb_points - 1]);
-    ui->error_r3_plot4->enableAxis(QwtPlot::xBottom, false);
+    ui->error_r3_plot4->enableAxis(QwtPlot::xBottom, true);
     ui->error_r3_plot4->setAutoReplot(true);
     grid->attach(ui->error_r3_plot4);
 
@@ -389,7 +389,7 @@ FusionMapsGui::FusionMapsGui(QWidget *parent) :
     err_m5_r3->data_curve->setRawSamples(err_m5_r3->datax, err_m5_r3->datay, err_m5_r3->idx);
     ui->error_r3_plot5->setAxisScale(QwtPlot::yLeft, -10*BOUND, 10*BOUND);
     ui->error_r3_plot5->setAxisScale(QwtPlot::xBottom, err_m5_r3->datax[0], err_m5_r3->datax[err_m5_r3->nb_points - 1]);
-    ui->error_r3_plot5->enableAxis(QwtPlot::xBottom, false);
+    ui->error_r3_plot5->enableAxis(QwtPlot::xBottom, true);
     ui->error_r3_plot5->setAutoReplot(true);
     grid->attach(ui->error_r3_plot5);
 
@@ -423,7 +423,7 @@ FusionMapsGui::FusionMapsGui(QWidget *parent) :
     err_m6_r3->data_curve->setRawSamples(err_m6_r3->datax, err_m6_r3->datay, err_m6_r3->idx);
     ui->error_r3_plot6->setAxisScale(QwtPlot::yLeft, -10*BOUND, 10*BOUND);
     ui->error_r3_plot6->setAxisScale(QwtPlot::xBottom, err_m6_r3->datax[0], err_m6_r3->datax[err_m6_r3->nb_points - 1]);
-    ui->error_r3_plot6->enableAxis(QwtPlot::xBottom, false);
+    ui->error_r3_plot6->enableAxis(QwtPlot::xBottom, true);
     ui->error_r3_plot6->setAutoReplot(true);
     grid->attach(ui->error_r3_plot6);
 }

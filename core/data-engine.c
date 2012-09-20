@@ -196,7 +196,7 @@ void handle_client_signals(DBusMessage *msg)
     DBusMessageIter args;
     char *sigvalue;
     double data;
-    int map_id;
+    static int map_id;
     int rc;
 
     // check if the message is a signal from the correct interface and with the correct name
@@ -235,9 +235,7 @@ void handle_client_signals(DBusMessage *msg)
         // if the map has already a timer running cancel it
         if(sensor_connected[map_id] == 1){
             cancel_rate_timer(sensor_timer[map_id]);
-        }
-        if(user_connected[map_id] ==1){
-            cancel_rate_timer(user_timer[map_id]);
+            printf("cancelled sensor timer for map %d\n", map_id);
         }
         // validate sensor interface
         sensor_connected[map_id] = 1;
@@ -247,6 +245,7 @@ void handle_client_signals(DBusMessage *msg)
         if((rc=create_rate_timer(&sensor_timer[map_id], SYNC_DATA/US_TO_MS, SYNC_DATA/US_TO_MS, PERIODIC))==-1){
             printf("Error setting timer for the user data update in map %d \n", map_id);
         }
+        printf("created sensor timer for map %d\n", map_id);
     }
     // sensor was disconnected from map
     if(strcmp(sigvalue, SIGNAL1)==0 && data==0.0){
@@ -254,17 +253,15 @@ void handle_client_signals(DBusMessage *msg)
         sensor_connected[map_id] = 0;
         // sensor is disconnected so, disarm and delete all the associated timers
         cancel_rate_timer(sensor_timer[map_id]);
+        printf("cancelled sensor timer for map %d\n", map_id);
     }
 
 
     // user data is connected to the map
     if(strcmp(sigvalue, SIGNAL3)==0 && data==1.0){
-        // if the map has already a timer running cancel it
-        if(sensor_connected[map_id] == 1){
-            cancel_rate_timer(sensor_timer[map_id]);
-        }
         if(user_connected[map_id] == 1){
             cancel_rate_timer(user_timer[map_id]);
+            printf("cancelled user timer for map %d\n", map_id);
         }
         // validate user connection
         user_connected[map_id] = 1;
@@ -274,18 +271,23 @@ void handle_client_signals(DBusMessage *msg)
         if((rc=create_rate_timer(&user_timer[map_id], SYNC_DATA/US_TO_MS, SYNC_DATA/US_TO_MS, PERIODIC))==-1){
             printf("Error setting timer for the user data update in map %d \n", map_id);
         }
+        printf("created user timer for map %d\n", map_id);
     }
     // if button was released disconnect from map and stop timers
     if(strcmp(sigvalue, SIGNAL3)==0 && data==0.0){
         // invalidate user connection
         user_connected[map_id] = 0;
         cancel_rate_timer(user_timer[map_id]);
+        printf("cancelled user timer for map %d\n", map_id);
     }
 
     // input data rate changed
     if(strcmp(sigvalue, SIGNAL2) == 0){
         // check if we modify the use or the sensor data rate
         if(user_connected[map_id]==1){
+            // cancel already existing timers
+            cancel_rate_timer(user_timer[map_id]);
+            printf("cancelled user timer for map %d\n", map_id);
             update_rate_user[map_id] = data;
             // invalidate sensor connection
             sensor_connected[map_id] = 0;
@@ -293,9 +295,13 @@ void handle_client_signals(DBusMessage *msg)
             if((rc=create_rate_timer(&user_timer[map_id], SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, ONE_SHOT))==-1){
                 printf("Error setting timer for the user data update in map %d \n", map_id);
             }
+            printf("created user timer for map %d\n", map_id);
         }
 
         if(sensor_connected[map_id] == 1){
+            // cancel already existing timers
+            cancel_rate_timer(sensor_timer[map_id]);
+            printf("cancelled sensor timer for map %d\n", map_id);
             // connect sensor to the map
             update_rate_sensor[map_id] = data;
             // invalidate user connection
@@ -304,23 +310,23 @@ void handle_client_signals(DBusMessage *msg)
             if((rc=create_rate_timer(&sensor_timer[map_id], SYNC_DATA*(int)update_rate_sensor[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_sensor[map_id]/US_TO_MS, ONE_SHOT))==-1){
                 printf("Error setting timer for the user data update in map %d \n", map_id);
             }
+            printf("cancelled sensor timer for map %d\n", map_id);
         }
     }
 
     // user data value changed
     if(strcmp(sigvalue, SIGNAL4) == 0){
         // if the map has already a timer running cancel it
-        if(sensor_connected[map_id] == 1){
-            cancel_rate_timer(sensor_timer[map_id]);
-        }
         if(user_connected[map_id] ==1){
             cancel_rate_timer(user_timer[map_id]);
+            printf("cancelled user timer for map %d\n", map_id);
         }
         user_data[map_id] = data;
         // start timer for data update rate
         if((rc=create_rate_timer(&user_timer[map_id], SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, SYNC_DATA*(int)update_rate_user[map_id]/US_TO_MS, PERIODIC))==-1){
             printf("Error setting timer for the user data update in map %d \n", map_id);
         }
+        printf("created user timer for map %d\n", map_id);
     }
 }
 
@@ -548,6 +554,5 @@ int cancel_rate_timer(timer_t timer_id)
        printf("CORE: DATA-ENGINE: CANCEL-RATE-TIMER: Cannot cancel timer with id %d, error %d \n", (int)timer_id, ret);
        return -1;
     }
-   timer_delete(timer_id);
    return 0;
 }
