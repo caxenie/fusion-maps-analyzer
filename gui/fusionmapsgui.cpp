@@ -1,5 +1,5 @@
 /**
- * Distributed cognitive systems design demo.
+ * Distributed cognitive systems design demo - data analyzer GUI.
  * Simple recurrent network that converges to a stable state
  * in which each of the defined relationships are satisfied.
  * Main functionality implementation.
@@ -187,7 +187,7 @@ FusionMapsGui::FusionMapsGui(QWidget *parent) :
 
     // map 2 errors
     // error to R1
-    err_m2_r1 = new error_plot_data;
+       err_m2_r1 = new error_plot_data;
     err_m2_r1->duration = 5;
     err_m2_r1->period = 100;
     per_sec = err_m2_r1->period/1000.0;

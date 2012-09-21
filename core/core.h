@@ -23,44 +23,50 @@
 #define MAPS_NUMBER 				6
 #define RELAXATION_THRESHOLD        0.0001f
 #define VERBOSE 					1
-#define ETA                         0.02f
+#define ETA12                        0.03456f
+#define ETA21                        0.01346f
+#define ETA234                       0.03884f
+#define ETA432                       0.03123f
+#define ETA456                       0.05876f
+#define ETA654                       0.04345f
+
 
 /* fusion maps network code */
 
 /* network type */
 enum
 {
-  MAP_1D = 1,
-  MAP_2D,
-  MAP_3D
+    MAP_1D = 1,
+    MAP_2D,
+    MAP_3D
 };
 
 /* cardinal number - number of relations in which a map is involved */
 enum{
-  LINK1 = 1,
-  LINK2,
-  LINK3
+    LINK1 = 1,
+    LINK2,
+    LINK3
 };
 
 /* a map cell that contains data of a certain type */
 typedef struct
 {
-  int type;			/* type of the cell, e.g. 1D, 2D, 3D */
-  double *val;      /* value in a cell: e.g. 1 value (1D), 2 values (2D), 3 values (3D) */
+    int type;			/* type of the cell, e.g. 1D, 2D, 3D */
+    double *val;      /* value in a cell: e.g. 1 value (1D), 2 values (2D), 3 values (3D) */
 } cell;
 
 typedef struct
 {
-  int size;             /* map size, e.g. squared maps size*size */
-  cell **cells;			/* cells that contain data representation */
+    int size;             /* map size, e.g. squared maps size*size */
+    cell **cells;			/* cells that contain data representation */
 } data;
 
 /* a map definition that contains multiple cells ancoding a certain feature */
 typedef struct
 {
-  int id;               /* numeric id unique for each map */
-  int links;             /* number of relations in which the map is involved */
-  data data;			/* the actual map data encapsuled */
+    int id;               /* numeric id unique for each map */
+    int links;             /* number of relations in which the map is involved */
+    data data;			/* the actual map data encapsuled */
 } map;
 
 /* globals */

@@ -21,6 +21,9 @@ short g_verbose = 1;
 int
 main (int argc, char **argv)
 {
+    FILE *f = fopen("fusion-analyzer-data.log","w+");
+    char* log_bufferw = (char*)calloc(200, sizeof(char));
+    long timer = 0;
     /* register signals */
     signal(SIGCONT, resume_network);
     signal(SIGUSR1, restart_network);
@@ -121,8 +124,8 @@ main (int argc, char **argv)
                                  M1ant);
 
                     M1.data.cells[i][j].val[0] =
-                            (1 - 2 * ETA) * M1.data.cells[i][j].val[0] +
-                            2 / 3 * ETA * M2.data.cells[i][j].val[0]; // compute new value for the map
+                            (1 - 2 * ETA21) * M1.data.cells[i][j].val[0] +
+                            2 / 3 * ETA21 * M2.data.cells[i][j].val[0]; // compute new value for the map
 
                     log_message
                             ("CORE: Updated Map  %d \n",
@@ -151,16 +154,16 @@ main (int argc, char **argv)
                                  M2ant);
 
                     M2.data.cells[i][j].val[0] =
-                            (1 - 2 * ETA) * M2.data.cells[i][j].val[0] +
-                            6 * ETA * M1.data.cells[i][j].val[0];
+                            (1 - 2 * ETA12) * M2.data.cells[i][j].val[0] +
+                            6 * ETA12 * M1.data.cells[i][j].val[0];
                     log_message
                             ("CORE: Updated Map  %d with respect tp R1 \n",
                              rand_map);
                     log_message ("CORE: M2 = %lf\n",
                                  M2.data.cells[i][j].val[0]);
                     M2.data.cells[i][j].val[0] =
-                            (1 - 2 * ETA) * M2.data.cells[i][j].val[0] +
-                            2 * ETA * (M3.data.cells[i][j].val[0] /
+                            (1 - 2 * ETA432) * M2.data.cells[i][j].val[0] +
+                            2 * ETA432 * (M3.data.cells[i][j].val[0] /
                                        M4.data.cells[i][j].val[0]);
                     log_message
                             ("CORE: Updated Map  %d with respect to R2 \n",
@@ -190,8 +193,8 @@ main (int argc, char **argv)
                                  M3ant);
 
                     M3.data.cells[i][j].val[0] =
-                            (1 - 2 * ETA) * M3.data.cells[i][j].val[0] +
-                            2 * ETA * M2.data.cells[i][j].val[0] *
+                            (1 - 2 * ETA432) * M3.data.cells[i][j].val[0] +
+                            2 * ETA432 * M2.data.cells[i][j].val[0] *
                             M4.data.cells[i][j].val[0];
 
                     log_message
@@ -221,8 +224,8 @@ main (int argc, char **argv)
                                  M4ant);
 
                     M4.data.cells[i][j].val[0] =
-                            (1 - 2 * ETA) * M4.data.cells[i][j].val[0] +
-                            2 * ETA * (M3.data.cells[i][j].val[0] /
+                            (1 - 2 * ETA234) * M4.data.cells[i][j].val[0] +
+                            2 * ETA234 * (M3.data.cells[i][j].val[0] /
                                        M2.data.cells[i][j].val[0]);
                     log_message
                             ("CORE: Updated Map  %d with respect to R2 \n",
@@ -231,8 +234,8 @@ main (int argc, char **argv)
                                  M4.data.cells[i][j].val[0]);
 
                     M4.data.cells[i][j].val[0] =
-                            (1 - 2 * ETA) * M4.data.cells[i][j].val[0] +
-                            2 * ETA * (M5.data.cells[i][j].val[0] +
+                            (1 - 2 * ETA654) * M4.data.cells[i][j].val[0] +
+                            2 * ETA654 * (M5.data.cells[i][j].val[0] +
                                        2 * M6.data.cells[i][j].val[0]);
                     log_message
                             ("CORE: Updated Map  %d with respect to R3 \n",
@@ -261,8 +264,8 @@ main (int argc, char **argv)
                                  M5ant);
 
                     M5.data.cells[i][j].val[0] =
-                            (1 - 2 * ETA) * M5.data.cells[i][j].val[0] -
-                            2 * ETA * (2 * M6.data.cells[i][j].val[0] -
+                            (1 - 2 * ETA456) * M5.data.cells[i][j].val[0] -
+                            2 * ETA456 * (2 * M6.data.cells[i][j].val[0] -
                                        M4.data.cells[i][j].val[0]);
                     log_message
                             ("CORE: Updated Map  %d  \n",
@@ -291,8 +294,8 @@ main (int argc, char **argv)
                                  M6ant);
 
                     M6.data.cells[i][j].val[0] =
-                            (1 - 2 * ETA) * M6.data.cells[i][j].val[0] +
-                            ETA *
+                            (1 - 2 * ETA456) * M6.data.cells[i][j].val[0] +
+                            ETA456 *
                             ((M4.data.cells[i][j].val[0] -
                               M5.data.cells[i][j].val[0]));
                     log_message
@@ -403,6 +406,24 @@ main (int argc, char **argv)
         }
 
         log_message("Loop time: %f ms\n",(double) (stop.tv_nsec-start.tv_nsec)/1000000); // get time in ms
+        timer++;
+        sprintf(log_bufferw, "%f %f %f %f %f %f %f %f %f %f %f %f %f %f %ld\n",
+                                                    M1.data.cells[0][0].val[0],
+                                                    M2.data.cells[0][0].val[0],
+                                                    M3.data.cells[0][0].val[0],
+                                                    M4.data.cells[0][0].val[0],
+                                                    M5.data.cells[0][0].val[0],
+                                                    M6.data.cells[0][0].val[0],
+                                                    E1[0],
+                                                    E2[0],
+                                                    E2[1],
+                                                    E3[0],
+                                                    E4[0],
+                                                    E4[1],
+                                                    E5[0],
+                                                    E6[0],
+                                                    timer);
+        fwrite(log_bufferw, strlen(log_bufferw), 1, f);
 
     }
     return 0;
