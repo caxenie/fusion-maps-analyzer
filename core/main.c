@@ -8,7 +8,7 @@
 #include "data-engine.h"
 #include "core.h"
 
-short g_verbose = 0;
+short g_verbose = 1;
 
 #define log_message(format,args...) \
     do{ \

@@ -1,4 +1,4 @@
-/*
+/**
  * Distributed cognitive systems design demo.
  * Simple recurrent network that converges to a stable state
  * in which each of the defined relationships are satisfied.
@@ -23,7 +23,7 @@
 #define MAPS_NUMBER 				6
 #define RELAXATION_THRESHOLD        0.0001f
 #define VERBOSE 					1
-#define ETA                         0.0165f
+#define ETA                         0.02f
 
 /* fusion maps network code */
 
