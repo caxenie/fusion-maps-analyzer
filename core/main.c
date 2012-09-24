@@ -82,7 +82,6 @@ main (int argc, char **argv)
     {
       /* start time */
       if( clock_gettime( CLOCK_REALTIME , &start) == -1 ) {
-          printf( "clock gettime" );
           exit( EXIT_FAILURE );
         }
 
@@ -134,7 +133,7 @@ main (int argc, char **argv)
                       log_message ("CORE: M1ant = %lf\n",
                                    M1ant);
 
-                      printf("Update M1: M2 state is : %lf \n", M2.data.cells[i][j].val[0]);
+                      log_message("Update M1: M2 state is : %lf \n", M2.data.cells[i][j].val[0]);
                       M1.data.cells[i][j].val[0] =
                           (1 - 18 * ETA21) * M1.data.cells[i][j].val[0] +
                           6 * ETA21 * M2.data.cells[i][j].val[0]; // compute new value for the map
@@ -165,7 +164,7 @@ main (int argc, char **argv)
                       log_message ("CORE: M2ant = %lf\n",
                                    M2ant);
 
-                      printf("Update M2: M1 state is : %lf \n", M1.data.cells[i][j].val[0]);
+                      log_message("Update M2: M1 state is : %lf \n", M1.data.cells[i][j].val[0]);
                       M2.data.cells[i][j].val[0] =
                           (1 - 2 * ETA12) * M2.data.cells[i][j].val[0] +
                           6 * ETA12 * M1.data.cells[i][j].val[0];
@@ -174,8 +173,8 @@ main (int argc, char **argv)
                            rand_map);
                       log_message ("CORE: M2 = %lf\n",
                                    M2.data.cells[i][j].val[0]);
-                      printf("Update M2: M3 state is : %lf \n", M3.data.cells[i][j].val[0]);
-                      printf("Update M2: M4 state is : %lf \n", M4.data.cells[i][j].val[0]);
+                      log_message("Update M2: M3 state is : %lf \n", M3.data.cells[i][j].val[0]);
+                      log_message("Update M2: M4 state is : %lf \n", M4.data.cells[i][j].val[0]);
                       M2.data.cells[i][j].val[0] =
                           (1 + 4 * ETA432 * pow(M4.data.cells[i][j].val[0],2) ) * M2.data.cells[i][j].val[0] -
                            4 * ETA432*M3.data.cells[i][j].val[0]*M4.data.cells[i][j].val[0];
@@ -206,8 +205,8 @@ main (int argc, char **argv)
 
                       log_message ("CORE: M3ant = %lf\n",
                                    M3ant);
-                      printf("Update M3: M2 state is : %lf \n", M2.data.cells[i][j].val[0]);
-                      printf("Update M3: M4 state is : %lf \n", M4.data.cells[i][j].val[0]);
+                      log_message("Update M3: M2 state is : %lf \n", M2.data.cells[i][j].val[0]);
+                      log_message("Update M3: M4 state is : %lf \n", M4.data.cells[i][j].val[0]);
                       M3.data.cells[i][j].val[0] =
                           (1 - 4 * ETA432) * M3.data.cells[i][j].val[0] +
                           4 * ETA432 * M2.data.cells[i][j].val[0] *
@@ -238,8 +237,8 @@ main (int argc, char **argv)
 
                       log_message ("CORE: M4ant = %lf\n",
                                    M4ant);
-                      printf("Update M4: M2 state is : %lf \n", M2.data.cells[i][j].val[0]);
-                      printf("Update M4: M3 state is : %lf \n", M3.data.cells[i][j].val[0]);
+                      log_message("Update M4: M2 state is : %lf \n", M2.data.cells[i][j].val[0]);
+                      log_message("Update M4: M3 state is : %lf \n", M3.data.cells[i][j].val[0]);
                       M4.data.cells[i][j].val[0] =
                           (1 - 4 * ETA234 * pow(M2.data.cells[i][j].val[0], 2)) * M4.data.cells[i][j].val[0] +
                           4 * ETA234 * (M3.data.cells[i][j].val[0] *
@@ -249,8 +248,8 @@ main (int argc, char **argv)
                            rand_map);
                       log_message ("CORE: M4 = %lf\n",
                                    M4.data.cells[i][j].val[0]);
-                      printf("Update M4: M5 state is : %lf \n", M5.data.cells[i][j].val[0]);
-                      printf("Update M4: M6 state is : %lf \n", M6.data.cells[i][j].val[0]);
+                      log_message("Update M4: M5 state is : %lf \n", M5.data.cells[i][j].val[0]);
+                      log_message("Update M4: M6 state is : %lf \n", M6.data.cells[i][j].val[0]);
                       M4.data.cells[i][j].val[0] =
                           (1 - 4 * ETA654) * M4.data.cells[i][j].val[0] +
                           4 * ETA654 * (M5.data.cells[i][j].val[0] +
@@ -280,8 +279,8 @@ main (int argc, char **argv)
 
                       log_message ("CORE: M5ant = %lf\n",
                                    M5ant);
-                      printf("Update M5: M4 state is : %lf \n", M4.data.cells[i][j].val[0]);
-                      printf("Update M5: M6 state is : %lf \n", M6.data.cells[i][j].val[0]);
+                      log_message("Update M5: M4 state is : %lf \n", M4.data.cells[i][j].val[0]);
+                      log_message("Update M5: M6 state is : %lf \n", M6.data.cells[i][j].val[0]);
                       M5.data.cells[i][j].val[0] =
                           (1 - 4 * ETA456) * M5.data.cells[i][j].val[0] +
                           4 * ETA456 * (M4.data.cells[i][j].val[0] - 2 * M6.data.cells[i][j].val[0]);
@@ -311,8 +310,8 @@ main (int argc, char **argv)
                       log_message ("CORE: M6ant = %lf\n",
                                    M6ant);
 
-                      printf("Update M6: M4 state is : %lf \n", M4.data.cells[i][j].val[0]);
-                      printf("Update M6: M5 state is : %lf \n", M5.data.cells[i][j].val[0]);
+                      log_message("Update M6: M4 state is : %lf \n", M4.data.cells[i][j].val[0]);
+                      log_message("Update M6: M5 state is : %lf \n", M5.data.cells[i][j].val[0]);
                       M6.data.cells[i][j].val[0] =
                           (1 - 16 * ETA456) * M6.data.cells[i][j].val[0] +
                           8 * ETA456 *
