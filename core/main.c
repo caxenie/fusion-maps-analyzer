@@ -8,7 +8,7 @@
 #include "data-engine.h"
 #include "core.h"
 
-short g_verbose = 1;
+short g_verbose = 0;
 
 #define log_message(format,args...) \
   do{ \
@@ -64,6 +64,7 @@ main (int argc, char **argv)
 
   double M1ant = 0.0f, M2ant = 0.0f, M3ant = 0.0f, M4ant = 0.0f, M5ant = 0.0f, M6ant = 0.0f;
 
+  // initialize map connections to user/sensor
   for(int i=0;i<MAPS_NUM+1;i++){
       update_state[i] = 0;
       user_connected[i] = 0;
@@ -120,6 +121,7 @@ main (int argc, char **argv)
       /* get a map from the net */
       rand_map = (rand () % (MAPS_NUMBER) + 1);
 
+      // update a map only if a sensor / user not connected
       if(user_connected[rand_map] ==0 && sensor_connected[rand_map] ==0 ){
           if (rand_map == 1)
             {
@@ -132,9 +134,10 @@ main (int argc, char **argv)
                       log_message ("CORE: M1ant = %lf\n",
                                    M1ant);
 
+                      printf("Update M1: M2 state is : %lf \n", M2.data.cells[i][j].val[0]);
                       M1.data.cells[i][j].val[0] =
-                          (1 - 2 * ETA21) * M1.data.cells[i][j].val[0] +
-                          2 / 3 * ETA21 * M2.data.cells[i][j].val[0]; // compute new value for the map
+                          (1 - 18 * ETA21) * M1.data.cells[i][j].val[0] +
+                          6 * ETA21 * M2.data.cells[i][j].val[0]; // compute new value for the map
 
                       log_message
                           ("CORE: Updated Map  %d \n",
@@ -162,6 +165,7 @@ main (int argc, char **argv)
                       log_message ("CORE: M2ant = %lf\n",
                                    M2ant);
 
+                      printf("Update M2: M1 state is : %lf \n", M1.data.cells[i][j].val[0]);
                       M2.data.cells[i][j].val[0] =
                           (1 - 2 * ETA12) * M2.data.cells[i][j].val[0] +
                           6 * ETA12 * M1.data.cells[i][j].val[0];
@@ -170,10 +174,12 @@ main (int argc, char **argv)
                            rand_map);
                       log_message ("CORE: M2 = %lf\n",
                                    M2.data.cells[i][j].val[0]);
+                      printf("Update M2: M3 state is : %lf \n", M3.data.cells[i][j].val[0]);
+                      printf("Update M2: M4 state is : %lf \n", M4.data.cells[i][j].val[0]);
                       M2.data.cells[i][j].val[0] =
-                          (1 - 2 * ETA432) * M2.data.cells[i][j].val[0] +
-                          2 * ETA432 * (M3.data.cells[i][j].val[0] /
-                                        M4.data.cells[i][j].val[0]);
+                          (1 + 4 * ETA432 * pow(M4.data.cells[i][j].val[0],2) ) * M2.data.cells[i][j].val[0] -
+                           4 * ETA432*M3.data.cells[i][j].val[0]*M4.data.cells[i][j].val[0];
+
                       log_message
                           ("CORE: Updated Map  %d with respect to R2 \n",
                            rand_map);
@@ -200,10 +206,11 @@ main (int argc, char **argv)
 
                       log_message ("CORE: M3ant = %lf\n",
                                    M3ant);
-
+                      printf("Update M3: M2 state is : %lf \n", M2.data.cells[i][j].val[0]);
+                      printf("Update M3: M4 state is : %lf \n", M4.data.cells[i][j].val[0]);
                       M3.data.cells[i][j].val[0] =
-                          (1 - 2 * ETA432) * M3.data.cells[i][j].val[0] +
-                          2 * ETA432 * M2.data.cells[i][j].val[0] *
+                          (1 - 4 * ETA432) * M3.data.cells[i][j].val[0] +
+                          4 * ETA432 * M2.data.cells[i][j].val[0] *
                           M4.data.cells[i][j].val[0];
 
                       log_message
@@ -231,20 +238,22 @@ main (int argc, char **argv)
 
                       log_message ("CORE: M4ant = %lf\n",
                                    M4ant);
-
+                      printf("Update M4: M2 state is : %lf \n", M2.data.cells[i][j].val[0]);
+                      printf("Update M4: M3 state is : %lf \n", M3.data.cells[i][j].val[0]);
                       M4.data.cells[i][j].val[0] =
-                          (1 - 2 * ETA234) * M4.data.cells[i][j].val[0] +
-                          2 * ETA234 * (M3.data.cells[i][j].val[0] /
+                          (1 - 4 * ETA234 * pow(M2.data.cells[i][j].val[0], 2)) * M4.data.cells[i][j].val[0] +
+                          4 * ETA234 * (M3.data.cells[i][j].val[0] *
                                         M2.data.cells[i][j].val[0]);
                       log_message
                           ("CORE: Updated Map  %d with respect to R2 \n",
                            rand_map);
                       log_message ("CORE: M4 = %lf\n",
                                    M4.data.cells[i][j].val[0]);
-
+                      printf("Update M4: M5 state is : %lf \n", M5.data.cells[i][j].val[0]);
+                      printf("Update M4: M6 state is : %lf \n", M6.data.cells[i][j].val[0]);
                       M4.data.cells[i][j].val[0] =
-                          (1 - 2 * ETA654) * M4.data.cells[i][j].val[0] +
-                          2 * ETA654 * (M5.data.cells[i][j].val[0] +
+                          (1 - 4 * ETA654) * M4.data.cells[i][j].val[0] +
+                          4 * ETA654 * (M5.data.cells[i][j].val[0] +
                                         2 * M6.data.cells[i][j].val[0]);
                       log_message
                           ("CORE: Updated Map  %d with respect to R3 \n",
@@ -271,11 +280,11 @@ main (int argc, char **argv)
 
                       log_message ("CORE: M5ant = %lf\n",
                                    M5ant);
-
+                      printf("Update M5: M4 state is : %lf \n", M4.data.cells[i][j].val[0]);
+                      printf("Update M5: M6 state is : %lf \n", M6.data.cells[i][j].val[0]);
                       M5.data.cells[i][j].val[0] =
-                          (1 - 2 * ETA456) * M5.data.cells[i][j].val[0] -
-                          2 * ETA456 * (2 * M6.data.cells[i][j].val[0] -
-                                        M4.data.cells[i][j].val[0]);
+                          (1 - 4 * ETA456) * M5.data.cells[i][j].val[0] +
+                          4 * ETA456 * (M4.data.cells[i][j].val[0] - 2 * M6.data.cells[i][j].val[0]);
                       log_message
                           ("CORE: Updated Map  %d  \n",
                            rand_map);
@@ -302,9 +311,11 @@ main (int argc, char **argv)
                       log_message ("CORE: M6ant = %lf\n",
                                    M6ant);
 
+                      printf("Update M6: M4 state is : %lf \n", M4.data.cells[i][j].val[0]);
+                      printf("Update M6: M5 state is : %lf \n", M5.data.cells[i][j].val[0]);
                       M6.data.cells[i][j].val[0] =
-                          (1 - 2 * ETA456) * M6.data.cells[i][j].val[0] +
-                          ETA456 *
+                          (1 - 16 * ETA456) * M6.data.cells[i][j].val[0] +
+                          8 * ETA456 *
                           ((M4.data.cells[i][j].val[0] -
                             M5.data.cells[i][j].val[0]));
                       log_message
@@ -328,19 +339,19 @@ main (int argc, char **argv)
         {
           for (int j = 0; j < MAP_SIZE; j++)
             {
-              if(isnan(M1.data.cells[i][j].val[0])!=0) M1.data.cells[i][j].val[0] = 0.0000001;
-              if(isnan(M2.data.cells[i][j].val[0])!=0) M2.data.cells[i][j].val[0] = 0.0000001;
-              if(isnan(M3.data.cells[i][j].val[0])!=0) M3.data.cells[i][j].val[0] = 0.0000001;
-              if(isnan(M4.data.cells[i][j].val[0])!=0) M4.data.cells[i][j].val[0] = 0.0000001;
-              if(isnan(M5.data.cells[i][j].val[0])!=0) M5.data.cells[i][j].val[0] = 0.0000001;
-              if(isnan(M6.data.cells[i][j].val[0])!=0) M6.data.cells[i][j].val[0] = 0.0000001;
+              if(isnan(M1.data.cells[i][j].val[0])!=0) M1.data.cells[i][j].val[0] = 0.0;
+              if(isnan(M2.data.cells[i][j].val[0])!=0) M2.data.cells[i][j].val[0] = 0.0;
+              if(isnan(M3.data.cells[i][j].val[0])!=0) M3.data.cells[i][j].val[0] = 0.0;
+              if(isnan(M4.data.cells[i][j].val[0])!=0) M4.data.cells[i][j].val[0] = 0.0;
+              if(isnan(M5.data.cells[i][j].val[0])!=0) M5.data.cells[i][j].val[0] = 0.0;
+              if(isnan(M6.data.cells[i][j].val[0])!=0) M6.data.cells[i][j].val[0] = 0.0;
 
-              if(isinf(M1.data.cells[i][j].val[0])!=0) M1.data.cells[i][j].val[0] = 1.0000001;
-              if(isinf(M2.data.cells[i][j].val[0])!=0) M2.data.cells[i][j].val[0] = 1.0000001;
-              if(isinf(M3.data.cells[i][j].val[0])!=0) M3.data.cells[i][j].val[0] = 1.0000001;
-              if(isinf(M4.data.cells[i][j].val[0])!=0) M4.data.cells[i][j].val[0] = 1.0000001;
-              if(isinf(M5.data.cells[i][j].val[0])!=0) M5.data.cells[i][j].val[0] = 1.0000001;
-              if(isinf(M6.data.cells[i][j].val[0])!=0) M6.data.cells[i][j].val[0] = 1.0000001;
+              if(isinf(M1.data.cells[i][j].val[0])!=0) M1.data.cells[i][j].val[0] = 0.0;
+              if(isinf(M2.data.cells[i][j].val[0])!=0) M2.data.cells[i][j].val[0] = 0.0;
+              if(isinf(M3.data.cells[i][j].val[0])!=0) M3.data.cells[i][j].val[0] = 0.0;
+              if(isinf(M4.data.cells[i][j].val[0])!=0) M4.data.cells[i][j].val[0] = 0.0;
+              if(isinf(M5.data.cells[i][j].val[0])!=0) M5.data.cells[i][j].val[0] = 0.0;
+              if(isinf(M6.data.cells[i][j].val[0])!=0) M6.data.cells[i][j].val[0] = 0.0;
             }
         }
 
