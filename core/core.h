@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <setjmp.h>
+#include <float.h>
 #include <pthread.h>
 #include <sys/types.h>
 #include <signal.h>

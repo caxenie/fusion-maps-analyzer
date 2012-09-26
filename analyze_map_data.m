@@ -1,8 +1,7 @@
 load fusion-analyzer-data.log
-LOOP_TIME = 10; %ms
-TO_S = 1000;
+LOOP_TIME = 1; %ms
+TO_S = 1;
 figure(1);
-text(0.95,0.95,'gigi');
 subplot(6,1,1)
 title('Maps values during simulation')
 plot(fusion_analyzer_data(:,15)*LOOP_TIME/TO_S, fusion_analyzer_data(:,1))
