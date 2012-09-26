@@ -983,12 +983,6 @@
    <zorder>groupBox_map4</zorder>
    <zorder>groupBox_map1</zorder>
    <zorder>groupBox_map5</zorder>
-   <zorder>groupBox_map1_2</zorder>
-   <zorder>groupBox_map1_2</zorder>
-   <zorder>groupBox_map2_2</zorder>
-   <zorder>groupBox_map3_2</zorder>
-   <zorder>groupBox_map6_2</zorder>
-   <zorder>groupBox_map5_2</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

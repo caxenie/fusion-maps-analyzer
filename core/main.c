@@ -19,7 +19,7 @@ short g_verbose = 0;
 
 /* entry point */
 int
-main (int argc, char **argv)
+main (int argc, char *argv[])
 {
     FILE *f = fopen("fusion-analyzer-data.log","w+");
     char* log_bufferw = (char*)calloc(200, sizeof(char));

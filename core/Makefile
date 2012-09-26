@@ -11,8 +11,8 @@
 CC            = gcc
 CXX           = g++
 DEFINES       = -DQT_WEBKIT
-CFLAGS        = -pipe -g -std=gnu99 -Wall -W $(DEFINES)
-CXXFLAGS      = -pipe -g -Wall -W $(DEFINES)
+CFLAGS        = -pipe -g -std=gnu99 -W $(DEFINES)
+CXXFLAGS      = -pipe -g  -W $(DEFINES)
 INCPATH       = -I/usr/share/qt4/mkspecs/linux-g++ -I. -I/usr/include/dbus-1.0 -I/usr/lib/i386-linux-gnu/dbus-1.0/include
 LINK          = g++
 LFLAGS        = 

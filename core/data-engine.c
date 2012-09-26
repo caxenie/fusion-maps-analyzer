@@ -334,10 +334,6 @@ void handle_client_signals(DBusMessage *msg)
 void listen_to_data_clients() 
 {
     DBusMessage* msg;
-    DBusMessage* reply;
-    DBusMessageIter args;
-    int ret;
-    char* param;
 
     printf("CORE: DATA-ENGINE: Listening for method calls & signals\n");
 
