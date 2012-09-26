@@ -23,10 +23,10 @@
 #define MAPS_NUMBER 				6
 #define RELAXATION_THRESHOLD        0.0001f
 #define VERBOSE 					1
-#define ETA12                        0.02456f
-#define ETA21                        0.02006f
+#define ETA12                        0.02956f
+#define ETA21                        0.02106f
 #define ETA234                       0.02884f
-#define ETA432                       0.02123f
+#define ETA432                       0.02423f
 #define ETA456                       0.02576f
 #define ETA654                       0.02345f
 

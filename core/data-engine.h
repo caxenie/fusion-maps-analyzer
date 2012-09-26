@@ -24,7 +24,7 @@
 #define SIGNAL4 "update_user_data_changed"
 
 #define MAPS_NUM    6
-#define SYNC_DATA   10000 // us
+#define SYNC_DATA   1000 // us - adjusted to 1ms loop time of net
 #define US_TO_MS    1000
 
 /* update rate timer types */

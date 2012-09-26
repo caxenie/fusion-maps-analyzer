@@ -417,9 +417,6 @@ main (int argc, char **argv)
             }
         }
 
-      // sync with analyzer
-      usleep(SYNC_DATA);
-
       if( clock_gettime( CLOCK_REALTIME, &stop) == -1 ) {
           perror( "clock gettime" );
           exit( EXIT_FAILURE );
