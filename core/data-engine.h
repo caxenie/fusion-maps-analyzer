@@ -1,6 +1,6 @@
 /**
  * Data transfer engine between the core network and the
- * visualizer using the DBud system bus.
+ * visualizer using the DBus system bus.
  * Data engine functionality definition.
  */
 #include <stdbool.h>

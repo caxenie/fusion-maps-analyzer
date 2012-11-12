@@ -190,7 +190,7 @@ void handle_client_methods(DBusMessage *msg)
     dbus_message_unref(reply);
 }
 
-/* handle signals form clients on the system bus and updates netwrok parameters */
+/* handle signals form clients on the system bus and updates network parameters */
 void handle_client_signals(DBusMessage *msg)
 {
     DBusMessageIter args;
@@ -414,7 +414,7 @@ void rate_timer_handler( int sig, siginfo_t *si, void *uc )
     timer_t *tidp;
     tidp = si->si_value.sival_ptr;
 
-    // chech which timer has expored so that the value in the map will be updated
+    // chech which timer has expired so that the value in the map will be updated
     if ( *tidp == user_timer[1])
     {
         // handle m1 user data rate
