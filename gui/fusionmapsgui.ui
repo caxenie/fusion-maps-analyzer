@@ -405,6 +405,9 @@
            <property name="enabled">
             <bool>false</bool>
            </property>
+           <property name="focusPolicy">
+            <enum>Qt::WheelFocus</enum>
+           </property>
            <property name="orientation">
             <enum>Qt::Vertical</enum>
            </property>

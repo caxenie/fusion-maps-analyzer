@@ -42,7 +42,7 @@ FusionMapsGui::FusionMapsGui(QWidget *parent) :
     ui->graphicsView_m1->setAxisMaxMinor(QwtPlot::xBottom, 0);
     ui->graphicsView_m1->setAxisScale(QwtPlot::yLeft, -BOUND, BOUND);
     ui->graphicsView_m1->setAxisMaxMinor(QwtPlot::yLeft, 0);
-    ui->user_data_slider1->setRange(-1.0, 1.0, 0.0001, 5);
+    ui->user_data_slider1->setRange(LOW_IN, HI_IN, INCREMENT, 5);
     ui->user_data_slider1->setValue( 0.0 );
 
     // map2
@@ -63,7 +63,7 @@ FusionMapsGui::FusionMapsGui(QWidget *parent) :
     ui->graphicsView_m2->setAxisMaxMinor(QwtPlot::xBottom, 0);
     ui->graphicsView_m2->setAxisScale(QwtPlot::yLeft, -BOUND, BOUND);
     ui->graphicsView_m2->setAxisMaxMinor(QwtPlot::yLeft, 0);
-    ui->user_data_slider2->setRange(-1.0, 1.0, 0.0001, 5);
+    ui->user_data_slider2->setRange(LOW_IN, HI_IN, INCREMENT, 5);
     ui->user_data_slider2->setValue( 0.0 );
     // map3
     repr_m3 = new QwtPlotSpectrogram();
@@ -83,7 +83,7 @@ FusionMapsGui::FusionMapsGui(QWidget *parent) :
     ui->graphicsView_m3->setAxisMaxMinor(QwtPlot::xBottom, 0);
     ui->graphicsView_m3->setAxisScale(QwtPlot::yLeft, -BOUND, BOUND);
     ui->graphicsView_m3->setAxisMaxMinor(QwtPlot::yLeft, 0);
-    ui->user_data_slider3->setRange(-1.0, 1.0, 0.0001, 5);
+    ui->user_data_slider3->setRange(LOW_IN, HI_IN, INCREMENT, 5);
     ui->user_data_slider3->setValue( 0.0 );
     // map 4
     repr_m4 = new QwtPlotSpectrogram();
@@ -103,7 +103,7 @@ FusionMapsGui::FusionMapsGui(QWidget *parent) :
     ui->graphicsView_m4->setAxisMaxMinor(QwtPlot::xBottom, 0);
     ui->graphicsView_m4->setAxisScale(QwtPlot::yLeft, -BOUND, BOUND);
     ui->graphicsView_m4->setAxisMaxMinor(QwtPlot::yLeft, 0);
-    ui->user_data_slider4->setRange(-1.0, 1.0, 0.0001, 5);
+    ui->user_data_slider4->setRange(LOW_IN, HI_IN, INCREMENT, 5);
     ui->user_data_slider4->setValue( 0.0 );
     // map5
     repr_m5 = new QwtPlotSpectrogram();
@@ -123,7 +123,7 @@ FusionMapsGui::FusionMapsGui(QWidget *parent) :
     ui->graphicsView_m5->setAxisMaxMinor(QwtPlot::xBottom, 0);
     ui->graphicsView_m5->setAxisScale(QwtPlot::yLeft, -BOUND, BOUND);
     ui->graphicsView_m5->setAxisMaxMinor(QwtPlot::yLeft, 0);
-    ui->user_data_slider5->setRange(-1.0, 1.0, 0.0001, 5);
+    ui->user_data_slider5->setRange(LOW_IN, HI_IN, INCREMENT, 5);
     ui->user_data_slider5->setValue( 0.0 );
     // map6
     repr_m6 = new QwtPlotSpectrogram();
@@ -143,7 +143,7 @@ FusionMapsGui::FusionMapsGui(QWidget *parent) :
     ui->graphicsView_m6->setAxisMaxMinor(QwtPlot::xBottom, 0);
     ui->graphicsView_m6->setAxisScale(QwtPlot::yLeft, -BOUND, BOUND);
     ui->graphicsView_m6->setAxisMaxMinor(QwtPlot::yLeft, 0);
-    ui->user_data_slider6->setRange(-1.0, 1.0, 0.0001, 5);
+    ui->user_data_slider6->setRange(LOW_IN, HI_IN, INCREMENT, 5);
     ui->user_data_slider6->setValue( 0.0 );
     // error visualization init
     double per_sec;

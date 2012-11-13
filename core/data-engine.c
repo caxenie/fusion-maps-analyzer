@@ -283,7 +283,7 @@ void handle_client_signals(DBusMessage *msg)
 
     // input data rate changed
     if(strcmp(sigvalue, SIGNAL2) == 0){
-        // check if we modify the use or the sensor data rate
+        // check if we modify the user or the sensor data rate
         if(user_connected[map_id]==1){
             // cancel already existing timers
             cancel_rate_timer(user_timer[map_id]);

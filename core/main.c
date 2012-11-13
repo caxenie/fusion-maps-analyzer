@@ -16,14 +16,18 @@ short g_verbose = 0;
     fprintf(stderr,format,args); \
     } while(0);
 
+/* file logging support */
+FILE *f;
+char* log_bufferw;
+long timer;
 
 /* entry point */
 int
 main (int argc, char *argv[])
 {
-    FILE *f = fopen("fusion-analyzer-data.log","w+");
-    char* log_bufferw = (char*)calloc(200, sizeof(char));
-    long timer = 0;
+    f = fopen("fusion-analyzer-data.log","w+");
+    log_bufferw = (char*)calloc(20000, sizeof(char));
+    timer = 0;
     /* register signals */
     signal(SIGCONT, resume_network);
     signal(SIGUSR1, restart_network);

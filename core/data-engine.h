@@ -48,7 +48,7 @@ double update_rate_sensor[MAPS_NUM+1];
 /* stores the data update rate for user data */
 double update_rate_user[MAPS_NUM+1];
 /* stores the data from the user */
-double user_data[MAPS_NUM+1];
+double  user_data[MAPS_NUM+1];
 /* stores the data from the connected sensor */
 double sensor_data[MAPS_NUM+1];
 

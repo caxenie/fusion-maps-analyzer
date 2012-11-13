@@ -34,6 +34,9 @@
 // converging net binary
 #define NET_BINARY       "/fusion_maps_core"
 #define INFO_HEADER_MSG  "Network Visualization Tool"
+#define LOW_IN      -1.0
+#define HI_IN       1.0
+#define INCREMENT   0.0001
 
 namespace Ui {
 class FusionMapsGui;
