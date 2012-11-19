@@ -24,12 +24,18 @@
 #define MAPS_NUMBER 				6
 #define RELAXATION_THRESHOLD        0.0001f
 #define VERBOSE 					1
-#define ETA12                        0.02956f
-#define ETA21                        0.02106f
-#define ETA234                       0.02884f
-#define ETA432                       0.02423f
-#define ETA456                       0.02576f
-#define ETA654                       0.02345f
+#define ETA12                        0.002956f
+#define ETA21                        0.002106f
+#define ETA234                       0.002884f
+#define ETA432                       0.002423f
+#define ETA456                       0.002576f
+#define ETA654                       0.0002345f
+#define ETA_EXT1                     0.000243f
+#define ETA_EXT2                     0.000543f
+#define ETA_EXT3                     0.000943f
+#define ETA_EXT4                     0.000743f
+#define ETA_EXT5                     0.000343f
+#define ETA_EXT6                     0.000443f
 
 
 /* fusion maps network code */

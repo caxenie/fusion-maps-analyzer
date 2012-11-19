@@ -36,6 +36,7 @@ main (int argc, char *argv[])
     /*initialize random number generator seed */
     srand (time (NULL));
 
+    int rand_edge = 0;
     int rand_map = 0;
     int update_state[MAPS_NUM+1] = {0,0,0,0,0,0,0};
 
@@ -94,6 +95,7 @@ main (int argc, char *argv[])
             fprintf(stderr, "\nCORE: RESTARTED NETWORK\n");
             srand (time (NULL));
             rand_map = 0;
+            rand_edge = 0;
             for(int i=0;i<MAPS_NUM+1;i++){
                 update_state[i] = 0;
                 user_connected[i] = 0;
@@ -124,237 +126,321 @@ main (int argc, char *argv[])
         /* get a map from the net */
         rand_map = (rand () % (MAPS_NUMBER) + 1);
 
-        // update a map only if a sensor / user not connected
-        if(user_connected[rand_map] ==0 && sensor_connected[rand_map] ==0 ){
-            if (rand_map == 1)
+        if (rand_map == 1)
+        {
+            for (int i = 0; i < MAP_SIZE; i++)
             {
-                for (int i = 0; i < MAP_SIZE; i++)
+                for (int j = 0; j < MAP_SIZE; j++)
                 {
-                    for (int j = 0; j < MAP_SIZE; j++)
-                    {
-                        log_message ("CORE: Extracted map %d\n", rand_map);
+                    log_message ("CORE: Extracted map %d\n", rand_map);
 
-                        log_message ("CORE: M1ant = %lf\n",
-                                     M1ant);
+                    log_message ("CORE: M1ant = %lf\n",
+                                 M1ant);
 
-                        log_message("Update M1: M2 state is : %lf \n", M2.data.cells[i][j].val[0]);
+                    log_message("Update M1: M2 state is : %lf \n", M2.data.cells[i][j].val[0]);
+
+                    rand_edge = (rand() % (M1.links+1) + 1);
+
+                    if(rand_edge==1){
                         M1.data.cells[i][j].val[0] =
                                 (1 - 18 * ETA21) * M1.data.cells[i][j].val[0] +
                                 6 * ETA21 * M2.data.cells[i][j].val[0]; // compute new value for the map
-
-                        log_message
-                                ("CORE: Updated Map  %d \n",
-                                 rand_map);
-                        log_message ("CORE: M1 = %lf\n",
-                                     M1.data.cells[i][j].val[0]); // just verbose
-
-                        e1 = fabs(M1.data.cells[i][j].val[0] - M1ant); // update error
-
-                        M1ant = M1.data.cells[i][j].val[0]; // update history
-
-                        update_state[rand_map] = 1;
                     }
+
+                    if(rand_edge==2){
+                        if(user_connected[rand_map] == 1){
+                            M1.data.cells[i][j].val[0] = (1-2*ETA_EXT1) * M1.data.cells[i][j].val[0] +
+                                    2*ETA_EXT1*user_data[rand_map];
+                        }
+                        if(sensor_connected[rand_map] == 1){
+                            M1.data.cells[i][j].val[0] = (1-2*ETA_EXT1) * M1.data.cells[i][j].val[0] +
+                                    2*ETA_EXT1*sensor_data[rand_map];
+                        }
+                    }
+
+                    log_message
+                            ("CORE: Updated Map  %d \n",
+                             rand_map);
+                    log_message ("CORE: M1 = %lf\n",
+                                 M1.data.cells[i][j].val[0]); // just verbose
+
+                    e1 = fabs(M1.data.cells[i][j].val[0] - M1ant); // update error
+
+                    M1ant = M1.data.cells[i][j].val[0]; // update history
+
+                    update_state[rand_map] = 1;
                 }
             }
+        }
 
-            if (rand_map == 2)
+        if (rand_map == 2)
+        {
+            for (int i = 0; i < MAP_SIZE; i++)
             {
-                for (int i = 0; i < MAP_SIZE; i++)
+                for (int j = 0; j < MAP_SIZE; j++)
                 {
-                    for (int j = 0; j < MAP_SIZE; j++)
-                    {
-                        log_message ("CORE: Extracted map %d\n", rand_map);
+                    log_message ("CORE: Extracted map %d\n", rand_map);
 
-                        log_message ("CORE: M2ant = %lf\n",
-                                     M2ant);
+                    log_message ("CORE: M2ant = %lf\n",
+                                 M2ant);
 
-                        log_message("Update M2: M1 state is : %lf \n", M1.data.cells[i][j].val[0]);
+                    rand_edge = (rand() % (M2.links+1) + 1);
+
+                    log_message("Update M2: M1 state is : %lf \n", M1.data.cells[i][j].val[0]);
+
+                    if(rand_edge==1){
                         M2.data.cells[i][j].val[0] =
                                 (1 - 2 * ETA12) * M2.data.cells[i][j].val[0] +
                                 6 * ETA12 * M1.data.cells[i][j].val[0];
-                        log_message
-                                ("CORE: Updated Map  %d with respect tp R1 \n",
-                                 rand_map);
-                        log_message ("CORE: M2 = %lf\n",
-                                     M2.data.cells[i][j].val[0]);
-                        log_message("Update M2: M3 state is : %lf \n", M3.data.cells[i][j].val[0]);
-                        log_message("Update M2: M4 state is : %lf \n", M4.data.cells[i][j].val[0]);
+                    }
+                    log_message
+                            ("CORE: Updated Map  %d with respect tp R1 \n",
+                             rand_map);
+                    log_message ("CORE: M2 = %lf\n",
+                                 M2.data.cells[i][j].val[0]);
+
+                    log_message("Update M2: M3 state is : %lf \n", M3.data.cells[i][j].val[0]);
+                    log_message("Update M2: M4 state is : %lf \n", M4.data.cells[i][j].val[0]);
+
+                    if(rand_edge==2){
                         M2.data.cells[i][j].val[0] =
                                 (1 + 4 * ETA432 * pow(M4.data.cells[i][j].val[0],2) ) * M2.data.cells[i][j].val[0] -
                                 4 * ETA432*M3.data.cells[i][j].val[0]*M4.data.cells[i][j].val[0];
-
-                        log_message
-                                ("CORE: Updated Map  %d with respect to R2 \n",
-                                 rand_map);
-                        log_message ("CORE: M2 = %lf\n",
-                                     M2.data.cells[i][j].val[0]);
-
-
-                        e2 = fabs(M2.data.cells[i][j].val[0] - M2ant);
-
-                        M2ant = M2.data.cells[i][j].val[0];
-
-                        update_state[rand_map] = 1;
                     }
+
+                    if(rand_edge==3){
+                        if(user_connected[rand_map] == 1){
+                            M2.data.cells[i][j].val[0] = (1-2*ETA_EXT2) * M2.data.cells[i][j].val[0] +
+                                    2*ETA_EXT2*user_data[rand_map];
+                        }
+                        if(sensor_connected[rand_map] == 1){
+                            M2.data.cells[i][j].val[0] = (1-2*ETA_EXT2) * M2.data.cells[i][j].val[0] +
+                                    2*ETA_EXT2*sensor_data[rand_map];
+                        }
+                    }
+
+                    log_message
+                            ("CORE: Updated Map  %d with respect to R2 \n",
+                             rand_map);
+                    log_message ("CORE: M2 = %lf\n",
+                                 M2.data.cells[i][j].val[0]);
+
+
+                    e2 = fabs(M2.data.cells[i][j].val[0] - M2ant);
+
+                    M2ant = M2.data.cells[i][j].val[0];
+
+                    update_state[rand_map] = 1;
                 }
             }
+        }
 
-            if (rand_map == 3)
+        if (rand_map == 3)
+        {
+            for (int i = 0; i < MAP_SIZE; i++)
             {
-                for (int i = 0; i < MAP_SIZE; i++)
+                for (int j = 0; j < MAP_SIZE; j++)
                 {
-                    for (int j = 0; j < MAP_SIZE; j++)
-                    {
-                        log_message ("CORE: Extracted map %d\n", rand_map);
+                    log_message ("CORE: Extracted map %d\n", rand_map);
 
-                        log_message ("CORE: M3ant = %lf\n",
-                                     M3ant);
-                        log_message("Update M3: M2 state is : %lf \n", M2.data.cells[i][j].val[0]);
-                        log_message("Update M3: M4 state is : %lf \n", M4.data.cells[i][j].val[0]);
+                    log_message ("CORE: M3ant = %lf\n",
+                                 M3ant);
+                    log_message("Update M3: M2 state is : %lf \n", M2.data.cells[i][j].val[0]);
+                    log_message("Update M3: M4 state is : %lf \n", M4.data.cells[i][j].val[0]);
+
+                    rand_edge = (rand() % (M3.links+1) + 1);
+
+                    if(rand_edge==1){
                         M3.data.cells[i][j].val[0] =
                                 (1 - 4 * ETA432) * M3.data.cells[i][j].val[0] +
                                 4 * ETA432 * M2.data.cells[i][j].val[0] *
                                 M4.data.cells[i][j].val[0];
-
-                        log_message
-                                ("CORE: Updated Map  %d  \n",
-                                 rand_map);
-                        log_message ("CORE: M3 = %lf\n",
-                                     M3.data.cells[i][j].val[0]);
-
-                        e3 = fabs(M3.data.cells[i][j].val[0] - M3ant);
-
-                        M3ant = M3.data.cells[i][j].val[0];
-
-                        update_state[rand_map] = 1;
                     }
+
+                    if(rand_edge==2){
+                        if(user_connected[rand_map] == 1){
+                            M3.data.cells[i][j].val[0] = (1-2*ETA_EXT3) * M3.data.cells[i][j].val[0] +
+                                    2*ETA_EXT3*user_data[rand_map];
+                        }
+                        if(sensor_connected[rand_map] == 1){
+                            M3.data.cells[i][j].val[0] = (1-2*ETA_EXT3) * M3.data.cells[i][j].val[0] +
+                                    2*ETA_EXT3*sensor_data[rand_map];
+                        }
+                    }
+
+                    log_message
+                            ("CORE: Updated Map  %d  \n",
+                             rand_map);
+                    log_message ("CORE: M3 = %lf\n",
+                                 M3.data.cells[i][j].val[0]);
+
+                    e3 = fabs(M3.data.cells[i][j].val[0] - M3ant);
+
+                    M3ant = M3.data.cells[i][j].val[0];
+
+                    update_state[rand_map] = 1;
                 }
             }
+        }
 
-            if (rand_map == 4)
+        if (rand_map == 4)
+        {
+            for (int i = 0; i < MAP_SIZE; i++)
             {
-                for (int i = 0; i < MAP_SIZE; i++)
+                for (int j = 0; j < MAP_SIZE; j++)
                 {
-                    for (int j = 0; j < MAP_SIZE; j++)
-                    {
-                        log_message ("CORE: Extracted map %d\n", rand_map);
+                    log_message ("CORE: Extracted map %d\n", rand_map);
 
-                        log_message ("CORE: M4ant = %lf\n",
-                                     M4ant);
-                        log_message("Update M4: M2 state is : %lf \n", M2.data.cells[i][j].val[0]);
-                        log_message("Update M4: M3 state is : %lf \n", M3.data.cells[i][j].val[0]);
+                    log_message ("CORE: M4ant = %lf\n",
+                                 M4ant);
+                    log_message("Update M4: M2 state is : %lf \n", M2.data.cells[i][j].val[0]);
+                    log_message("Update M4: M3 state is : %lf \n", M3.data.cells[i][j].val[0]);
+
+                    rand_edge = (rand() % (M4.links+1) + 1);
+
+                    if(rand_edge==1){
                         M4.data.cells[i][j].val[0] =
                                 (1 - 4 * ETA234 * pow(M2.data.cells[i][j].val[0], 2)) * M4.data.cells[i][j].val[0] +
                                 4 * ETA234 * (M3.data.cells[i][j].val[0] *
                                               M2.data.cells[i][j].val[0]);
-                        log_message
-                                ("CORE: Updated Map  %d with respect to R2 \n",
-                                 rand_map);
-                        log_message ("CORE: M4 = %lf\n",
-                                     M4.data.cells[i][j].val[0]);
-                        log_message("Update M4: M5 state is : %lf \n", M5.data.cells[i][j].val[0]);
-                        log_message("Update M4: M6 state is : %lf \n", M6.data.cells[i][j].val[0]);
+                    }
+                    log_message
+                            ("CORE: Updated Map  %d with respect to R2 \n",
+                             rand_map);
+                    log_message ("CORE: M4 = %lf\n",
+                                 M4.data.cells[i][j].val[0]);
+                    log_message("Update M4: M5 state is : %lf \n", M5.data.cells[i][j].val[0]);
+                    log_message("Update M4: M6 state is : %lf \n", M6.data.cells[i][j].val[0]);
+
+                    if(rand_edge==2){
                         M4.data.cells[i][j].val[0] =
                                 (1 - 4 * ETA654) * M4.data.cells[i][j].val[0] +
                                 4 * ETA654 * (M5.data.cells[i][j].val[0] +
                                               2 * M6.data.cells[i][j].val[0]);
-                        log_message
-                                ("CORE: Updated Map  %d with respect to R3 \n",
-                                 rand_map);
-                        log_message ("CORE: M4 = %lf\n",
-                                     M4.data.cells[i][j].val[0]);
-
-                        e4 = fabs(M4.data.cells[i][j].val[0] - M4ant);
-
-                        M4ant = M4.data.cells[i][j].val[0];
-
-                        update_state[rand_map] = 1;
                     }
+
+                    if(rand_edge==3){
+                        if(user_connected[rand_map] == 1){
+                            M4.data.cells[i][j].val[0] = (1-2*ETA_EXT4) * M4.data.cells[i][j].val[0] +
+                                    2*ETA_EXT4*user_data[rand_map];
+                        }
+                        if(sensor_connected[rand_map] == 1){
+                            M4.data.cells[i][j].val[0] = (1-2*ETA_EXT4) * M4.data.cells[i][j].val[0] +
+                                    2*ETA_EXT4*sensor_data[rand_map];
+                        }
+                    }
+
+
+                    log_message
+                            ("CORE: Updated Map  %d with respect to R3 \n",
+                             rand_map);
+                    log_message ("CORE: M4 = %lf\n",
+                                 M4.data.cells[i][j].val[0]);
+
+                    e4 = fabs(M4.data.cells[i][j].val[0] - M4ant);
+
+                    M4ant = M4.data.cells[i][j].val[0];
+
+                    update_state[rand_map] = 1;
                 }
             }
+        }
 
-            if (rand_map == 5)
+        if (rand_map == 5)
+        {
+            for (int i = 0; i < MAP_SIZE; i++)
             {
-                for (int i = 0; i < MAP_SIZE; i++)
+                for (int j = 0; j < MAP_SIZE; j++)
                 {
-                    for (int j = 0; j < MAP_SIZE; j++)
-                    {
-                        log_message ("CORE: Extracted map %d\n", rand_map);
+                    log_message ("CORE: Extracted map %d\n", rand_map);
 
-                        log_message ("CORE: M5ant = %lf\n",
-                                     M5ant);
-                        log_message("Update M5: M4 state is : %lf \n", M4.data.cells[i][j].val[0]);
-                        log_message("Update M5: M6 state is : %lf \n", M6.data.cells[i][j].val[0]);
+                    log_message ("CORE: M5ant = %lf\n",
+                                 M5ant);
+                    log_message("Update M5: M4 state is : %lf \n", M4.data.cells[i][j].val[0]);
+                    log_message("Update M5: M6 state is : %lf \n", M6.data.cells[i][j].val[0]);
+
+                    rand_edge = (rand() % (M5.links+1) + 1);
+
+                    if(rand_edge==1){
                         M5.data.cells[i][j].val[0] =
                                 (1 - 4 * ETA456) * M5.data.cells[i][j].val[0] +
                                 4 * ETA456 * (M4.data.cells[i][j].val[0] - 2 * M6.data.cells[i][j].val[0]);
-                        log_message
-                                ("CORE: Updated Map  %d  \n",
-                                 rand_map);
-                        log_message ("CORE: M5 = %lf\n",
-                                     M5.data.cells[i][j].val[0]);
-
-                        e5 = fabs(M5.data.cells[i][j].val[0] - M5ant);
-
-                        M5ant = M5.data.cells[i][j].val[0];
-
-                        update_state[rand_map] = 1;
                     }
+
+                    if(rand_edge==2){
+                        if(user_connected[rand_map] == 1){
+                            M5.data.cells[i][j].val[0] = (1-2*ETA_EXT5) * M5.data.cells[i][j].val[0] +
+                                    2*ETA_EXT5*user_data[rand_map];
+                        }
+                        if(sensor_connected[rand_map] == 1){
+                            M5.data.cells[i][j].val[0] = (1-2*ETA_EXT5) * M5.data.cells[i][j].val[0] +
+                                    2*ETA_EXT5*sensor_data[rand_map];
+                        }
+                    }
+
+
+                    log_message
+                            ("CORE: Updated Map  %d  \n",
+                             rand_map);
+                    log_message ("CORE: M5 = %lf\n",
+                                 M5.data.cells[i][j].val[0]);
+
+                    e5 = fabs(M5.data.cells[i][j].val[0] - M5ant);
+
+                    M5ant = M5.data.cells[i][j].val[0];
+
+                    update_state[rand_map] = 1;
                 }
             }
+        }
 
-            if (rand_map == 6)
+        if (rand_map == 6)
+        {
+            for (int i = 0; i < MAP_SIZE; i++)
             {
-                for (int i = 0; i < MAP_SIZE; i++)
+                for (int j = 0; j < MAP_SIZE; j++)
                 {
-                    for (int j = 0; j < MAP_SIZE; j++)
-                    {
-                        log_message ("CORE: Extracted map %d\n", rand_map);
+                    log_message ("CORE: Extracted map %d\n", rand_map);
 
-                        log_message ("CORE: M6ant = %lf\n",
-                                     M6ant);
+                    log_message ("CORE: M6ant = %lf\n",
+                                 M6ant);
 
-                        log_message("Update M6: M4 state is : %lf \n", M4.data.cells[i][j].val[0]);
-                        log_message("Update M6: M5 state is : %lf \n", M5.data.cells[i][j].val[0]);
+                    log_message("Update M6: M4 state is : %lf \n", M4.data.cells[i][j].val[0]);
+                    log_message("Update M6: M5 state is : %lf \n", M5.data.cells[i][j].val[0]);
+
+                    rand_edge = (rand() % (M6.links+1) + 1);
+
+                    if(rand_edge==1){
                         M6.data.cells[i][j].val[0] =
                                 (1 - 16 * ETA456) * M6.data.cells[i][j].val[0] +
                                 8 * ETA456 *
                                 ((M4.data.cells[i][j].val[0] -
                                   M5.data.cells[i][j].val[0]));
-                        log_message
-                                ("CORE: Updated Map  %d \n",
-                                 rand_map);
-                        log_message ("CORE: M6 = %lf\n",
-                                     M6.data.cells[i][j].val[0]);
-
-                        e6 = fabs(M6.data.cells[i][j].val[0] - M6ant);
-
-                        M6ant = M6.data.cells[i][j].val[0];
-
-                        update_state[rand_map] = 1;
                     }
+
+                    if(rand_edge==2){
+                        if(user_connected[rand_map] == 1){
+                            M6.data.cells[i][j].val[0] = (1-2*ETA_EXT6) * M6.data.cells[i][j].val[0] +
+                                    2*ETA_EXT6*user_data[rand_map];
+                        }
+                        if(sensor_connected[rand_map] == 1){
+                            M6.data.cells[i][j].val[0] = (1-2*ETA_EXT6) * M6.data.cells[i][j].val[0] +
+                                    2*ETA_EXT6*sensor_data[rand_map];
+                        }
+                    }
+
+                    log_message
+                            ("CORE: Updated Map  %d \n",
+                             rand_map);
+                    log_message ("CORE: M6 = %lf\n",
+                                 M6.data.cells[i][j].val[0]);
+
+                    e6 = fabs(M6.data.cells[i][j].val[0] - M6ant);
+
+                    M6ant = M6.data.cells[i][j].val[0];
+
+                    update_state[rand_map] = 1;
                 }
-            }
-        } // end if no user and no sensor connected to the selected map
-
-        /* check for floating point exceptions and fix the representation */
-        for (int i = 0; i < MAP_SIZE; i++)
-        {
-            for (int j = 0; j < MAP_SIZE; j++)
-            {
-                if(isnan(M1.data.cells[i][j].val[0])!=0) M1.data.cells[i][j].val[0] = 0.0;
-                if(isnan(M2.data.cells[i][j].val[0])!=0) M2.data.cells[i][j].val[0] = 0.0;
-                if(isnan(M3.data.cells[i][j].val[0])!=0) M3.data.cells[i][j].val[0] = 0.0;
-                if(isnan(M4.data.cells[i][j].val[0])!=0) M4.data.cells[i][j].val[0] = 0.0;
-                if(isnan(M5.data.cells[i][j].val[0])!=0) M5.data.cells[i][j].val[0] = 0.0;
-                if(isnan(M6.data.cells[i][j].val[0])!=0) M6.data.cells[i][j].val[0] = 0.0;
-
-                if(isinf(M1.data.cells[i][j].val[0])!=0) M1.data.cells[i][j].val[0] = DBL_MAX;
-                if(isinf(M2.data.cells[i][j].val[0])!=0) M2.data.cells[i][j].val[0] = DBL_MAX;
-                if(isinf(M3.data.cells[i][j].val[0])!=0) M3.data.cells[i][j].val[0] = DBL_MAX;
-                if(isinf(M4.data.cells[i][j].val[0])!=0) M4.data.cells[i][j].val[0] = DBL_MAX;
-                if(isinf(M5.data.cells[i][j].val[0])!=0) M5.data.cells[i][j].val[0] = DBL_MAX;
-                if(isinf(M6.data.cells[i][j].val[0])!=0) M6.data.cells[i][j].val[0] = DBL_MAX;
             }
         }
 
@@ -375,24 +461,30 @@ main (int argc, char *argv[])
                             M5.data.cells[i][j].val[0],
                             M6.data.cells[i][j].val[0]);
 
-                // errors with respect to the relationships in which each map is involved with filters for jumping values
-                if(isnan((E1[0] = pow(M1.data.cells[i][j].val[0]-M2.data.cells[i][j].val[0]/3, 2))!=0)) E1[0] = 0.0;
-                if(isnan((E2[0] = pow(M2.data.cells[i][j].val[0]-3*M1.data.cells[i][j].val[0], 2))!=0)) E2[0] = 0.0;
-                if(isnan((E2[1] = pow(M2.data.cells[i][j].val[0]-M3.data.cells[i][j].val[0]/M4.data.cells[i][j].val[0], 2))!=0)) E2[1] = 0.0;
-                if(isnan((E3[0] = pow(M3.data.cells[i][j].val[0]-M2.data.cells[i][j].val[0]*M4.data.cells[i][j].val[0], 2))!=0)) E3[0] = 0.0;
-                if(isnan((E4[0] = pow(M4.data.cells[i][j].val[0]-M3.data.cells[i][j].val[0]/M2.data.cells[i][j].val[0], 2))!=0)) E4[0] = 0.0;
-                if(isnan((E4[1] = pow(M4.data.cells[i][j].val[0]-M5.data.cells[i][j].val[0] - 2*M6.data.cells[i][j].val[0], 2))!=0))  E4[1] = 0.0;
-                if(isnan((E5[0] = pow(M5.data.cells[i][j].val[0]-M4.data.cells[i][j].val[0] + 2*M6.data.cells[i][j].val[0], 2))!=0)) E5[0] = 0.0;
-                if(isnan((E6[0] = pow(M6.data.cells[i][j].val[0]-(M4.data.cells[i][j].val[0]-M5.data.cells[i][j].val[0])/2, 2))!=0)) E6[0] = 0.0;
+                // errors with respect to the relationships in which each map is involved
 
-                if(isinf((E1[0] = pow(M1.data.cells[i][j].val[0]-M2.data.cells[i][j].val[0]/3, 2))!=0)) E1[0] = DBL_MAX;
-                if(isinf((E2[0] = pow(M2.data.cells[i][j].val[0]-3*M1.data.cells[i][j].val[0], 2))!=0)) E2[0] = DBL_MAX;
-                if(isinf((E2[1] = pow(M2.data.cells[i][j].val[0]-M3.data.cells[i][j].val[0]/M4.data.cells[i][j].val[0], 2))!=0)) E2[1] = DBL_MAX;
-                if(isinf((E3[0] = pow(M3.data.cells[i][j].val[0]-M2.data.cells[i][j].val[0]*M4.data.cells[i][j].val[0], 2))!=0)) E3[0] = DBL_MAX;
-                if(isinf((E4[0] = pow(M4.data.cells[i][j].val[0]-M3.data.cells[i][j].val[0]/M2.data.cells[i][j].val[0], 2))!=0)) E4[0] = DBL_MAX;
-                if(isinf((E4[1] = pow(M4.data.cells[i][j].val[0]-M5.data.cells[i][j].val[0] - 2*M6.data.cells[i][j].val[0], 2))!=0))  E4[1] = DBL_MAX;
-                if(isinf((E5[0] = pow(M5.data.cells[i][j].val[0]-M4.data.cells[i][j].val[0] + 2*M6.data.cells[i][j].val[0], 2))!=0)) E5[0] = DBL_MAX;
-                if(isinf((E6[0] = pow(M6.data.cells[i][j].val[0]-(M4.data.cells[i][j].val[0]-M5.data.cells[i][j].val[0])/2, 2))!=0)) E6[0] = DBL_MAX;
+                // squared errors
+                //                E1[0] = pow(M1.data.cells[i][j].val[0]-M2.data.cells[i][j].val[0]/3, 2);
+                //                E2[0] = pow(M2.data.cells[i][j].val[0]-3*M1.data.cells[i][j].val[0], 2);
+                //                E2[1] = pow(M2.data.cells[i][j].val[0]-M3.data.cells[i][j].val[0]/M4.data.cells[i][j].val[0], 2);
+                //                E3[0] = pow(M3.data.cells[i][j].val[0]-M2.data.cells[i][j].val[0]*M4.data.cells[i][j].val[0], 2);
+                //                E4[0] = pow(M4.data.cells[i][j].val[0]-M3.data.cells[i][j].val[0]/M2.data.cells[i][j].val[0], 2);
+                //                E4[1] = pow(M4.data.cells[i][j].val[0]-M5.data.cells[i][j].val[0] - 2*M6.data.cells[i][j].val[0], 2);
+                //                E5[0] = pow(M5.data.cells[i][j].val[0]-M4.data.cells[i][j].val[0] + 2*M6.data.cells[i][j].val[0], 2);
+                //                E6[0] = pow(M6.data.cells[i][j].val[0]-(M4.data.cells[i][j].val[0]-M5.data.cells[i][j].val[0])/2, 2);
+
+                // full errors
+                E1[0] = M1.data.cells[i][j].val[0]-M2.data.cells[i][j].val[0]/3;
+                E2[0] = M2.data.cells[i][j].val[0]-3*M1.data.cells[i][j].val[0];
+                E2[1] = M2.data.cells[i][j].val[0]-M3.data.cells[i][j].val[0]/M4.data.cells[i][j].val[0];
+                E3[0] = M3.data.cells[i][j].val[0]-M2.data.cells[i][j].val[0]*M4.data.cells[i][j].val[0];
+                E4[0] = M4.data.cells[i][j].val[0]-M3.data.cells[i][j].val[0]/M2.data.cells[i][j].val[0];
+                E4[1] = M4.data.cells[i][j].val[0]-M5.data.cells[i][j].val[0] - 2*M6.data.cells[i][j].val[0];
+                E5[0] = M5.data.cells[i][j].val[0]-M4.data.cells[i][j].val[0] + 2*M6.data.cells[i][j].val[0];
+                E6[0] = M6.data.cells[i][j].val[0]-(M4.data.cells[i][j].val[0]-M5.data.cells[i][j].val[0])/2;
+
+
+
             }
 
         }
@@ -433,23 +525,23 @@ main (int argc, char *argv[])
 
         log_message("Loop time: %f ms\n",(double) (stop.tv_nsec-start.tv_nsec)/1000000); // get time in ms
         timer++;
-            sprintf(log_bufferw, "%f %f %f %f %f %f %f %f %f %f %f %f %f %f %ld\n",
-                    M1.data.cells[0][0].val[0],
-                    M2.data.cells[0][0].val[0],
-                    M3.data.cells[0][0].val[0],
-                    M4.data.cells[0][0].val[0],
-                    M5.data.cells[0][0].val[0],
-                    M6.data.cells[0][0].val[0],
-                    E1[0],
-                    E2[0],
-                    E2[1],
-                    E3[0],
-                    E4[0],
-                    E4[1],
-                    E5[0],
-                    E6[0],
-                    timer);
-            fwrite(log_bufferw, strlen(log_bufferw), 1, f);
+        sprintf(log_bufferw, "%f %f %f %f %f %f %f %f %f %f %f %f %f %f %ld\n",
+                M1.data.cells[0][0].val[0],
+                M2.data.cells[0][0].val[0],
+                M3.data.cells[0][0].val[0],
+                M4.data.cells[0][0].val[0],
+                M5.data.cells[0][0].val[0],
+                M6.data.cells[0][0].val[0],
+                E1[0],
+                E2[0],
+                E2[1],
+                E3[0],
+                E4[0],
+                E4[1],
+                E5[0],
+                E6[0],
+                timer);
+        fwrite(log_bufferw, strlen(log_bufferw), 1, f);
     }
     return 0;
 }
