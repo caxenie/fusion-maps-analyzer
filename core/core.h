@@ -22,7 +22,7 @@
 
 #define MAP_SIZE 					1
 #define MAPS_NUMBER 				6
-#define RELAXATION_THRESHOLD        0.0001f
+#define RELAXATION_THRESHOLD        0.00001f
 #define VERBOSE 					1
 #define ETA12                        0.002956f
 #define ETA21                        0.002106f

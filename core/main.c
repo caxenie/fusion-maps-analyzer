@@ -126,6 +126,7 @@ main (int argc, char *argv[])
         /* get a map from the net */
         rand_map = (rand () % (MAPS_NUMBER) + 1);
 
+
         if (rand_map == 1)
         {
             for (int i = 0; i < MAP_SIZE; i++)
@@ -524,6 +525,8 @@ main (int argc, char *argv[])
         }
 
         log_message("Loop time: %f ms\n",(double) (stop.tv_nsec-start.tv_nsec)/1000000); // get time in ms
+        //        sprintf(log_bufferw, " Time: %f\n", (double) (stop.tv_nsec-start.tv_nsec)/1000000);
+        //        fwrite(log_bufferw, strlen(log_bufferw), 1, f);
         timer++;
         sprintf(log_bufferw, "%f %f %f %f %f %f %f %f %f %f %f %f %f %f %ld\n",
                 M1.data.cells[0][0].val[0],
