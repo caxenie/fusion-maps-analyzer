@@ -883,7 +883,12 @@ void FusionMapsGui::error_processor(QProcess::ProcessError err)
 void FusionMapsGui::on_user_data_slider1_valueChanged(double value)
 {
   if(net_pid!=0){
-    this->data_engine->send_signal(value, USER_DATA_CHANGED_SIGNAL, 1);
+      if(fequalzero(value)==0){
+          this->data_engine->send_signal(value, USER_DATA_CHANGED_SIGNAL, 1);
+      }
+      else{
+          this->data_engine->send_signal(TOLERANCE, USER_DATA_CHANGED_SIGNAL, 1);
+      }
     }
 }
 
@@ -938,7 +943,12 @@ void FusionMapsGui::on_sensor_connect_button_m2_clicked()
 void FusionMapsGui::on_user_data_slider2_valueChanged(double value)
 {
   if(net_pid!=0){
-    this->data_engine->send_signal(value, USER_DATA_CHANGED_SIGNAL, 2);
+      if(fequalzero(value)==0){
+          this->data_engine->send_signal(value, USER_DATA_CHANGED_SIGNAL, 2);
+      }
+      else{
+          this->data_engine->send_signal(TOLERANCE, USER_DATA_CHANGED_SIGNAL, 2);
+      }
     }
 }
 
@@ -973,7 +983,12 @@ void FusionMapsGui::on_sensor_connect_button_m3_clicked()
 void FusionMapsGui::on_user_data_slider3_valueChanged(double value)
 {
   if(net_pid!=0){
-    this->data_engine->send_signal(value, USER_DATA_CHANGED_SIGNAL, 3);
+      if(fequalzero(value)==0){
+          this->data_engine->send_signal(value, USER_DATA_CHANGED_SIGNAL, 3);
+      }
+      else{
+          this->data_engine->send_signal(TOLERANCE, USER_DATA_CHANGED_SIGNAL, 3);
+      }
     }
 }
 
@@ -1008,7 +1023,12 @@ void FusionMapsGui::on_sensor_connect_button_m4_clicked()
 void FusionMapsGui::on_user_data_slider4_valueChanged(double value)
 {
   if(net_pid!=0){
-    this->data_engine->send_signal(value, USER_DATA_CHANGED_SIGNAL, 4);
+      if(fequalzero(value)==0){
+          this->data_engine->send_signal(value, USER_DATA_CHANGED_SIGNAL, 4);
+      }
+      else{
+          this->data_engine->send_signal(TOLERANCE, USER_DATA_CHANGED_SIGNAL, 4);
+      }
     }
 }
 
@@ -1044,7 +1064,12 @@ void FusionMapsGui::on_sensor_connect_button_m5_clicked()
 void FusionMapsGui::on_user_data_slider5_valueChanged(double value)
 {
   if(net_pid!=0){
-    this->data_engine->send_signal(value, USER_DATA_CHANGED_SIGNAL, 5);
+      if(fequalzero(value)==0){
+          this->data_engine->send_signal(value, USER_DATA_CHANGED_SIGNAL, 5);
+      }
+      else{
+          this->data_engine->send_signal(TOLERANCE, USER_DATA_CHANGED_SIGNAL, 5);
+      }
     }
 }
 
@@ -1081,7 +1106,12 @@ void FusionMapsGui::on_sensor_connect_button_m6_clicked()
 void FusionMapsGui::on_user_data_slider6_valueChanged(double value)
 {
   if(net_pid!=0){
-    this->data_engine->send_signal(value, USER_DATA_CHANGED_SIGNAL, 6);
+      if(fequalzero(value)==0){
+          this->data_engine->send_signal(value, USER_DATA_CHANGED_SIGNAL, 6);
+      }
+      else{
+          this->data_engine->send_signal(0.001f, USER_DATA_CHANGED_SIGNAL, 6);
+      }
     }
 }
 

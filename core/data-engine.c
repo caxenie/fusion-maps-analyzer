@@ -55,7 +55,7 @@ void init_system_bus_connection()
         sensor_connected[i] = 0;
         user_connected[i] = 0;
         sensor_data[i] = randomize();
-        user_data[i] = 0.0f;
+        user_data[i] = 0.0001f;
         update_rate_user[i] = 1.0;
         update_rate_sensor[i] = 1.0;
     }

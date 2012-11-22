@@ -23,12 +23,12 @@ DataEngine::DataEngine(QObject *parent) :
         exit(EXIT_FAILURE);
     }
     running = 1;
-    /* init dat aand err variables */
+    /* init dat and err variables */
     for(int i=0;i<MAPS_NUM;i++){
-        map_data[i] = 0.0f;
+        map_data[i] = 0.0001f;
     }
     for(int i=0;i<ERR_NUM;i++){
-        map_err[i] = 0.0f;
+        map_err[i] = 0.0001f;
     }
 }
 

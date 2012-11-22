@@ -205,8 +205,8 @@ main (int argc, char *argv[])
 
                     if(rand_edge==2){
                         M2.data.cells[i][j].val[0] =
-                                (1 + 4 * ETA432 * pow(M4.data.cells[i][j].val[0],2) ) * M2.data.cells[i][j].val[0] -
-                                4 * ETA432*M3.data.cells[i][j].val[0]*M4.data.cells[i][j].val[0];
+                                (1 - 2 * ETA432 * pow(M4.data.cells[i][j].val[0],2) ) * M2.data.cells[i][j].val[0] +
+                                2 * ETA432*M3.data.cells[i][j].val[0]*M4.data.cells[i][j].val[0];
                     }
 
                     if(rand_edge==3){
@@ -253,8 +253,8 @@ main (int argc, char *argv[])
 
                     if(rand_edge==1){
                         M3.data.cells[i][j].val[0] =
-                                (1 - 4 * ETA432) * M3.data.cells[i][j].val[0] +
-                                4 * ETA432 * M2.data.cells[i][j].val[0] *
+                                (1 - 2 * ETA432) * M3.data.cells[i][j].val[0] +
+                                2 * ETA432 * M2.data.cells[i][j].val[0] *
                                 M4.data.cells[i][j].val[0];
                     }
 
@@ -301,8 +301,8 @@ main (int argc, char *argv[])
 
                     if(rand_edge==1){
                         M4.data.cells[i][j].val[0] =
-                                (1 - 4 * ETA234 * pow(M2.data.cells[i][j].val[0], 2)) * M4.data.cells[i][j].val[0] +
-                                4 * ETA234 * (M3.data.cells[i][j].val[0] *
+                                (1 - 2 * ETA234 * pow(M2.data.cells[i][j].val[0], 2)) * M4.data.cells[i][j].val[0] +
+                                2 * ETA234 * (M3.data.cells[i][j].val[0] *
                                               M2.data.cells[i][j].val[0]);
                     }
                     log_message
@@ -315,8 +315,8 @@ main (int argc, char *argv[])
 
                     if(rand_edge==2){
                         M4.data.cells[i][j].val[0] =
-                                (1 - 4 * ETA654) * M4.data.cells[i][j].val[0] +
-                                4 * ETA654 * (M5.data.cells[i][j].val[0] +
+                                (1 - 2 * ETA654) * M4.data.cells[i][j].val[0] +
+                                2 * ETA654 * (M5.data.cells[i][j].val[0] +
                                               2 * M6.data.cells[i][j].val[0]);
                     }
 
@@ -364,8 +364,8 @@ main (int argc, char *argv[])
 
                     if(rand_edge==1){
                         M5.data.cells[i][j].val[0] =
-                                (1 - 4 * ETA456) * M5.data.cells[i][j].val[0] +
-                                4 * ETA456 * (M4.data.cells[i][j].val[0] - 2 * M6.data.cells[i][j].val[0]);
+                                (1 - 2 * ETA456) * M5.data.cells[i][j].val[0] +
+                                2 * ETA456 * (M4.data.cells[i][j].val[0] - 2 * M6.data.cells[i][j].val[0]);
                     }
 
                     if(rand_edge==2){
@@ -413,8 +413,8 @@ main (int argc, char *argv[])
 
                     if(rand_edge==1){
                         M6.data.cells[i][j].val[0] =
-                                (1 - 16 * ETA456) * M6.data.cells[i][j].val[0] +
-                                8 * ETA456 *
+                                (1 - 8 * ETA456) * M6.data.cells[i][j].val[0] +
+                                4 * ETA456 *
                                 ((M4.data.cells[i][j].val[0] -
                                   M5.data.cells[i][j].val[0]));
                     }
