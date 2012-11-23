@@ -133,13 +133,6 @@ main (int argc, char *argv[])
             {
                 for (int j = 0; j < MAP_SIZE; j++)
                 {
-                    log_message ("CORE: Extracted map %d\n", rand_map);
-
-                    log_message ("CORE: M1ant = %lf\n",
-                                 M1ant);
-
-                    log_message("Update M1: M2 state is : %lf \n", M2.data.cells[i][j].val[0]);
-
                     rand_edge = (rand() % (M1.links+1) + 1);
 
                     if(rand_edge==1){
@@ -159,12 +152,6 @@ main (int argc, char *argv[])
                         }
                     }
 
-                    log_message
-                            ("CORE: Updated Map  %d \n",
-                             rand_map);
-                    log_message ("CORE: M1 = %lf\n",
-                                 M1.data.cells[i][j].val[0]); // just verbose
-
                     e1 = fabs(M1.data.cells[i][j].val[0] - M1ant); // update error
 
                     M1ant = M1.data.cells[i][j].val[0]; // update history
@@ -180,28 +167,13 @@ main (int argc, char *argv[])
             {
                 for (int j = 0; j < MAP_SIZE; j++)
                 {
-                    log_message ("CORE: Extracted map %d\n", rand_map);
-
-                    log_message ("CORE: M2ant = %lf\n",
-                                 M2ant);
-
                     rand_edge = (rand() % (M2.links+1) + 1);
 
-                    log_message("Update M2: M1 state is : %lf \n", M1.data.cells[i][j].val[0]);
-
-                    if(rand_edge==1){
+                   if(rand_edge==1){
                         M2.data.cells[i][j].val[0] =
                                 (1 - 2 * ETA12) * M2.data.cells[i][j].val[0] +
                                 6 * ETA12 * M1.data.cells[i][j].val[0];
                     }
-                    log_message
-                            ("CORE: Updated Map  %d with respect tp R1 \n",
-                             rand_map);
-                    log_message ("CORE: M2 = %lf\n",
-                                 M2.data.cells[i][j].val[0]);
-
-                    log_message("Update M2: M3 state is : %lf \n", M3.data.cells[i][j].val[0]);
-                    log_message("Update M2: M4 state is : %lf \n", M4.data.cells[i][j].val[0]);
 
                     if(rand_edge==2){
                         M2.data.cells[i][j].val[0] =
@@ -220,13 +192,6 @@ main (int argc, char *argv[])
                         }
                     }
 
-                    log_message
-                            ("CORE: Updated Map  %d with respect to R2 \n",
-                             rand_map);
-                    log_message ("CORE: M2 = %lf\n",
-                                 M2.data.cells[i][j].val[0]);
-
-
                     e2 = fabs(M2.data.cells[i][j].val[0] - M2ant);
 
                     M2ant = M2.data.cells[i][j].val[0];
@@ -242,13 +207,6 @@ main (int argc, char *argv[])
             {
                 for (int j = 0; j < MAP_SIZE; j++)
                 {
-                    log_message ("CORE: Extracted map %d\n", rand_map);
-
-                    log_message ("CORE: M3ant = %lf\n",
-                                 M3ant);
-                    log_message("Update M3: M2 state is : %lf \n", M2.data.cells[i][j].val[0]);
-                    log_message("Update M3: M4 state is : %lf \n", M4.data.cells[i][j].val[0]);
-
                     rand_edge = (rand() % (M3.links+1) + 1);
 
                     if(rand_edge==1){
@@ -269,12 +227,6 @@ main (int argc, char *argv[])
                         }
                     }
 
-                    log_message
-                            ("CORE: Updated Map  %d  \n",
-                             rand_map);
-                    log_message ("CORE: M3 = %lf\n",
-                                 M3.data.cells[i][j].val[0]);
-
                     e3 = fabs(M3.data.cells[i][j].val[0] - M3ant);
 
                     M3ant = M3.data.cells[i][j].val[0];
@@ -290,13 +242,6 @@ main (int argc, char *argv[])
             {
                 for (int j = 0; j < MAP_SIZE; j++)
                 {
-                    log_message ("CORE: Extracted map %d\n", rand_map);
-
-                    log_message ("CORE: M4ant = %lf\n",
-                                 M4ant);
-                    log_message("Update M4: M2 state is : %lf \n", M2.data.cells[i][j].val[0]);
-                    log_message("Update M4: M3 state is : %lf \n", M3.data.cells[i][j].val[0]);
-
                     rand_edge = (rand() % (M4.links+1) + 1);
 
                     if(rand_edge==1){
@@ -305,13 +250,6 @@ main (int argc, char *argv[])
                                 2 * ETA234 * (M3.data.cells[i][j].val[0] *
                                               M2.data.cells[i][j].val[0]);
                     }
-                    log_message
-                            ("CORE: Updated Map  %d with respect to R2 \n",
-                             rand_map);
-                    log_message ("CORE: M4 = %lf\n",
-                                 M4.data.cells[i][j].val[0]);
-                    log_message("Update M4: M5 state is : %lf \n", M5.data.cells[i][j].val[0]);
-                    log_message("Update M4: M6 state is : %lf \n", M6.data.cells[i][j].val[0]);
 
                     if(rand_edge==2){
                         M4.data.cells[i][j].val[0] =
@@ -331,13 +269,6 @@ main (int argc, char *argv[])
                         }
                     }
 
-
-                    log_message
-                            ("CORE: Updated Map  %d with respect to R3 \n",
-                             rand_map);
-                    log_message ("CORE: M4 = %lf\n",
-                                 M4.data.cells[i][j].val[0]);
-
                     e4 = fabs(M4.data.cells[i][j].val[0] - M4ant);
 
                     M4ant = M4.data.cells[i][j].val[0];
@@ -353,13 +284,6 @@ main (int argc, char *argv[])
             {
                 for (int j = 0; j < MAP_SIZE; j++)
                 {
-                    log_message ("CORE: Extracted map %d\n", rand_map);
-
-                    log_message ("CORE: M5ant = %lf\n",
-                                 M5ant);
-                    log_message("Update M5: M4 state is : %lf \n", M4.data.cells[i][j].val[0]);
-                    log_message("Update M5: M6 state is : %lf \n", M6.data.cells[i][j].val[0]);
-
                     rand_edge = (rand() % (M5.links+1) + 1);
 
                     if(rand_edge==1){
@@ -379,13 +303,6 @@ main (int argc, char *argv[])
                         }
                     }
 
-
-                    log_message
-                            ("CORE: Updated Map  %d  \n",
-                             rand_map);
-                    log_message ("CORE: M5 = %lf\n",
-                                 M5.data.cells[i][j].val[0]);
-
                     e5 = fabs(M5.data.cells[i][j].val[0] - M5ant);
 
                     M5ant = M5.data.cells[i][j].val[0];
@@ -401,14 +318,6 @@ main (int argc, char *argv[])
             {
                 for (int j = 0; j < MAP_SIZE; j++)
                 {
-                    log_message ("CORE: Extracted map %d\n", rand_map);
-
-                    log_message ("CORE: M6ant = %lf\n",
-                                 M6ant);
-
-                    log_message("Update M6: M4 state is : %lf \n", M4.data.cells[i][j].val[0]);
-                    log_message("Update M6: M5 state is : %lf \n", M5.data.cells[i][j].val[0]);
-
                     rand_edge = (rand() % (M6.links+1) + 1);
 
                     if(rand_edge==1){
@@ -430,12 +339,6 @@ main (int argc, char *argv[])
                         }
                     }
 
-                    log_message
-                            ("CORE: Updated Map  %d \n",
-                             rand_map);
-                    log_message ("CORE: M6 = %lf\n",
-                                 M6.data.cells[i][j].val[0]);
-
                     e6 = fabs(M6.data.cells[i][j].val[0] - M6ant);
 
                     M6ant = M6.data.cells[i][j].val[0];
@@ -445,34 +348,10 @@ main (int argc, char *argv[])
             }
         }
 
-        log_message
-                ("\nCORE: Errors: E1 = %lf | E2 = %lf | E3 = %lf | E4 = %lf | E5 = %lf | E6 = %lf \n",
-                 e1, e2, e3, e4, e5, e6);
-
         for (int i = 0; i < MAP_SIZE; i++)
         {
             for (int j = 0; j < MAP_SIZE; j++)
             {
-
-                log_message("\nCORE: maps state M1: %f | M2 %f | M3 %f | M4 %f | M5 %f | M6 %f\n",
-                            M1.data.cells[i][j].val[0],
-                            M2.data.cells[i][j].val[0],
-                            M3.data.cells[i][j].val[0],
-                            M4.data.cells[i][j].val[0],
-                            M5.data.cells[i][j].val[0],
-                            M6.data.cells[i][j].val[0]);
-
-                // errors with respect to the relationships in which each map is involved
-
-                // squared errors
-                //                E1[0] = pow(M1.data.cells[i][j].val[0]-M2.data.cells[i][j].val[0]/3, 2);
-                //                E2[0] = pow(M2.data.cells[i][j].val[0]-3*M1.data.cells[i][j].val[0], 2);
-                //                E2[1] = pow(M2.data.cells[i][j].val[0]-M3.data.cells[i][j].val[0]/M4.data.cells[i][j].val[0], 2);
-                //                E3[0] = pow(M3.data.cells[i][j].val[0]-M2.data.cells[i][j].val[0]*M4.data.cells[i][j].val[0], 2);
-                //                E4[0] = pow(M4.data.cells[i][j].val[0]-M3.data.cells[i][j].val[0]/M2.data.cells[i][j].val[0], 2);
-                //                E4[1] = pow(M4.data.cells[i][j].val[0]-M5.data.cells[i][j].val[0] - 2*M6.data.cells[i][j].val[0], 2);
-                //                E5[0] = pow(M5.data.cells[i][j].val[0]-M4.data.cells[i][j].val[0] + 2*M6.data.cells[i][j].val[0], 2);
-                //                E6[0] = pow(M6.data.cells[i][j].val[0]-(M4.data.cells[i][j].val[0]-M5.data.cells[i][j].val[0])/2, 2);
 
                 // full errors
                 E1[0] = M1.data.cells[i][j].val[0]-M2.data.cells[i][j].val[0]/3;
@@ -527,24 +406,24 @@ main (int argc, char *argv[])
         log_message("Loop time: %f ms\n",(double) (stop.tv_nsec-start.tv_nsec)/1000000); // get time in ms
         //        sprintf(log_bufferw, " Time: %f\n", (double) (stop.tv_nsec-start.tv_nsec)/1000000);
         //        fwrite(log_bufferw, strlen(log_bufferw), 1, f);
-        timer++;
-        sprintf(log_bufferw, "%f %f %f %f %f %f %f %f %f %f %f %f %f %f %ld\n",
-                M1.data.cells[0][0].val[0],
-                M2.data.cells[0][0].val[0],
-                M3.data.cells[0][0].val[0],
-                M4.data.cells[0][0].val[0],
-                M5.data.cells[0][0].val[0],
-                M6.data.cells[0][0].val[0],
-                E1[0],
-                E2[0],
-                E2[1],
-                E3[0],
-                E4[0],
-                E4[1],
-                E5[0],
-                E6[0],
-                timer);
-        fwrite(log_bufferw, strlen(log_bufferw), 1, f);
+//        timer++;
+//        sprintf(log_bufferw, "%f %f %f %f %f %f %f %f %f %f %f %f %f %f %ld\n",
+//                M1.data.cells[0][0].val[0],
+//                M2.data.cells[0][0].val[0],
+//                M3.data.cells[0][0].val[0],
+//                M4.data.cells[0][0].val[0],
+//                M5.data.cells[0][0].val[0],
+//                M6.data.cells[0][0].val[0],
+//                E1[0],
+//                E2[0],
+//                E2[1],
+//                E3[0],
+//                E4[0],
+//                E4[1],
+//                E5[0],
+//                E6[0],
+//                timer);
+//        fwrite(log_bufferw, strlen(log_bufferw), 1, f);
     }
     return 0;
 }
