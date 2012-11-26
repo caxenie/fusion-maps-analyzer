@@ -406,24 +406,27 @@ main (int argc, char *argv[])
         log_message("Loop time: %f ms\n",(double) (stop.tv_nsec-start.tv_nsec)/1000000); // get time in ms
         //        sprintf(log_bufferw, " Time: %f\n", (double) (stop.tv_nsec-start.tv_nsec)/1000000);
         //        fwrite(log_bufferw, strlen(log_bufferw), 1, f);
-//        timer++;
-//        sprintf(log_bufferw, "%f %f %f %f %f %f %f %f %f %f %f %f %f %f %ld\n",
-//                M1.data.cells[0][0].val[0],
-//                M2.data.cells[0][0].val[0],
-//                M3.data.cells[0][0].val[0],
-//                M4.data.cells[0][0].val[0],
-//                M5.data.cells[0][0].val[0],
-//                M6.data.cells[0][0].val[0],
-//                E1[0],
-//                E2[0],
-//                E2[1],
-//                E3[0],
-//                E4[0],
-//                E4[1],
-//                E5[0],
-//                E6[0],
-//                timer);
-//        fwrite(log_bufferw, strlen(log_bufferw), 1, f);
+
+#ifdef VERBOSE
+        timer++;
+        sprintf(log_bufferw, "%f %f %f %f %f %f %f %f %f %f %f %f %f %f %ld\n",
+                M1.data.cells[0][0].val[0],
+                M2.data.cells[0][0].val[0],
+                M3.data.cells[0][0].val[0],
+                M4.data.cells[0][0].val[0],
+                M5.data.cells[0][0].val[0],
+                M6.data.cells[0][0].val[0],
+                E1[0],
+                E2[0],
+                E2[1],
+                E3[0],
+                E4[0],
+                E4[1],
+                E5[0],
+                E6[0],
+                timer);
+        fwrite(log_bufferw, strlen(log_bufferw), 1, f);
+#endif
     }
     return 0;
 }

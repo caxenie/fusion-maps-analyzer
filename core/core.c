@@ -119,7 +119,7 @@ stop_network()
 	fprintf
 	(stderr, "CORE: Errors: E1 = %lf | E2 = %lf - E2 = %lf | E3 = %lf | E4 = %lf - E4 = %lf | E5 = %lf | E6 = %lf \n",
      E1[0], E2[0], E2[1], E3[0], E4[0], E4[1], E5[0],
-	 E6[0]);
+     E6[0]);
 	exit(0);
 }
 
