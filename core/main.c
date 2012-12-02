@@ -117,9 +117,9 @@ main (int UNUSED(argc), char** UNUSED(argv))
         /*
           The relationships hardcoded in the network:
 
-            M2 = 3*M1
-            M3 = M2*M4
-            M4 = M5+2*M6
+            M2 = 3*pow(M1, 2);
+            M3 = pow(M2, 2) - 4*sin(M4);
+            M4 = 8*sqrt(M5) + cos(M6); (M5 > 0)
 
         */
 
@@ -136,11 +136,9 @@ main (int UNUSED(argc), char** UNUSED(argv))
                     rand_edge = (rand() % (M1.links+1) + 1);
 
                     if(rand_edge==1){
-                        M1.data.cells[i][j].val[0] =
-                                (1 - 18 * ETA21) * M1.data.cells[i][j].val[0] +
-                                6 * ETA21 * M2.data.cells[i][j].val[0]; // compute new value for the map
+                        M1.data.cells[i][j].val[0] = M1.data.cells[i][j].val[0] * // compute new value for the map
+                               (1 + 12*ETA21*M2.data.cells[i][j].val[0] - 36*ETA21*pow(M1.data.cells[i][j].val[0], 2));
                     }
-
                     if(rand_edge==2){
                         if(user_connected[rand_map] == 1){
                             M1.data.cells[i][j].val[0] = (1-2*ETA_EXT1) * M1.data.cells[i][j].val[0] +
@@ -172,13 +170,12 @@ main (int UNUSED(argc), char** UNUSED(argv))
                    if(rand_edge==1){
                         M2.data.cells[i][j].val[0] =
                                 (1 - 2 * ETA12) * M2.data.cells[i][j].val[0] +
-                                6 * ETA12 * M1.data.cells[i][j].val[0];
+                                6 * ETA12 * pow(M1.data.cells[i][j].val[0], 2);
                     }
 
                     if(rand_edge==2){
-                        M2.data.cells[i][j].val[0] =
-                                (1 - 2 * ETA432 * pow(M4.data.cells[i][j].val[0],2) ) * M2.data.cells[i][j].val[0] +
-                                2 * ETA432*M3.data.cells[i][j].val[0]*M4.data.cells[i][j].val[0];
+                        M2.data.cells[i][j].val[0] = M2.data.cells[i][j].val[0]*
+                            (1+4*M3.data.cells[i][j].val[0] - 4*pow(M2.data.cells[i][j].val[0], 2) + 16*sin(M4.data.cells[i][j].val[0]));
                     }
 
                     if(rand_edge==3){
@@ -212,8 +209,8 @@ main (int UNUSED(argc), char** UNUSED(argv))
                     if(rand_edge==1){
                         M3.data.cells[i][j].val[0] =
                                 (1 - 2 * ETA432) * M3.data.cells[i][j].val[0] +
-                                2 * ETA432 * M2.data.cells[i][j].val[0] *
-                                M4.data.cells[i][j].val[0];
+                                2 * ETA432 * pow(M2.data.cells[i][j].val[0], 2) -
+                                8*ETA432*sin(M4.data.cells[i][j].val[0]);
                     }
 
                     if(rand_edge==2){
@@ -245,17 +242,17 @@ main (int UNUSED(argc), char** UNUSED(argv))
                     rand_edge = (rand() % (M4.links+1) + 1);
 
                     if(rand_edge==1){
-                        M4.data.cells[i][j].val[0] =
-                                (1 - 2 * ETA234 * pow(M2.data.cells[i][j].val[0], 2)) * M4.data.cells[i][j].val[0] +
-                                2 * ETA234 * (M3.data.cells[i][j].val[0] *
-                                              M2.data.cells[i][j].val[0]);
+                        M4.data.cells[i][j].val[0] = M4.data.cells[i][j].val[0] -
+                                                     8*ETA234*M3.data.cells[i][j].val[0]*cos(M4.data.cells[i][j].val[0]) +
+                                                     8*ETA234*pow(M2.data.cells[i][j].val[0], 2)*cos(M4.data.cells[i][j].val[0]) -
+                                                     32*sin(M4.data.cells[i][j].val[0])*cos(M4.data.cells[i][j].val[0]);
+
                     }
 
                     if(rand_edge==2){
-                        M4.data.cells[i][j].val[0] =
-                                (1 - 2 * ETA654) * M4.data.cells[i][j].val[0] +
-                                2 * ETA654 * (M5.data.cells[i][j].val[0] +
-                                              2 * M6.data.cells[i][j].val[0]);
+                        M4.data.cells[i][j].val[0] = (1-2*ETA654)*M4.data.cells[i][j].val[0] +
+                                                      16*ETA654*sqrt(fabs(M5.data.cells[i][j].val[0])) +
+                                                      2*ETA654*cos(M6.data.cells[i][j].val[0]);
                     }
 
                     if(rand_edge==3){
@@ -287,9 +284,11 @@ main (int UNUSED(argc), char** UNUSED(argv))
                     rand_edge = (rand() % (M5.links+1) + 1);
 
                     if(rand_edge==1){
-                        M5.data.cells[i][j].val[0] =
-                                (1 - 2 * ETA456) * M5.data.cells[i][j].val[0] +
-                                2 * ETA456 * (M4.data.cells[i][j].val[0] - 2 * M6.data.cells[i][j].val[0]);
+                        M5.data.cells[i][j].val[0] = M5.data.cells[i][j].val[0] +
+                            ((8*ETA456*M4.data.cells[i][j].val[0] )/sqrt(fabs(M5.data.cells[i][j].val[0] ))) -
+                            32*ETA456 -
+                            ((4*ETA456*cos(M6.data.cells[i][j].val[0] ))/sqrt(fabs(M5.data.cells[i][j].val[0])));
+
                     }
 
                     if(rand_edge==2){
@@ -321,11 +320,11 @@ main (int UNUSED(argc), char** UNUSED(argv))
                     rand_edge = (rand() % (M6.links+1) + 1);
 
                     if(rand_edge==1){
-                        M6.data.cells[i][j].val[0] =
-                                (1 - 8 * ETA456) * M6.data.cells[i][j].val[0] +
-                                4 * ETA456 *
-                                ((M4.data.cells[i][j].val[0] -
-                                  M5.data.cells[i][j].val[0]));
+                        M6.data.cells[i][j].val[0] =  M6.data.cells[i][j].val[0] -
+                            2*ETA456* M4.data.cells[i][j].val[0]*sin( M6.data.cells[i][j].val[0]) +
+                            16*ETA456*sqrt(fabs(M5.data.cells[i][j].val[0]))*sin(M6.data.cells[i][j].val[0])+
+                            2*ETA456*sin(M6.data.cells[i][j].val[0])*cos(M6.data.cells[i][j].val[0]);
+
                     }
 
                     if(rand_edge==2){
@@ -354,16 +353,20 @@ main (int UNUSED(argc), char** UNUSED(argv))
             {
 
                 // full errors
-                E1[0] = M1.data.cells[i][j].val[0]-M2.data.cells[i][j].val[0]/3;
-                E2[0] = M2.data.cells[i][j].val[0]-3*M1.data.cells[i][j].val[0];
-                E2[1] = M2.data.cells[i][j].val[0]-M3.data.cells[i][j].val[0]/M4.data.cells[i][j].val[0];
-                E3[0] = M3.data.cells[i][j].val[0]-M2.data.cells[i][j].val[0]*M4.data.cells[i][j].val[0];
-                E4[0] = M4.data.cells[i][j].val[0]-M3.data.cells[i][j].val[0]/M2.data.cells[i][j].val[0];
-                E4[1] = M4.data.cells[i][j].val[0]-M5.data.cells[i][j].val[0] - 2*M6.data.cells[i][j].val[0];
-                E5[0] = M5.data.cells[i][j].val[0]-M4.data.cells[i][j].val[0] + 2*M6.data.cells[i][j].val[0];
-                E6[0] = M6.data.cells[i][j].val[0]-(M4.data.cells[i][j].val[0]-M5.data.cells[i][j].val[0])/2;
-
-
+                // Map 1 with respect to R12
+                E1[0] = M1.data.cells[i][j].val[0]-sqrt(M2.data.cells[i][j].val[0]/3);
+                // Map 2 with  respect to R12 and R34
+                E2[0] = M2.data.cells[i][j].val[0]-3*pow(M1.data.cells[i][j].val[0], 2);
+                E2[1] = M2.data.cells[i][j].val[0]- sqrt(M3.data.cells[i][j].val[0] + 4*sin(M4.data.cells[i][j].val[0]));
+                // Map 3 with respect to R34
+                E3[0] = M3.data.cells[i][j].val[0]-pow(M2.data.cells[i][j].val[0], 2) +4*sin(M4.data.cells[i][j].val[0]);
+                // Map 4 with  respect to R34 and R56
+                E4[0] = M4.data.cells[i][j].val[0]-asin((pow(M2.data.cells[i][j].val[0], 2) - M3.data.cells[i][j].val[0])/4);
+                E4[1] = M4.data.cells[i][j].val[0]-8*sqrt(fabs(M5.data.cells[i][j].val[0])) - cos(M6.data.cells[i][j].val[0]);
+                // Map 5 with respect to R56
+                E5[0] = M5.data.cells[i][j].val[0]-((M4.data.cells[i][j].val[0] - cos(M6.data.cells[i][j].val[0])/8));
+                // Map 6 with respect to R56
+                E6[0] = M6.data.cells[i][j].val[0]-acos(M4.data.cells[i][j].val[0]-8*sqrt(fabs(M5.data.cells[i][j].val[0])));
 
             }
 
