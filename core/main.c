@@ -23,7 +23,7 @@ long timer;
 
 /* entry point */
 int
-main (int argc, char *argv[])
+main (int UNUSED(argc), char** UNUSED(argv))
 {
     f = fopen("fusion-analyzer-data.log","w+");
     log_bufferw = (char*)calloc(20000, sizeof(char));

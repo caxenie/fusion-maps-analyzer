@@ -366,7 +366,7 @@ void listen_to_data_clients()
 }
 
 /* initialize the data engine thread properties and sets up executing code */
-void* data_engine_functionality(void *data)
+void* data_engine_functionality(void* UNUSED(data))
 {
     int ret;
     ret = pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
@@ -409,7 +409,7 @@ void cancel_data_transfer_engine()
   this pointer is also saved in the sival_ptr variable right before calling timer_create().
   in this function notice that we always use the SIGRTMIN signal, so expiration of any timer causes this signal to be raised.
 */
-void rate_timer_handler( int sig, siginfo_t *si, void *uc )
+void rate_timer_handler( int UNUSED(sig), siginfo_t *si, void* UNUSED(uc) )
 {
     timer_t *tidp;
     tidp = si->si_value.sival_ptr;
