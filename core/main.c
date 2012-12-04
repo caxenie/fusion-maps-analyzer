@@ -88,7 +88,7 @@ main (int UNUSED(argc), char** UNUSED(argv))
       /* start time */
       if( clock_gettime( CLOCK_REALTIME , &start) == -1 ) {
           exit( EXIT_FAILURE );
-        }
+      }
 
       /* non local goto for self-restarting */
       if(sigsetjmp(jmpbuf, 2)) {
@@ -118,8 +118,8 @@ main (int UNUSED(argc), char** UNUSED(argv))
           The relationships hardcoded in the network:
 
           M2 = 5*pow(M1,2);
-          M3 = arctg(M2) - 4*pow(M4, 2);
-          M4 = 8*arcctg(M5) + pow(M6, 3)
+          M3 = atan(M2) - 4*pow(M4, 2);
+          M4 = 8*atan(M5) + pow(M6, 2)
 
         */
 
