@@ -156,7 +156,7 @@ main (int UNUSED(argc), char** UNUSED(argv))
 
           M2 = integrate(M1)dt
           M3 = 5*M2 - atan(M4);
-          M4 = M5 + integrate(M6)dt
+          M4 = M5 + 3*M6
 
         */
 
@@ -326,12 +326,13 @@ main (int UNUSED(argc), char** UNUSED(argv))
 
                     }
 
-                    /* update from user or sensor */
+
                     if(rand_edge==2){
                         M4.data.cells[i][j].val[0] = (1-2*ETA654)*M4.data.cells[i][j].val[0] +
-                                ETA654*(2*M5.data.cells[i][j].val[0] + ((double)((M6_tcur.tv_nsec - M6_tant.tv_nsec)/1000000))*(M6.data.cells[i][j].val[0] + M6ant));
+                                2*ETA654*(M5.data.cells[i][j].val[0] + 3*M6.data.cells[i][j].val[0]);
                     }
 
+                   /* update from user or sensor */
                     if(rand_edge==3){
                         if(user_connected[rand_map] == 1){
                             M4.data.cells[i][j].val[0] = (1-2*ETA_EXT4) * M4.data.cells[i][j].val[0] +
@@ -372,7 +373,7 @@ main (int UNUSED(argc), char** UNUSED(argv))
                     /* update from network dynamics */
                     if(rand_edge==1){
                         M5.data.cells[i][j].val[0] = (1 - 2*ETA654)*M5.data.cells[i][j].val[0] +
-                                ETA654*(2*M4.data.cells[i][j].val[0] - ((double)((M6_tcur.tv_nsec - M6_tant.tv_nsec)/1000000))*(M6.data.cells[i][j].val[0] + M6ant));
+                                2*ETA654*(M4.data.cells[i][j].val[0] -3*M6.data.cells[i][j].val[0]);
 
                     }
 
@@ -414,9 +415,8 @@ main (int UNUSED(argc), char** UNUSED(argv))
 
                     /* update from network dynamics */
                     if(rand_edge==1){
-                        M6.data.cells[i][j].val[0] =  M6.data.cells[i][j].val[0] +
-                                ETA456*((double)((M6_tcur.tv_nsec - M6_tant.tv_nsec)/1000000))*
-                                (2*M4.data.cells[i][j].val[0] - 2*M5.data.cells[i][j].val[0] - ((double)((M6_tcur.tv_nsec - M6_tant.tv_nsec)/1000000))*((M6.data.cells[i][j].val[0] + M6ant)));
+                        M6.data.cells[i][j].val[0] =  (1 - 18*ETA456)*M6.data.cells[i][j].val[0] +
+                                6*ETA456*(M4.data.cells[i][j].val[0] - M5.data.cells[i][j].val[0]);
 
                     }
 
@@ -456,13 +456,11 @@ main (int UNUSED(argc), char** UNUSED(argv))
                 E3[0] = M3.data.cells[i][j].val[0]- 5*M2.data.cells[i][j].val[0] + atan(M4.data.cells[i][j].val[0]);
                 // Map 4 with  respect to R34 and R56
                 E4[0] = M4.data.cells[i][j].val[0]-tan((5*M2.data.cells[i][j].val[0])- M3.data.cells[i][j].val[0]);
-                E4[1] = M4.data.cells[i][j].val[0]- M5.data.cells[i][j].val[0] - (M6.data.cells[i][j].val[0] + M6ant)/2;
+                E4[1] = M4.data.cells[i][j].val[0]- M5.data.cells[i][j].val[0] - 3*M6.data.cells[i][j].val[0];
                 // Map 5 with respect to R56
-                E5[0] = M5.data.cells[i][j].val[0]- M4.data.cells[i][j].val[0] + (M6.data.cells[i][j].val[0] + M6ant)/2;
+                E5[0] = M5.data.cells[i][j].val[0]- M4.data.cells[i][j].val[0] + 3*M6.data.cells[i][j].val[0];
                 // Map 6 with respect to R56
-                derivM4 = (M4.data.cells[i][j].val[0] - M4ant);
-                derivM5 = (M5.data.cells[i][j].val[0] - M5ant);
-                E6[0] = M6.data.cells[i][j].val[0] - (derivM4 - derivM5);
+                E6[0] = M6.data.cells[i][j].val[0] - (M4.data.cells[i][j].val[0] - M5.data.cells[i][j].val[0])/3;
 
 
             }
