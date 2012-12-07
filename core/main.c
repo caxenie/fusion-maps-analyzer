@@ -100,9 +100,6 @@ main (int UNUSED(argc), char** UNUSED(argv))
     /* some timing info */
     struct timespec start, stop;
 
-    double derivM4 = 0.0f;
-    double derivM5 = 0.0f;
-
     /* loop the network */
     while (1)
     {
