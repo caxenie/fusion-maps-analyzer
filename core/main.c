@@ -180,8 +180,8 @@ main (int UNUSED(argc), char** UNUSED(argv))
                     /* update from network dynamics */
                     if(rand_edge==1){
                         M1.data.cells[i][j].val[0] = M1.data.cells[i][j].val[0] * // compute new value for the map
-                                (1 + pow((double)((M1_tcur.tv_nsec - M1_tant.tv_nsec)/1000000), 2)/* ms */ * ETA21) -
-                                ((double)((M1_tcur.tv_nsec - M1_tant.tv_nsec)/1000000))*ETA21*(M2.data.cells[i][j].val[0] + (((double)((M1_tcur.tv_nsec - M1_tant.tv_nsec)/1000000)))*M1ant);
+                                (1 + pow((((double)(M1_tcur.tv_nsec - M1_tant.tv_nsec))/1000000), 2)/* ms */ * ETA21) -
+                                ((((double)(M1_tcur.tv_nsec - M1_tant.tv_nsec))/1000000))*ETA21*(M2.data.cells[i][j].val[0] + (((((double)(M1_tcur.tv_nsec - M1_tant.tv_nsec))/1000000)))*M1ant);
                     }
 
                     /* update from user or sensor */
@@ -225,7 +225,7 @@ main (int UNUSED(argc), char** UNUSED(argv))
                     if(rand_edge==1){
                         M2.data.cells[i][j].val[0] =
                                 (1 - 2 * ETA12) * M2.data.cells[i][j].val[0] +
-                                ((double)((M1_tcur.tv_nsec - M1_tant.tv_nsec)/1000000)) * ETA12 * (M1.data.cells[i][j].val[0] + M1ant);
+                                ((((double)(M1_tcur.tv_nsec - M1_tant.tv_nsec))/1000000)) * ETA12 * (M1.data.cells[i][j].val[0] + M1ant);
                     }
 
 
