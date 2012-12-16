@@ -69,23 +69,11 @@ main (int UNUSED(argc), char** UNUSED(argv))
 
     double M1ant = 0.0f, M2ant = 0.0f, M3ant = 0.0f, M4ant = 0.0f, M5ant = 0.0f, M6ant = 0.0f;
 
-    struct timespec M1_tant, M1_tcur, M2_tant, M2_tcur, M3_tant, M3_tcur, M4_tant, M4_tcur, M5_tant, M5_tcur, M6_tant, M6_tcur;
+    struct timeval M1_tant, M1_tcur;
 
-    if( clock_gettime( CLOCK_REALTIME , &M1_tcur) == -1 ) {
-        exit( EXIT_FAILURE );
+    if( gettimeofday(&M1_tant, NULL) ){
+        exit(EXIT_FAILURE);
     }
-
-    M1_tant.tv_nsec = 0;
-    M2_tant.tv_nsec = 0;
-    M2_tcur.tv_nsec = M1_tcur.tv_nsec;
-    M3_tant.tv_nsec = 0;
-    M3_tcur.tv_nsec = M1_tcur.tv_nsec;
-    M4_tant.tv_nsec = 0;
-    M4_tcur.tv_nsec = M1_tcur.tv_nsec;
-    M5_tant.tv_nsec = 0;
-    M5_tcur.tv_nsec = M1_tcur.tv_nsec;
-    M6_tant.tv_nsec = 0;
-    M6_tcur.tv_nsec = M1_tcur.tv_nsec;
 
     // initialize map connections to user/sensor
     for(int i=0;i<MAPS_NUM+1;i++){
@@ -130,21 +118,9 @@ main (int UNUSED(argc), char** UNUSED(argv))
             e1 = 0, e2 = 0, e3 = 0, e4 = 0, e5 = 0, e6 = 0;
             M1ant = 0.0f, M2ant = 0.0f, M3ant = 0.0f, M4ant = 0.0f, M5ant = 0.0f, M6ant = 0.0f;
 
-            if( clock_gettime( CLOCK_REALTIME , &M1_tcur) == -1 ) {
-                exit( EXIT_FAILURE );
+            if( gettimeofday(&M1_tant, NULL) ){
+                exit(EXIT_FAILURE);
             }
-
-            M1_tant.tv_nsec = 0;
-            M2_tant.tv_nsec = 0;
-            M2_tcur.tv_nsec = M1_tcur.tv_nsec;
-            M3_tant.tv_nsec = 0;
-            M3_tcur.tv_nsec = M1_tcur.tv_nsec;
-            M4_tant.tv_nsec = 0;
-            M4_tcur.tv_nsec = M1_tcur.tv_nsec;
-            M5_tant.tv_nsec = 0;
-            M5_tcur.tv_nsec = M1_tcur.tv_nsec;
-            M6_tant.tv_nsec = 0;
-            M6_tcur.tv_nsec = M1_tcur.tv_nsec;
 
         }
 
@@ -169,19 +145,18 @@ main (int UNUSED(argc), char** UNUSED(argv))
                 {
                     rand_edge = (rand() % (M1.links+1) + 1);
 
+                    M1ant = M1.data.cells[i][j].val[0]; // update history
 
-                    M1_tant.tv_nsec = M1_tcur.tv_nsec;
-
-                    /* get update time */
-                    if( clock_gettime( CLOCK_REALTIME, &M1_tcur) == -1){
-                        M1_tcur = M1_tant;
+                    if( gettimeofday(&M1_tcur, NULL) ){
+                        exit(EXIT_FAILURE);
                     }
 
                     /* update from network dynamics */
                     if(rand_edge==1){
                         M1.data.cells[i][j].val[0] = M1.data.cells[i][j].val[0] * // compute new value for the map
-                                (1 + pow((((double)(M1_tcur.tv_nsec - M1_tant.tv_nsec))/1000000), 2)/* ms */ * ETA21) -
-                                ((((double)(M1_tcur.tv_nsec - M1_tant.tv_nsec))/1000000))*ETA21*(M2.data.cells[i][j].val[0] + (((((double)(M1_tcur.tv_nsec - M1_tant.tv_nsec))/1000000)))*M1ant);
+                            (1 + pow(TO_MS(compute_dt(NULL, &M1_tcur, &M1_tant)), 2)/* ms */ * ETA21) -
+                                (TO_MS(compute_dt(NULL, &M1_tcur, &M1_tant)))*ETA21*(M2.data.cells[i][j].val[0] +
+                                                                                     (TO_MS(compute_dt(NULL, &M1_tcur, &M1_tant)))*M1ant);
                     }
 
                     /* update from user or sensor */
@@ -196,9 +171,10 @@ main (int UNUSED(argc), char** UNUSED(argv))
                         }
                     }
 
+
                     e1 = fabs(M1.data.cells[i][j].val[0] - M1ant); // update error
 
-                    M1ant = M1.data.cells[i][j].val[0]; // update history
+                    M1_tant = M1_tcur;
 
                     update_state[rand_map] = 1;
                 }
@@ -214,18 +190,13 @@ main (int UNUSED(argc), char** UNUSED(argv))
                     rand_edge = (rand() % (M2.links+1) + 1);
 
 
-                    M2_tant.tv_nsec = M2_tcur.tv_nsec;
-
-                    /* get update time */
-                    if( clock_gettime( CLOCK_REALTIME, &M2_tcur) == -1){
-                        M2_tcur = M2_tant;
-                    }
+                    M2ant = M2.data.cells[i][j].val[0];
 
                     /* update from network dynamics */
                     if(rand_edge==1){
                         M2.data.cells[i][j].val[0] =
                                 (1 - 2 * ETA12) * M2.data.cells[i][j].val[0] +
-                                ((((double)(M1_tcur.tv_nsec - M1_tant.tv_nsec))/1000000)) * ETA12 * (M1.data.cells[i][j].val[0] + M1ant);
+                                (TO_MS(compute_dt(NULL, &M1_tcur, &M1_tant))) * ETA12 * (M1.data.cells[i][j].val[0] + M1ant);
                     }
 
 
@@ -248,8 +219,6 @@ main (int UNUSED(argc), char** UNUSED(argv))
 
                     e2 = fabs(M2.data.cells[i][j].val[0] - M2ant);
 
-                    M2ant = M2.data.cells[i][j].val[0];
-
                     update_state[rand_map] = 1;
                 }
             }
@@ -264,14 +233,9 @@ main (int UNUSED(argc), char** UNUSED(argv))
                     rand_edge = (rand() % (M3.links+1) + 1);
 
 
-                    M3_tant.tv_nsec = M3_tcur.tv_nsec;
+                     M3ant = M3.data.cells[i][j].val[0];
 
-                    /* get update time */
-                    if( clock_gettime( CLOCK_REALTIME, &M3_tcur) == -1){
-                        M3_tcur = M3_tant;
-                    }
-
-                    /* update from network dynamics */
+                     /* update from network dynamics */
                     if(rand_edge==1){
                         M3.data.cells[i][j].val[0] =
                                 (1 - 2 * ETA432) * M3.data.cells[i][j].val[0] +
@@ -292,8 +256,6 @@ main (int UNUSED(argc), char** UNUSED(argv))
 
                     e3 = fabs(M3.data.cells[i][j].val[0] - M3ant);
 
-                    M3ant = M3.data.cells[i][j].val[0];
-
                     update_state[rand_map] = 1;
                 }
             }
@@ -307,13 +269,7 @@ main (int UNUSED(argc), char** UNUSED(argv))
                 {
                     rand_edge = (rand() % (M4.links+1) + 1);
 
-
-                    M4_tant.tv_nsec = M4_tcur.tv_nsec;
-
-                    /* get update time */
-                    if( clock_gettime( CLOCK_REALTIME, &M4_tcur) == -1){
-                        M4_tcur = M4_tant;
-                    }
+                     M4ant = M4.data.cells[i][j].val[0];
 
                     /* update from network dynamics */
                     if(rand_edge==1){
@@ -343,8 +299,6 @@ main (int UNUSED(argc), char** UNUSED(argv))
 
                     e4 = fabs(M4.data.cells[i][j].val[0] - M4ant);
 
-                    M4ant = M4.data.cells[i][j].val[0];
-
                     update_state[rand_map] = 1;
                 }
             }
@@ -358,14 +312,7 @@ main (int UNUSED(argc), char** UNUSED(argv))
                 {
                     rand_edge = (rand() % (M5.links+1) + 1);
 
-
-                    M5_tant.tv_nsec = M5_tcur.tv_nsec;
-
-                    /* get update time */
-                    if( clock_gettime( CLOCK_REALTIME, &M5_tcur) == -1){
-                        M5_tcur = M5_tant;
-                    }
-
+                    M5ant = M5.data.cells[i][j].val[0];
 
                     /* update from network dynamics */
                     if(rand_edge==1){
@@ -388,8 +335,6 @@ main (int UNUSED(argc), char** UNUSED(argv))
 
                     e5 = fabs(M5.data.cells[i][j].val[0] - M5ant);
 
-                    M5ant = M5.data.cells[i][j].val[0];
-
                     update_state[rand_map] = 1;
                 }
             }
@@ -403,12 +348,7 @@ main (int UNUSED(argc), char** UNUSED(argv))
                 {
                     rand_edge = (rand() % (M6.links+1) + 1);
 
-                    M6_tant.tv_nsec = M6_tcur.tv_nsec;
-
-                    /* get update time */
-                    if( clock_gettime( CLOCK_REALTIME, &M6_tcur) == -1){
-                        M6_tcur = M6_tant;
-                    }
+                    M6ant = M6.data.cells[i][j].val[0];
 
                     /* update from network dynamics */
                     if(rand_edge==1){
@@ -431,8 +371,6 @@ main (int UNUSED(argc), char** UNUSED(argv))
 
                     e6 = fabs(M6.data.cells[i][j].val[0] - M6ant);
 
-                    M6ant = M6.data.cells[i][j].val[0];
-
                     update_state[rand_map] = 1;
                 }
             }
@@ -445,7 +383,7 @@ main (int UNUSED(argc), char** UNUSED(argv))
 
                 // full errors
                 // Map 1 with respect to R12
-                E1[0] = M1.data.cells[i][j].val[0] - (M2.data.cells[i][j].val[0] - M2ant);///((double)((M2_tcur.tv_nsec - M2_tant.tv_nsec)/1000000));
+                E1[0] = M1.data.cells[i][j].val[0] - (M2.data.cells[i][j].val[0] - M2ant);
                 // Map 2 with  respect to R12 and R34
                 E2[0] = M2.data.cells[i][j].val[0]-((M1.data.cells[i][j].val[0]+M1ant)/2);
                 E2[1] = M2.data.cells[i][j].val[0]-((M3.data.cells[i][j].val[0] + atan(M4.data.cells[i][j].val[0]))/5);

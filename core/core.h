@@ -38,6 +38,7 @@
 #define ETA_EXT5                     0.0002023f
 #define ETA_EXT6                     0.0002343f
 
+#define TO_MS(x) ((double)x)/1000.0
 
 /* fusion maps network code */
 
@@ -102,19 +103,5 @@ void restart_network();
 /* stops the network by exiting the main loop */
 void stop_network();
 /* the other commands (e.g.: pause, quit) are already embedded in the slots from the analyzer GUI */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/* compute the time interval for integration or derivation */
+double compute_dt(struct timeval *difference, struct timeval *end_time, struct timeval *start_time);
