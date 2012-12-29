@@ -65,9 +65,22 @@ main (int UNUSED(argc), char** UNUSED(argv))
     E5[0] = 0.0;
     E6[0] = 0.0;
 
-    e1 = 0, e2 = 0, e3 = 0, e4 = 0, e5 = 0, e6 = 0;
+    e1 = 0;
+    e2 = 0;
+    e3 = 0;
+    e4 = 0;
+    e5 = 0;
+    e6 = 0;
 
-    double M1ant = 0.0f, M2ant = 0.0f, M3ant = 0.0f, M4ant = 0.0f, M5ant = 0.0f, M6ant = 0.0f;
+    double M1ant = 0.0f;
+    double M2ant = 0.0f;
+    double M3ant = 0.0f;
+    double M4ant = 0.0f;
+    double M5ant = 0.0f;
+    double M6ant = 0.0f;
+
+    double integral = 0.0f;
+    double dtk = 0.0f;
 
     struct timeval M1_tant, M1_tcur;
 
@@ -115,13 +128,15 @@ main (int UNUSED(argc), char** UNUSED(argv))
             M6 = init_map (6, 1, MAP_1D, LINK1);
 
             E1[0] = 0.0; E2[0] = 0.0; E2[1] = 0.0; E3[0] = 0.0; E4[0] = 0.0; E4[1] = 0.0; E5[0] = 0.0; E6[0] = 0.0;
-            e1 = 0, e2 = 0, e3 = 0, e4 = 0, e5 = 0, e6 = 0;
-            M1ant = 0.0f, M2ant = 0.0f, M3ant = 0.0f, M4ant = 0.0f, M5ant = 0.0f, M6ant = 0.0f;
+            e1 = 0.0; e2 = 0.0; e3 = 0.0; e4 = 0.0; e5 = 0.0; e6 = 0.0;
+            M1ant = 0.0f; M2ant = 0.0f; M3ant = 0.0f; M4ant = 0.0f; M5ant = 0.0f; M6ant = 0.0f;
 
             if( gettimeofday(&M1_tant, NULL) ){
                 exit(EXIT_FAILURE);
             }
 
+              integral = 0.0f;
+              dtk = 0.0f;
         }
 
         /*
@@ -145,19 +160,20 @@ main (int UNUSED(argc), char** UNUSED(argv))
                 {
                     rand_edge = (rand() % (M1.links+1) + 1);
 
-                    M1ant = M1.data.cells[i][j].val[0]; // update history
 
                     if( gettimeofday(&M1_tcur, NULL) ){
                         exit(EXIT_FAILURE);
                     }
 
+                    dtk = TO_MS(compute_dt(NULL, &M1_tcur, &M1_tant));
+
                     /* update from network dynamics */
                     if(rand_edge==1){
-                        M1.data.cells[i][j].val[0] = M1.data.cells[i][j].val[0] * // compute new value for the map
-                            (1 + pow(TO_MS(compute_dt(NULL, &M1_tcur, &M1_tant)), 2)/* ms */ * ETA21) -
-                                (TO_MS(compute_dt(NULL, &M1_tcur, &M1_tant)))*ETA21*(M2.data.cells[i][j].val[0] +
-                                                                                     (TO_MS(compute_dt(NULL, &M1_tcur, &M1_tant)))*M1ant);
+                        M1.data.cells[i][j].val[0] = M1.data.cells[i][j].val[0] - // compute new value for the map
+                            (2*ETA21*(M2.data.cells[i][j].val[0] - integral))*dtk;
                     }
+
+                    integral = (M1ant + M1.data.cells[i][j].val[0])*dtk/2;
 
                     /* update from user or sensor */
                     if(rand_edge==2){
@@ -173,6 +189,8 @@ main (int UNUSED(argc), char** UNUSED(argv))
 
 
                     e1 = fabs(M1.data.cells[i][j].val[0] - M1ant); // update error
+
+                    M1ant = M1.data.cells[i][j].val[0]; // update history
 
                     M1_tant = M1_tcur;
 
@@ -194,9 +212,8 @@ main (int UNUSED(argc), char** UNUSED(argv))
 
                     /* update from network dynamics */
                     if(rand_edge==1){
-                        M2.data.cells[i][j].val[0] =
-                                (1 - 2 * ETA12) * M2.data.cells[i][j].val[0] +
-                                (TO_MS(compute_dt(NULL, &M1_tcur, &M1_tant))) * ETA12 * (M1.data.cells[i][j].val[0] + M1ant);
+                        M2.data.cells[i][j].val[0] = M2.data.cells[i][j].val[0] - // compute new value for the map
+                            (2*ETA12*(M2.data.cells[i][j].val[0] - integral));
                     }
 
 
