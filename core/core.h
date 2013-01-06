@@ -38,7 +38,7 @@
 #define ETA_EXT5                     0.0002023f
 #define ETA_EXT6                     0.0002343f
 
-#define TO_MS(x) ((double)x)/1000.0
+#define TO_MS(x) ((double)x)/1000000.0
 
 /* fusion maps network code */
 

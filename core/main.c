@@ -7,7 +7,6 @@
 
 #include "data-engine.h"
 #include "core.h"
-
 short g_verbose = 0;
 
 #define log_message(format,args...) \
@@ -173,7 +172,7 @@ main (int UNUSED(argc), char** UNUSED(argv))
                             (2*ETA21*(M2.data.cells[i][j].val[0] - integral))*dtk;
                     }
 
-                    integral = (M1ant + M1.data.cells[i][j].val[0])*dtk/2;
+                    integral += (M1ant + M1.data.cells[i][j].val[0])*dtk/2;
 
                     /* update from user or sensor */
                     if(rand_edge==2){
