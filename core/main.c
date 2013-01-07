@@ -24,8 +24,10 @@ long timer;
 int
 main (int UNUSED(argc), char** UNUSED(argv))
 {
+#ifdef VERBOSE
     f = fopen("fusion-analyzer-data.log","w+");
     log_bufferw = (char*)calloc(20000, sizeof(char));
+#endif
     timer = 0;
     /* register signals */
     signal(SIGCONT, resume_network);
@@ -164,7 +166,7 @@ main (int UNUSED(argc), char** UNUSED(argv))
                         exit(EXIT_FAILURE);
                     }
 
-                    dtk = TO_MS(compute_dt(NULL, &M1_tcur, &M1_tant));
+                    dtk = TO_S(compute_dt(NULL, &M1_tcur, &M1_tant));
 
                     /* update from network dynamics */
                     if(rand_edge==1){

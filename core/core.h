@@ -24,7 +24,7 @@
 #define MAP_SIZE 					 1
 #define MAPS_NUMBER 				 6
 #define RELAXATION_THRESHOLD         0.00001f
-#define VERBOSE 					 1
+//#define VERBOSE 					 1
 #define ETA12                        0.0002956f
 #define ETA21                        0.0002106f
 #define ETA234                       0.0002884f
@@ -38,7 +38,7 @@
 #define ETA_EXT5                     0.0002023f
 #define ETA_EXT6                     0.0002343f
 
-#define TO_MS(x) ((double)x)/1000000.0
+#define TO_S(x) ((double)x)/1000000.0
 
 /* fusion maps network code */
 
