@@ -13,20 +13,24 @@
 #include <signal.h>
 #include <time.h>
 
+/* bus attributes */
 #define SERVER_BUS_NAME 			"org.fusionmaps.network"
 #define SERVER_SIGNAL_INTERFACE                 "org.fusionmaps.signals"
 #define SERVER_METHOD_INTERFACE                 "org.fusionmaps.methods"
 
+/* method aliases on the bus */
 #define METHOD1 "update_values"
 #define SIGNAL1 "sensor_data_connected" 
 #define SIGNAL2 "update_rate_changed"
 #define SIGNAL3 "user_data_connected"
 #define SIGNAL4 "update_user_data_changed"
 
+/* network parameters */
 #define MAPS_NUM    6
 #define SYNC_DATA   1000 // us - adjusted to 1ms loop time of net
 #define US_TO_MS    1000
 
+/* g++ warnings shut up */
 #ifdef __GNUC__
     #define UNUSED(x) UNUSED_ ## x __attribute__((__unused__))
 #else

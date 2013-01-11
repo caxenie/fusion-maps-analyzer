@@ -123,31 +123,23 @@ stop_network()
 	exit(0);
 }
 
-/* compute the time interval for integration or derivation */
-double compute_dt(struct timeval *difference,
-             struct timeval *end_time,
-             struct timeval *start_time
+/* compute the time interval for integration or derivation or loop execution */
+double compute_dt(struct timespec *end_time,
+             struct timespec *start_time
             )
 {
-  struct timeval temp_diff;
+  struct timespec difference;
 
-  if(difference==NULL)
+  difference.tv_sec =end_time->tv_sec -start_time->tv_sec ;
+  difference.tv_nsec=end_time->tv_nsec-start_time->tv_nsec;
+
+  while(difference.tv_nsec<0)
   {
-    difference=&temp_diff;
+    difference.tv_nsec+=1000000000;
+    difference.tv_sec -=1;
   }
 
-  difference->tv_sec =end_time->tv_sec -start_time->tv_sec ;
-  difference->tv_usec=end_time->tv_usec-start_time->tv_usec;
-
-  /* Using while instead of if below makes the code slightly more robust. */
-
-  while(difference->tv_usec<0)
-  {
-    difference->tv_usec+=1000000;
-    difference->tv_sec -=1;
-  }
-
-  return ((double)(1000000*difference->tv_sec+
-                   difference->tv_usec));
+  return ((double)(1000000000*difference.tv_sec+
+                   difference.tv_nsec));
 
 }
