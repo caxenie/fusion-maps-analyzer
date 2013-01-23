@@ -27,6 +27,8 @@
 #define SYNC_DATA   1000 // us - adjusted to 1ms loop time of net
 #define US_TO_MS    1000
 
+#define DATA_ENGINE_THREAD 2
+
 #ifdef __GNUC__
     #define UNUSED(x) UNUSED_ ## x __attribute__((__unused__))
 #else

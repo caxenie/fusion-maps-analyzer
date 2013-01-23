@@ -8,7 +8,7 @@
 #include "data-engine.h"
 #include "core.h"
 
-short g_verbose = 0;
+short g_verbose = 1;
 
 #define log_message(format,args...) \
   do{ \
@@ -353,19 +353,19 @@ main (int UNUSED(argc), char** UNUSED(argv))
 
               // full errors
               // Map 1 with respect to R12
-              E1[0] = M1.data.cells[i][j].val[0]-sqrt(M2.data.cells[i][j].val[0]/5);
+              if(isnan(E1[0] = M1.data.cells[i][j].val[0]-sqrt(M2.data.cells[i][j].val[0]/5)!=0)) E1[0] = 0.0f;
               // Map 2 with  respect to R12 and R34
-              E2[0] = M2.data.cells[i][j].val[0]-5*pow(M1.data.cells[i][j].val[0], 2);
-              E2[1] = M2.data.cells[i][j].val[0]- tan(M3.data.cells[i][j].val[0] + 4*pow(M4.data.cells[i][j].val[0], 2));
+              if(isnan(E2[0] = M2.data.cells[i][j].val[0]-5*pow(M1.data.cells[i][j].val[0], 2))!=0) E2[0] = 0.0f;
+              if(isnan(E2[1] = M2.data.cells[i][j].val[0]- tan(M3.data.cells[i][j].val[0] + 4*pow(M4.data.cells[i][j].val[0], 2)))!=0) E2[1] = 0.0f;
               // Map 3 with respect to R34
-              E3[0] = M3.data.cells[i][j].val[0]-(atan(M2.data.cells[i][j].val[0]) - 4*pow(M4.data.cells[i][j].val[0], 2));
+              if(isnan(E3[0] = M3.data.cells[i][j].val[0]-(atan(M2.data.cells[i][j].val[0]) - 4*pow(M4.data.cells[i][j].val[0], 2)))!=0) E3[0] = 0.0f;
               // Map 4 with  respect to R34 and R56
-              E4[0] = M4.data.cells[i][j].val[0]-sqrt((atan(M2.data.cells[i][j].val[0]) - M3.data.cells[i][j].val[0])/4);
-              E4[1] = M4.data.cells[i][j].val[0]-(8*atan(fabs(M5.data.cells[i][j].val[0])) + pow(M6.data.cells[i][j].val[0], 2));
+              if(isnan(E4[0] = M4.data.cells[i][j].val[0]-sqrt((atan(M2.data.cells[i][j].val[0]) - M3.data.cells[i][j].val[0])/4))!=0) E4[0] = 0.0f;
+              if(isnan(E4[1] = M4.data.cells[i][j].val[0]-(8*atan(fabs(M5.data.cells[i][j].val[0])) + pow(M6.data.cells[i][j].val[0], 2)))!=0) E4[1] = 0.0f;
               // Map 5 with respect to R56
-              E5[0] = M5.data.cells[i][j].val[0]-tan((M4.data.cells[i][j].val[0] - pow(M6.data.cells[i][j].val[0], 2)/8));
+              if(isnan(E5[0] = M5.data.cells[i][j].val[0]-tan((M4.data.cells[i][j].val[0] - pow(M6.data.cells[i][j].val[0], 2)/8)))!=0) E5[0] = 0.0f;
               // Map 6 with respect to R56
-              E6[0] = M6.data.cells[i][j].val[0]-sqrt(M4.data.cells[i][j].val[0]-8*atan(M5.data.cells[i][j].val[0]));
+              if(isnan(E6[0] = M6.data.cells[i][j].val[0]-sqrt(M4.data.cells[i][j].val[0]-8*atan(M5.data.cells[i][j].val[0])))!=0) E6[0] =  0.0f;
 
             }
 
