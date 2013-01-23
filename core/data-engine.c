@@ -381,6 +381,8 @@ void* data_engine_functionality(void* UNUSED(data))
     }
     init_system_bus_connection();
     listen_to_data_clients();
+
+    return (void*) DATA_ENGINE_THREAD;
 }
 
 /* start the data engine code */
