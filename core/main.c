@@ -137,8 +137,8 @@ main (int UNUSED(argc), char** UNUSED(argv))
 
                     if(rand_edge==1){
                         M1.data.cells[i][j].val[0] =
-                                (1 - 18 * ETA21) * M1.data.cells[i][j].val[0] +
-                                6 * ETA21 * M2.data.cells[i][j].val[0]; // compute new value for the map
+                                (1.0 - 2.0 * ETA21) * M1.data.cells[i][j].val[0] +
+                                (2.0/3.0) * ETA21 * M2.data.cells[i][j].val[0]; // compute new value for the map
                     }
 
                     if(rand_edge==2){
@@ -174,7 +174,7 @@ main (int UNUSED(argc), char** UNUSED(argv))
                                 (1 - 2 * ETA12) * M2.data.cells[i][j].val[0] +
                                 6 * ETA12 * M1.data.cells[i][j].val[0];
                     }
-
+ 
                     if(rand_edge==2){
                         M2.data.cells[i][j].val[0] =
                                 (1 - 2 * ETA432 * pow(M4.data.cells[i][j].val[0],2) ) * M2.data.cells[i][j].val[0] +
@@ -409,6 +409,7 @@ main (int UNUSED(argc), char** UNUSED(argv))
 
 #ifdef VERBOSE
         timer++;
+        if(timer%1000000==0){
         sprintf(log_bufferw, "%f %f %f %f %f %f %f %f %f %f %f %f %f %f %ld\n",
                 M1.data.cells[0][0].val[0],
                 M2.data.cells[0][0].val[0],
@@ -426,6 +427,7 @@ main (int UNUSED(argc), char** UNUSED(argv))
                 E6[0],
                 timer);
         fwrite(log_bufferw, strlen(log_bufferw), 1, f);
+        }
 #endif
     }
     return 0;
