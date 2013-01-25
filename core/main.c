@@ -42,12 +42,12 @@ main (int UNUSED(argc), char** UNUSED(argv))
 
     /* map initialization */
     /* for the current setup we populate the neighbor list by hand */
-    M1 = init_map (1, 1, MAP_1D, LINK1);
-    M2 = init_map (2, 1, MAP_1D, LINK2);
-    M3 = init_map (3, 1, MAP_1D, LINK1);
-    M4 = init_map (4, 1, MAP_1D, LINK2);
-    M5 = init_map (5, 1, MAP_1D, LINK1);
-    M6 = init_map (6, 1, MAP_1D, LINK2);
+    M1 = init_map (1, 1, MAP_1D, LINK2);
+    M2 = init_map (2, 1, MAP_1D, LINK3);
+    M3 = init_map (3, 1, MAP_1D, LINK2);
+    M4 = init_map (4, 1, MAP_1D, LINK3);
+    M5 = init_map (5, 1, MAP_1D, LINK2);
+    M6 = init_map (6, 1, MAP_1D, LINK3);
 
     E1 = (double *) calloc (LINK1, sizeof (double));
     E2 = (double *) calloc (LINK2, sizeof (double));
@@ -101,12 +101,12 @@ main (int UNUSED(argc), char** UNUSED(argv))
                 user_connected[i] = 0;
                 sensor_connected[i] = 0;
             }
-            M1 = init_map (1, 1, MAP_1D, LINK1);
-            M2 = init_map (2, 1, MAP_1D, LINK2);
-            M3 = init_map (3, 1, MAP_1D, LINK1);
-            M4 = init_map (4, 1, MAP_1D, LINK2);
-            M5 = init_map (5, 1, MAP_1D, LINK1);
-            M6 = init_map (6, 1, MAP_1D, LINK1);
+            M1 = init_map (1, 1, MAP_1D, LINK2);
+            M2 = init_map (2, 1, MAP_1D, LINK3);
+            M3 = init_map (3, 1, MAP_1D, LINK2);
+            M4 = init_map (4, 1, MAP_1D, LINK3);
+            M5 = init_map (5, 1, MAP_1D, LINK2);
+            M6 = init_map (6, 1, MAP_1D, LINK2);
 
             E1[0] = 0.0; E2[0] = 0.0; E2[1] = 0.0; E3[0] = 0.0; E4[0] = 0.0; E4[1] = 0.0; E5[0] = 0.0; E6[0] = 0.0;
             e1 = 0, e2 = 0, e3 = 0, e4 = 0, e5 = 0, e6 = 0;
@@ -133,11 +133,11 @@ main (int UNUSED(argc), char** UNUSED(argv))
             {
                 for (int j = 0; j < MAP_SIZE; j++)
                 {
-                    rand_edge = (rand() % (M1.links+1) + 1);
+                    rand_edge = (rand() % (M1.links) + 1);
 
                     if(rand_edge==1){
                         M1.data.cells[i][j].val[0] =
-                                (1.0 - 2.0 * ETA21) * M1.data.cells[i][j].val[0] +
+                                (1 - 2 * ETA21) * M1.data.cells[i][j].val[0] +
                                 (2.0/3.0) * ETA21 * M2.data.cells[i][j].val[0]; // compute new value for the map
                     }
 
@@ -167,7 +167,7 @@ main (int UNUSED(argc), char** UNUSED(argv))
             {
                 for (int j = 0; j < MAP_SIZE; j++)
                 {
-                    rand_edge = (rand() % (M2.links+1) + 1);
+                    rand_edge = (rand() % (M2.links) + 1);
 
                    if(rand_edge==1){
                         M2.data.cells[i][j].val[0] =
@@ -177,8 +177,8 @@ main (int UNUSED(argc), char** UNUSED(argv))
  
                     if(rand_edge==2){
                         M2.data.cells[i][j].val[0] =
-                                (1 - 2 * ETA432 * pow(M4.data.cells[i][j].val[0],2) ) * M2.data.cells[i][j].val[0] +
-                                2 * ETA432*M3.data.cells[i][j].val[0]*M4.data.cells[i][j].val[0];
+                                (1 - 2 * ETA432) * M2.data.cells[i][j].val[0] +
+                                2 * ETA432*(M3.data.cells[i][j].val[0]/M4.data.cells[i][j].val[0]);
                     }
 
                     if(rand_edge==3){
@@ -207,7 +207,7 @@ main (int UNUSED(argc), char** UNUSED(argv))
             {
                 for (int j = 0; j < MAP_SIZE; j++)
                 {
-                    rand_edge = (rand() % (M3.links+1) + 1);
+                    rand_edge = (rand() % (M3.links) + 1);
 
                     if(rand_edge==1){
                         M3.data.cells[i][j].val[0] =
@@ -242,12 +242,12 @@ main (int UNUSED(argc), char** UNUSED(argv))
             {
                 for (int j = 0; j < MAP_SIZE; j++)
                 {
-                    rand_edge = (rand() % (M4.links+1) + 1);
+                    rand_edge = (rand() % (M4.links) + 1);
 
                     if(rand_edge==1){
                         M4.data.cells[i][j].val[0] =
-                                (1 - 2 * ETA234 * pow(M2.data.cells[i][j].val[0], 2)) * M4.data.cells[i][j].val[0] +
-                                2 * ETA234 * (M3.data.cells[i][j].val[0] *
+                                (1 - 2 * ETA234) * M4.data.cells[i][j].val[0] +
+                                2 * ETA234 * (M3.data.cells[i][j].val[0]/
                                               M2.data.cells[i][j].val[0]);
                     }
 
@@ -284,7 +284,7 @@ main (int UNUSED(argc), char** UNUSED(argv))
             {
                 for (int j = 0; j < MAP_SIZE; j++)
                 {
-                    rand_edge = (rand() % (M5.links+1) + 1);
+                    rand_edge = (rand() % (M5.links) + 1);
 
                     if(rand_edge==1){
                         M5.data.cells[i][j].val[0] =
@@ -318,14 +318,14 @@ main (int UNUSED(argc), char** UNUSED(argv))
             {
                 for (int j = 0; j < MAP_SIZE; j++)
                 {
-                    rand_edge = (rand() % (M6.links+1) + 1);
+                    rand_edge = (rand() % (M6.links) + 1);
 
                     if(rand_edge==1){
                         M6.data.cells[i][j].val[0] =
-                                (1 - 8 * ETA456) * M6.data.cells[i][j].val[0] +
-                                4 * ETA456 *
-                                ((M4.data.cells[i][j].val[0] -
-                                  M5.data.cells[i][j].val[0]));
+                                (1 - 2 * ETA456) * M6.data.cells[i][j].val[0] +
+                                ETA456 *
+                                (M4.data.cells[i][j].val[0] -
+                                  M5.data.cells[i][j].val[0]);
                     }
 
                     if(rand_edge==2){
@@ -354,14 +354,14 @@ main (int UNUSED(argc), char** UNUSED(argv))
             {
 
                 // full errors
-                E1[0] = M1.data.cells[i][j].val[0]-M2.data.cells[i][j].val[0]/3;
-                E2[0] = M2.data.cells[i][j].val[0]-3*M1.data.cells[i][j].val[0];
-                E2[1] = M2.data.cells[i][j].val[0]-M3.data.cells[i][j].val[0]/M4.data.cells[i][j].val[0];
-                E3[0] = M3.data.cells[i][j].val[0]-M2.data.cells[i][j].val[0]*M4.data.cells[i][j].val[0];
-                E4[0] = M4.data.cells[i][j].val[0]-M3.data.cells[i][j].val[0]/M2.data.cells[i][j].val[0];
-                E4[1] = M4.data.cells[i][j].val[0]-M5.data.cells[i][j].val[0] - 2*M6.data.cells[i][j].val[0];
-                E5[0] = M5.data.cells[i][j].val[0]-M4.data.cells[i][j].val[0] + 2*M6.data.cells[i][j].val[0];
-                E6[0] = M6.data.cells[i][j].val[0]-(M4.data.cells[i][j].val[0]-M5.data.cells[i][j].val[0])/2;
+                E1[0] = M1.data.cells[i][j].val[0]-M2.data.cells[i][j].val[0]/3; E1[0] = fabs(E1[0]);
+                E2[0] = M2.data.cells[i][j].val[0]-3*M1.data.cells[i][j].val[0]; E2[0] = fabs(E2[0]);
+                E2[1] = M2.data.cells[i][j].val[0]-M3.data.cells[i][j].val[0]/M4.data.cells[i][j].val[0];E2[1] = fabs(E2[1]);
+                E3[0] = M3.data.cells[i][j].val[0]-M2.data.cells[i][j].val[0]*M4.data.cells[i][j].val[0];E3[0] = fabs(E3[0]);
+                E4[0] = M4.data.cells[i][j].val[0]-M3.data.cells[i][j].val[0]/M2.data.cells[i][j].val[0];E4[0] = fabs(E4[0]);
+                E4[1] = M4.data.cells[i][j].val[0]-M5.data.cells[i][j].val[0] - 2*M6.data.cells[i][j].val[0];E4[1] = fabs(E4[1]);
+                E5[0] = M5.data.cells[i][j].val[0]-M4.data.cells[i][j].val[0] + 2*M6.data.cells[i][j].val[0];E5[0] = fabs(E5[0]);
+                E6[0] = M6.data.cells[i][j].val[0]-(M4.data.cells[i][j].val[0]-M5.data.cells[i][j].val[0])/2;E6[0] = fabs(E6[0]);
 
 
 
