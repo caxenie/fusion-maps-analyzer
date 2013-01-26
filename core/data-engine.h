@@ -24,19 +24,21 @@
 #define SIGNAL4 "update_user_data_changed"
 
 #define MAPS_NUM    6
-#define SYNC_DATA   1000 // us - adjusted to 1ms loop time of net
+#define SYNC_DATA   1000
 #define US_TO_MS    1000
 
+#define DATA_ENGINE_THREAD 2
+
 #ifdef __GNUC__
-    #define UNUSED(x) UNUSED_ ## x __attribute__((__unused__))
+#define UNUSED(x) UNUSED_ ## x __attribute__((__unused__))
 #else
-    #define UNUSED(x) UNUSED_ ## x
+#define UNUSED(x) UNUSED_ ## x
 #endif
 
 #ifdef __GNUC__
-    #define UNUSED_FUNCTION(x) __attribute__((__unused__)) UNUSED_ ## x
+#define UNUSED_FUNCTION(x) __attribute__((__unused__)) UNUSED_ ## x
 #else
-    #define UNUSED_FUNCTION(x) UNUSED_ ## x
+#define UNUSED_FUNCTION(x) UNUSED_ ## x
 #endif
 
 /* update rate timer types */
@@ -51,18 +53,6 @@ pthread_t data_engine_thread;
 DBusConnection* conn;
 /* error handler */
 DBusError err;
-
-/* mask arrays for user data or sensor data inputs */
-int user_connected[MAPS_NUM+1];
-int sensor_connected[MAPS_NUM+1];
-/* stores the data update rate for sensors */
-double update_rate_sensor[MAPS_NUM+1];
-/* stores the data update rate for user data */
-double update_rate_user[MAPS_NUM+1];
-/* stores the data from the user */
-double  user_data[MAPS_NUM+1];
-/* stores the data from the connected sensor */
-double sensor_data[MAPS_NUM+1];
 
 /* init connection to the system bus and add signal filters */
 void init_system_bus_connection();

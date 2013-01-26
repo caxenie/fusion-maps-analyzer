@@ -11,7 +11,8 @@ SOURCES += data-engine.c \
 
 HEADERS += \
     data-engine.h \
-    core.h
+    core.h \
+    shared-data.h
 
 INCLUDEPATH += /usr/include/dbus-1.0
 INCLUDEPATH += /usr/lib/i386-linux-gnu/dbus-1.0/include/

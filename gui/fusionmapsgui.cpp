@@ -1143,7 +1143,7 @@ void FusionMapsGui::on_user_data_slider6_valueChanged(double value)
           this->data_engine->send_signal(value, USER_DATA_CHANGED_SIGNAL, 6);
       }
       else{
-          this->data_engine->send_signal(0.001f, USER_DATA_CHANGED_SIGNAL, 6);
+          this->data_engine->send_signal(0.0001f, USER_DATA_CHANGED_SIGNAL, 6);
       }
     }
 }
