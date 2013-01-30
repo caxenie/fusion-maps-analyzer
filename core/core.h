@@ -21,22 +21,23 @@
 
 #define _GNU_SOURCE
 
-#define MAP_SIZE 					 1
-#define MAPS_NUMBER 				 6
+#define MAP_SIZE 	             1
+#define MAPS_NUMBER 	             6
 #define RELAXATION_THRESHOLD         0.00001f
-#define VERBOSE 					 1
-#define ETA12                        0.0002956f
-#define ETA21                        0.0002106f
-#define ETA234                       0.0002884f
-#define ETA432                       0.0002423f
-#define ETA456                       0.0002576f
-#define ETA654                       0.0002345f
-#define ETA_EXT1                     0.0002343f
-#define ETA_EXT2                     0.0002243f
-#define ETA_EXT3                     0.0002143f
-#define ETA_EXT4                     0.0002003f
-#define ETA_EXT5                     0.0002023f
-#define ETA_EXT6                     0.0002343f
+#define VERBOSE 		     1
+#define ETA                          0.0002
+#define ETA12                        ETA//0.0002956f
+#define ETA21                        ETA//0.0002106f
+#define ETA234                       ETA//0.0002884f
+#define ETA432                       ETA//0.0002423f
+#define ETA456                       ETA//0.0002576f
+#define ETA654                       ETA//0.0002345f
+#define ETA_EXT1                     ETA//0.0002343f
+#define ETA_EXT2                     ETA//0.0002243f
+#define ETA_EXT3                     ETA//0.0002143f
+#define ETA_EXT4                     ETA//0.0002003f
+#define ETA_EXT5                     ETA//0.0002023f
+#define ETA_EXT6                     ETA//0.0002343f
 
 
 /* fusion maps network code */
