@@ -47,9 +47,9 @@ main (int UNUSED(argc), char** UNUSED(argv))
 
     /* map initialization */
     /* for the current setup we populate the neighbor list by hand */
-    M1 = init_map (1, 1, MAP_1D, LINK1); M2 = init_map (2, 1, MAP_1D, LINK2);
-    M3 = init_map (3, 1, MAP_1D, LINK1); M4 = init_map (4, 1, MAP_1D, LINK2);
-    M5 = init_map (5, 1, MAP_1D, LINK1); M6 = init_map (6, 1, MAP_1D, LINK2);
+    M1 = init_map (1, 1, MAP_1D, LINK2); M2 = init_map (2, 1, MAP_1D, LINK3);
+    M3 = init_map (3, 1, MAP_1D, LINK2); M4 = init_map (4, 1, MAP_1D, LINK3);
+    M5 = init_map (5, 1, MAP_1D, LINK2); M6 = init_map (6, 1, MAP_1D, LINK2);
 
     E1 = (double *) calloc (LINK1, sizeof (double));
     E2 = (double *) calloc (LINK2, sizeof (double));
@@ -113,8 +113,8 @@ main (int UNUSED(argc), char** UNUSED(argv))
                 user_connected[i] = 0;
                 sensor_connected[i] = 0;
             }
-            M1 = init_map (1, 1, MAP_1D, LINK1); M2 = init_map (2, 1, MAP_1D, LINK2); M3 = init_map (3, 1, MAP_1D, LINK1);
-            M4 = init_map (4, 1, MAP_1D, LINK2); M5 = init_map (5, 1, MAP_1D, LINK1); M6 = init_map (6, 1, MAP_1D, LINK1);
+            M1 = init_map (1, 1, MAP_1D, LINK2); M2 = init_map (2, 1, MAP_1D, LINK3); M3 = init_map (3, 1, MAP_1D, LINK2);
+            M4 = init_map (4, 1, MAP_1D, LINK3); M5 = init_map (5, 1, MAP_1D, LINK2); M6 = init_map (6, 1, MAP_1D, LINK2);
 
             E1[0] = 0.0; E2[0] = 0.0; E2[1] = 0.0; E3[0] = 0.0; E4[0] = 0.0; E4[1] = 0.0; E5[0] = 0.0; E6[0] = 0.0;
             e1 = 0.0; e2 = 0.0; e3 = 0.0; e4 = 0.0; e5 = 0.0; e6 = 0.0;
@@ -141,13 +141,13 @@ main (int UNUSED(argc), char** UNUSED(argv))
         rand_map = (rand () % (MAPS_NUMBER) + 1);
 
 
-        if (rand_map == 1)
+        if (rand_map == M1.id)
         {
             for (int i = 0; i < MAP_SIZE; i++)
             {
                 for (int j = 0; j < MAP_SIZE; j++)
                 {
-                    rand_edge = (rand() % (M1.links+1) + 1);
+                    rand_edge = (rand() % (M1.links) + 1);
 
 
                     if( clock_gettime(CLOCK_REALTIME, &M1_tcur)==-1 ){
@@ -159,20 +159,20 @@ main (int UNUSED(argc), char** UNUSED(argv))
                     /* update from network dynamics */
                     if(rand_edge==1){
                         M1.data.cells[i][j].val[0] = M1.data.cells[i][j].val[0] - // compute new value for the map
-                                (2*ETA21*(M2.data.cells[i][j].val[0] - integral))*dtk;
+                                (2.0*ETA21*(M2.data.cells[i][j].val[0] - integral))*dtk;
                     }
 
-                    integral += (M1ant + M1.data.cells[i][j].val[0])*dtk/2;
+                    integral += (M1ant + M1.data.cells[i][j].val[0])*dtk/2.0;
 
                     /* update from user or sensor */
                     if(rand_edge==2){
                         if(user_connected[rand_map] == 1){
-                            M1.data.cells[i][j].val[0] = (1-2*ETA_EXT1) * M1.data.cells[i][j].val[0] +
-                                    2*ETA_EXT1*user_data[rand_map];
+                            M1.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT1) * M1.data.cells[i][j].val[0] +
+                                    2.0*ETA_EXT1*user_data[rand_map];
                         }
                         if(sensor_connected[rand_map] == 1){
-                            M1.data.cells[i][j].val[0] = (1-2*ETA_EXT1) * M1.data.cells[i][j].val[0] +
-                                    2*ETA_EXT1*sensor_data[rand_map];
+                            M1.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT1) * M1.data.cells[i][j].val[0] +
+                                    2.0*ETA_EXT1*sensor_data[rand_map];
                         }
                     }
 
@@ -188,13 +188,13 @@ main (int UNUSED(argc), char** UNUSED(argv))
             }
         }
 
-        if (rand_map == 2)
+        if (rand_map == M2.id)
         {
             for (int i = 0; i < MAP_SIZE; i++)
             {
                 for (int j = 0; j < MAP_SIZE; j++)
                 {
-                    rand_edge = (rand() % (M2.links+1) + 1);
+                    rand_edge = (rand() % (M2.links) + 1);
 
 
                     M2ant = M2.data.cells[i][j].val[0];
@@ -202,24 +202,24 @@ main (int UNUSED(argc), char** UNUSED(argv))
                     /* update from network dynamics */
                     if(rand_edge==1){
                         M2.data.cells[i][j].val[0] = M2.data.cells[i][j].val[0] - // compute new value for the map
-                                (2*ETA12*(M2.data.cells[i][j].val[0] - integral));
+                                (2.0*ETA12*(M2.data.cells[i][j].val[0] - integral));
                     }
 
 
                     if(rand_edge==2){
-                        M2.data.cells[i][j].val[0] = (1 - 50*ETA432)*M2.data.cells[i][j].val[0]+
-                                10*ETA432*(M3.data.cells[i][j].val[0] + atan(M4.data.cells[i][j].val[0]));
+                        M2.data.cells[i][j].val[0] = (1.0 - 50.0*ETA432)*M2.data.cells[i][j].val[0]+
+                                10.0*ETA432*(M3.data.cells[i][j].val[0] + atan(M4.data.cells[i][j].val[0]));
                     }
 
                     /* update from user or sensor */
                     if(rand_edge==3){
                         if(user_connected[rand_map] == 1){
-                            M2.data.cells[i][j].val[0] = (1-2*ETA_EXT2) * M2.data.cells[i][j].val[0] +
-                                    2*ETA_EXT2*user_data[rand_map];
+                            M2.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT2) * M2.data.cells[i][j].val[0] +
+                                    2.0*ETA_EXT2*user_data[rand_map];
                         }
                         if(sensor_connected[rand_map] == 1){
-                            M2.data.cells[i][j].val[0] = (1-2*ETA_EXT2) * M2.data.cells[i][j].val[0] +
-                                    2*ETA_EXT2*sensor_data[rand_map];
+                            M2.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT2) * M2.data.cells[i][j].val[0] +
+                                    2.0*ETA_EXT2*sensor_data[rand_map];
                         }
                     }
 
@@ -230,13 +230,13 @@ main (int UNUSED(argc), char** UNUSED(argv))
             }
         }
 
-        if (rand_map == 3)
+        if (rand_map == M3.id)
         {
             for (int i = 0; i < MAP_SIZE; i++)
             {
                 for (int j = 0; j < MAP_SIZE; j++)
                 {
-                    rand_edge = (rand() % (M3.links+1) + 1);
+                    rand_edge = (rand() % (M3.links) + 1);
 
 
                     M3ant = M3.data.cells[i][j].val[0];
@@ -244,19 +244,19 @@ main (int UNUSED(argc), char** UNUSED(argv))
                     /* update from network dynamics */
                     if(rand_edge==1){
                         M3.data.cells[i][j].val[0] =
-                                (1 - 2 * ETA432) * M3.data.cells[i][j].val[0] +
-                                2*ETA432*(5*M2.data.cells[i][j].val[0] - atan(M4.data.cells[i][j].val[0]));
+                                (1.0 - 2.0 * ETA432) * M3.data.cells[i][j].val[0] +
+                                2.0*ETA432*(5.0*M2.data.cells[i][j].val[0] - atan(M4.data.cells[i][j].val[0]));
                     }
 
                     /* update from user or sensor */
                     if(rand_edge==2){
                         if(user_connected[rand_map] == 1){
-                            M3.data.cells[i][j].val[0] = (1-2*ETA_EXT3) * M3.data.cells[i][j].val[0] +
-                                    2*ETA_EXT3*user_data[rand_map];
+                            M3.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT3) * M3.data.cells[i][j].val[0] +
+                                    2.0*ETA_EXT3*user_data[rand_map];
                         }
                         if(sensor_connected[rand_map] == 1){
-                            M3.data.cells[i][j].val[0] = (1-2*ETA_EXT3) * M3.data.cells[i][j].val[0] +
-                                    2*ETA_EXT3*sensor_data[rand_map];
+                            M3.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT3) * M3.data.cells[i][j].val[0] +
+                                    2.0*ETA_EXT3*sensor_data[rand_map];
                         }
                     }
 
@@ -267,39 +267,39 @@ main (int UNUSED(argc), char** UNUSED(argv))
             }
         }
 
-        if (rand_map == 4)
+        if (rand_map == M4.id)
         {
             for (int i = 0; i < MAP_SIZE; i++)
             {
                 for (int j = 0; j < MAP_SIZE; j++)
                 {
-                    rand_edge = (rand() % (M4.links+1) + 1);
+                    rand_edge = (rand() % (M4.links) + 1);
 
                     M4ant = M4.data.cells[i][j].val[0];
 
                     /* update from network dynamics */
                     if(rand_edge==1){
                         M4.data.cells[i][j].val[0] = M4.data.cells[i][j].val[0] -
-                                ((2*ETA234*(M3.data.cells[i][j].val[0] - 5*M2.data.cells[i][j].val[0] + atan(M4.data.cells[i][j].val[0])))/
-                                 (1 + pow(M4.data.cells[i][j].val[0], 2)));
+                                ((2.0*ETA234*(M3.data.cells[i][j].val[0] - 5.0*M2.data.cells[i][j].val[0] + atan(M4.data.cells[i][j].val[0])))/
+                                 (1.0 + pow(M4.data.cells[i][j].val[0], 2)));
 
                     }
 
 
                     if(rand_edge==2){
-                        M4.data.cells[i][j].val[0] = (1-2*ETA654)*M4.data.cells[i][j].val[0] +
-                                2*ETA654*(M5.data.cells[i][j].val[0] + 3*M6.data.cells[i][j].val[0]);
+                        M4.data.cells[i][j].val[0] = (1.0-2.0*ETA654)*M4.data.cells[i][j].val[0] +
+                                2.0*ETA654*(M5.data.cells[i][j].val[0] + 3.0*M6.data.cells[i][j].val[0]);
                     }
 
                     /* update from user or sensor */
                     if(rand_edge==3){
                         if(user_connected[rand_map] == 1){
-                            M4.data.cells[i][j].val[0] = (1-2*ETA_EXT4) * M4.data.cells[i][j].val[0] +
-                                    2*ETA_EXT4*user_data[rand_map];
+                            M4.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT4) * M4.data.cells[i][j].val[0] +
+                                    2.0*ETA_EXT4*user_data[rand_map];
                         }
                         if(sensor_connected[rand_map] == 1){
-                            M4.data.cells[i][j].val[0] = (1-2*ETA_EXT4) * M4.data.cells[i][j].val[0] +
-                                    2*ETA_EXT4*sensor_data[rand_map];
+                            M4.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT4) * M4.data.cells[i][j].val[0] +
+                                    2.0*ETA_EXT4*sensor_data[rand_map];
                         }
                     }
 
@@ -310,32 +310,32 @@ main (int UNUSED(argc), char** UNUSED(argv))
             }
         }
 
-        if (rand_map == 5)
+        if (rand_map == M5.id)
         {
             for (int i = 0; i < MAP_SIZE; i++)
             {
                 for (int j = 0; j < MAP_SIZE; j++)
                 {
-                    rand_edge = (rand() % (M5.links+1) + 1);
+                    rand_edge = (rand() % (M5.links) + 1);
 
                     M5ant = M5.data.cells[i][j].val[0];
 
                     /* update from network dynamics */
                     if(rand_edge==1){
-                        M5.data.cells[i][j].val[0] = (1 - 2*ETA654)*M5.data.cells[i][j].val[0] +
-                                2*ETA654*(M4.data.cells[i][j].val[0] -3*M6.data.cells[i][j].val[0]);
+                        M5.data.cells[i][j].val[0] = (1.0 - 2.0*ETA654)*M5.data.cells[i][j].val[0] +
+                                2.0*ETA654*(M4.data.cells[i][j].val[0] -3.0*M6.data.cells[i][j].val[0]);
 
                     }
 
                     /* update from user or sensor */
                     if(rand_edge==2){
                         if(user_connected[rand_map] == 1){
-                            M5.data.cells[i][j].val[0] = (1-2*ETA_EXT5) * M5.data.cells[i][j].val[0] +
-                                    2*ETA_EXT5*user_data[rand_map];
+                            M5.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT5) * M5.data.cells[i][j].val[0] +
+                                    2.0*ETA_EXT5*user_data[rand_map];
                         }
                         if(sensor_connected[rand_map] == 1){
-                            M5.data.cells[i][j].val[0] = (1-2*ETA_EXT5) * M5.data.cells[i][j].val[0] +
-                                    2*ETA_EXT5*sensor_data[rand_map];
+                            M5.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT5) * M5.data.cells[i][j].val[0] +
+                                    2.0*ETA_EXT5*sensor_data[rand_map];
                         }
                     }
 
@@ -346,32 +346,32 @@ main (int UNUSED(argc), char** UNUSED(argv))
             }
         }
 
-        if (rand_map == 6)
+        if (rand_map == M6.id)
         {
             for (int i = 0; i < MAP_SIZE; i++)
             {
                 for (int j = 0; j < MAP_SIZE; j++)
                 {
-                    rand_edge = (rand() % (M6.links+1) + 1);
+                    rand_edge = (rand() % (M6.links) + 1);
 
                     M6ant = M6.data.cells[i][j].val[0];
 
                     /* update from network dynamics */
                     if(rand_edge==1){
-                        M6.data.cells[i][j].val[0] =  (1 - 18*ETA456)*M6.data.cells[i][j].val[0] +
-                                6*ETA456*(M4.data.cells[i][j].val[0] - M5.data.cells[i][j].val[0]);
+                        M6.data.cells[i][j].val[0] =  (1.0 - 18.0*ETA456)*M6.data.cells[i][j].val[0] +
+                                6.0*ETA456*(M4.data.cells[i][j].val[0] - M5.data.cells[i][j].val[0]);
 
                     }
 
                     /* update from user or sensor */
                     if(rand_edge==2){
                         if(user_connected[rand_map] == 1){
-                            M6.data.cells[i][j].val[0] = (1-2*ETA_EXT6) * M6.data.cells[i][j].val[0] +
-                                    2*ETA_EXT6*user_data[rand_map];
+                            M6.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT6) * M6.data.cells[i][j].val[0] +
+                                    2.0*ETA_EXT6*user_data[rand_map];
                         }
                         if(sensor_connected[rand_map] == 1){
-                            M6.data.cells[i][j].val[0] = (1-2*ETA_EXT6) * M6.data.cells[i][j].val[0] +
-                                    2*ETA_EXT6*sensor_data[rand_map];
+                            M6.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT6) * M6.data.cells[i][j].val[0] +
+                                    2.0*ETA_EXT6*sensor_data[rand_map];
                         }
                     }
 
@@ -390,20 +390,26 @@ main (int UNUSED(argc), char** UNUSED(argv))
                 // full errors
                 // Map 1 with respect to R12
                 if(isnan(E1[0] = M1.data.cells[i][j].val[0] - (M2.data.cells[i][j].val[0] - M2ant))!=0) E1[0] = 0.0;
+                E1[0] = fabs(E1[0]);
                 // Map 2 with  respect to R12 and R34
                 if(isnan(E2[0] = M2.data.cells[i][j].val[0]-((M1.data.cells[i][j].val[0]+M1ant)/2))!=0) E2[0] = 0.0f;
+                E2[0] = fabs(E2[0]);
                 if(isnan(E2[1] = M2.data.cells[i][j].val[0]-((M3.data.cells[i][j].val[0] + atan(M4.data.cells[i][j].val[0]))/5))!=0) E2[1] = 0.0f;
+                E2[1] = fabs(E2[1]);
                 // Map 3 with respect to R34
                 if(isnan(E3[0] = M3.data.cells[i][j].val[0]- 5*M2.data.cells[i][j].val[0] + atan(M4.data.cells[i][j].val[0]))!=0) E3[0] = 0.0f;
+                E3[0] = fabs(E3[0]);
                 // Map 4 with  respect to R34 and R56
                 if(isnan(E4[0] = M4.data.cells[i][j].val[0]-tan((5*M2.data.cells[i][j].val[0])- M3.data.cells[i][j].val[0]))!=0) E4[0] = 0.0f;
+                E4[0] = fabs(E4[0]);
                 if(isnan(E4[1] = M4.data.cells[i][j].val[0]- M5.data.cells[i][j].val[0] - 3*M6.data.cells[i][j].val[0])!=0) E4[1] = 0.0f;
+                E4[1] = fabs(E4[1]);
                 // Map 5 with respect to R56
                 if(isnan(E5[0] = M5.data.cells[i][j].val[0]- M4.data.cells[i][j].val[0] + 3*M6.data.cells[i][j].val[0])!=0) E5[0] = 0.0f;
+                E5[0] = fabs(E5[0]);
                 // Map 6 with respect to R56
                 if(isnan(E6[0] = M6.data.cells[i][j].val[0] - (M4.data.cells[i][j].val[0] - M5.data.cells[i][j].val[0])/3)!=0) E6[0] = 0.0f;
-
-
+                E6[0] = fabs(E6[0]);
             }
 
         }
