@@ -1,5 +1,6 @@
 #!/bin/sh
 echo "Building Interacting Maps for Sensor Fusion Demo \n"
+rm fusion-analyzer-data.log
 cd core
 echo "Building core ...\n"
 make clean 

@@ -221,8 +221,6 @@ void handle_client_signals(DBusMessage *msg)
   else
     dbus_message_iter_get_basic(&args, &map_id);
 
-
-
   printf("CORE: DATA-ENGINE: Got Signal %s with value %lf for map %d \n", sigvalue, data, map_id);
 
   // filter depending on the type of signal
