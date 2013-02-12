@@ -93,11 +93,11 @@ grid on
 % analize the (M1, M2) dependency to check
 figure(5);
 plot(fusion_analyzer_data(:,1), fusion_analyzer_data(:,2));
-legend('Net data relationship', 'Analytic relationship');
 title('The dependency between M1 and M2 and the relationship curve');
 xlabel('M1');
 ylabel('M2');
 grid on;
+legend('Net data relationship', 'Analytic relationship');
 minM1 = min(fusion_analyzer_data(:,1));
 minM2 = min(fusion_analyzer_data(:,2));
 maxM1 = max(fusion_analyzer_data(:,1));
@@ -113,12 +113,12 @@ plot(t, 3*t, '-r');
 % analize the (M2, M3, M4) dependency to check
 figure(6);
 plot3(fusion_analyzer_data(:,2), fusion_analyzer_data(:,4), fusion_analyzer_data(:,3));
-legend('Net data relationship', 'Analytic relationship');
 title('The dependency between M2, M3, and M4 and the relationship curve');
 xlabel('M2');
 ylabel('M4');
 zlabel('M3');
 grid on;
+legend('Net data relationship', 'Analytic relationship');
 minM2 = min(fusion_analyzer_data(:,2));         
 maxM2 = max(fusion_analyzer_data(:,2));
 minM3 = min(fusion_analyzer_data(:,3));
@@ -138,12 +138,12 @@ plot3(t1, t2, (t1.*t2)/maxFct, '-r');
 % analize the (M4, M5, M6) dependency to check
 figure(7);
 plot3(fusion_analyzer_data(:,5), fusion_analyzer_data(:,6), fusion_analyzer_data(:,4));
-legend('Net data relationship', 'Analytic relationship');
 title('The dependency between M5, M6, and M4 and the relationship curve');
 xlabel('M5');
 ylabel('M6');
 zlabel('M4');
 grid on;
+legend('Net data relationship', 'Analytic relationship');
 minM5 = min(fusion_analyzer_data(:,5));
 maxM5 = max(fusion_analyzer_data(:,5));
 minM6 = min(fusion_analyzer_data(:,6));
