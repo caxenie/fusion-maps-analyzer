@@ -4,7 +4,7 @@
  * Core functionality implementation.
  */
 
-#include "core.h"
+#include "shared-data.h"
 
 /* random number generator */
 double

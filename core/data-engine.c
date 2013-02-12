@@ -4,11 +4,7 @@
  * Data engine functionality implementation.
  */
 
-#include "data-engine.h"
-#include "core.h"
-
-/* mutex to access the network data safely when requested by analyzer */
-static pthread_mutex_t net_data_mutex = PTHREAD_MUTEX_INITIALIZER;
+#include "shared-data.h"
 
 /* init connection to the system bus and add signal filters */
 void init_system_bus_connection()
