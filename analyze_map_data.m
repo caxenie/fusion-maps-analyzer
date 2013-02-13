@@ -1,3 +1,7 @@
+clc;
+clf;
+close('all');
+clear all;
 load fusion-analyzer-data.log
 LOOP_TIME = 1; %ms
 TO_S = 1000000;
@@ -47,29 +51,29 @@ plot(fusion_analyzer_data(:,15)*LOOP_TIME/TO_S, fusion_analyzer_data(:,7))
 ylabel('Map 1 error to R1')
 xlabel('Time(s)')
 grid on
-subplot(2,1,2)
-plot(fusion_analyzer_data(:,15)*LOOP_TIME/TO_S, fusion_analyzer_data(:,8))
-ylabel('Map 2 error to R1')
-xlabel('Time(s)')
+subplot(2,1,2);
+plot(fusion_analyzer_data(:,15)*LOOP_TIME/TO_S, fusion_analyzer_data(:,8));
+ylabel('Map 2 error to R1');
+xlabel('Time(s)');
 grid on
 
 % second relationship between M2, M3 and M4
 figure(3);
 subplot(3,1,1)
 plot(fusion_analyzer_data(:,15)*LOOP_TIME/TO_S, fusion_analyzer_data(:,9))
-ylabel('Map 2 error to R2')
-xlabel('Time(s)')
-grid on
+ylabel('Map 2 error to R2');
+xlabel('Time(s)');
+grid on;
 subplot(3,1,2)
 plot(fusion_analyzer_data(:,15)*LOOP_TIME/TO_S, fusion_analyzer_data(:,10))
-ylabel('Map 3 error to R2')
-xlabel('Time(s)')
-grid on
+ylabel('Map 3 error to R2');
+xlabel('Time(s)');
+grid on;
 subplot(3,1,3)
 plot(fusion_analyzer_data(:,15)*LOOP_TIME/TO_S, fusion_analyzer_data(:,11))
-ylabel('Map 4 error to R2')
-xlabel('Time(s)')
-grid on
+ylabel('Map 4 error to R2');
+xlabel('Time(s)');
+grid on;
 
 % third relationship between M4, M5, M6
 figure(4);
@@ -90,69 +94,54 @@ xlabel('Time(s)')
 grid on
 
 % analize the first relationship R1: M2 = 3*M1
-% analize the (M1, M2) dependency to check
+% analize the (M1, M2) dependency 
 figure(5);
-plot(fusion_analyzer_data(:,1), fusion_analyzer_data(:,2));
-title('The dependency between M1 and M2 and the relationship curve');
-xlabel('M1');
-ylabel('M2');
-grid on;
-legend('Net data relationship', 'Analytic relationship');
-minM1 = min(fusion_analyzer_data(:,1));
-minM2 = min(fusion_analyzer_data(:,2));
-maxM1 = max(fusion_analyzer_data(:,1));
-maxM2 = max(fusion_analyzer_data(:,2));
-minFct = min(minM1, minM2);
-maxFct = max(maxM1, maxM2);
-t = minFct:1:maxFct;
+plot(fusion_analyzer_data(:,15)*LOOP_TIME/TO_S, 3*fusion_analyzer_data(:,1));
 hold on;
-plot(t, 3*t, '-r');
+plot(fusion_analyzer_data(:,15)*LOOP_TIME/TO_S, fusion_analyzer_data(:,2), '-r');
+title('The dependency between M1 and M2');
+grid on;
+legend('3*M1 data', 'M2 data');
+xlabel('Time(s)');
 
 
 % analize the second relationship R2: M3 = M2*M4
-% analize the (M2, M3, M4) dependency to check
+% analize the (M2, M3, M4) dependency 
 figure(6);
-plot3(fusion_analyzer_data(:,2), fusion_analyzer_data(:,4), fusion_analyzer_data(:,3));
-title('The dependency between M2, M3, and M4 and the relationship curve');
-xlabel('M2');
-ylabel('M4');
-zlabel('M3');
-grid on;
-legend('Net data relationship', 'Analytic relationship');
-minM2 = min(fusion_analyzer_data(:,2));         
-maxM2 = max(fusion_analyzer_data(:,2));
-minM3 = min(fusion_analyzer_data(:,3));
-maxM3 = max(fusion_analyzer_data(:,3));
-minM4 = min(fusion_analyzer_data(:,4));
-maxM4 = max(fusion_analyzer_data(:,4));
-minFct = min([minM2, minM3, minM4]);
-maxFct = max([maxM2, maxM3, maxM4]);
-t1 = minFct:1:maxFct;
-t2 = minFct:1:maxFct;
+plot(fusion_analyzer_data(:,15)*LOOP_TIME/TO_S, fusion_analyzer_data(:,2).*fusion_analyzer_data(:,4));
 hold on;
-plot3(t1, t2, (t1.*t2)/maxFct, '-r');
-
+plot(fusion_analyzer_data(:,15)*LOOP_TIME/TO_S, fusion_analyzer_data(:,3), '-r');
+title('The dependency between M2, M3, and M4');
+legend('M2*M4 data', 'M3 data');
+grid on;
+xlabel('Time(s)');
 
 
 % analize the second relationship R3: M4 = M5 + 2*M6
-% analize the (M4, M5, M6) dependency to check
+% analize the (M4, M5, M6) dependency 
 figure(7);
-plot3(fusion_analyzer_data(:,5), fusion_analyzer_data(:,6), fusion_analyzer_data(:,4));
-title('The dependency between M5, M6, and M4 and the relationship curve');
-xlabel('M5');
-ylabel('M6');
-zlabel('M4');
-grid on;
-legend('Net data relationship', 'Analytic relationship');
-minM5 = min(fusion_analyzer_data(:,5));
-maxM5 = max(fusion_analyzer_data(:,5));
-minM6 = min(fusion_analyzer_data(:,6));
-maxM6 = max(fusion_analyzer_data(:,6));
-minM4 = min(fusion_analyzer_data(:,4));
-maxM4 = max(fusion_analyzer_data(:,4));
-minFct = min([minM5, minM6, minM4]);
-maxFct = max([maxM5, maxM6, maxM4]);
-t1 = minFct:1:maxFct;
-t2 = minFct:1:maxFct;
+plot(fusion_analyzer_data(:,15)*LOOP_TIME/TO_S, fusion_analyzer_data(:,5)+(2*fusion_analyzer_data(:,6)));
 hold on;
-plot3(t1, t2, t1 + 2*t2, '-r');
+plot(fusion_analyzer_data(:,15)*LOOP_TIME/TO_S, fusion_analyzer_data(:,4), '-r');
+title('The dependency between M4, M5, and M6');
+legend('M5+2*M6 data', 'M4 data');
+grid on;
+xlabel('Time(s)');  
+
+% analize map to map dependencies 
+% relationship 1: M2 = 3*M1
+figure(8);
+plot(fusion_analyzer_data(:,1), fusion_analyzer_data(:,2), '-b');
+title('M2 dependency on M1');
+xlabel('M1 values');
+ylabel('M2 values');
+grid on;
+hold on;
+% add the analytical solution to check the error 
+global_min = min([min(fusion_analyzer_data(:,1)) , min(fusion_analyzer_data(:,2))]);
+global_max = max([max(fusion_analyzer_data(:,1)) , max(fusion_analyzer_data(:,2))]);
+t = 0:0.1:global_max;
+plot(t, 3*t, '-r');
+legend('Simulation data', 'Analytic curve');
+
+

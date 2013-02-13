@@ -132,7 +132,6 @@ main (int UNUSED(argc), char** UNUSED(argv))
       /* get a map from the net */
       rand_edge = (rand () % edges + 1);
 
-
       for (int i = 0; i < MAP_SIZE; i++)
         {
           for (int j = 0; j < MAP_SIZE; j++)
