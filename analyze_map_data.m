@@ -39,6 +39,8 @@ plot(fusion_analyzer_data(:,15)*LOOP_TIME/TO_S, fusion_analyzer_data(:,6))
 ylabel('Map 6 values')
 xlabel('Time(s)')
 grid on
+saveas (1, "maps.jpg");
+
 % per relation errors
 % first relation between M1 and M2
 figure(2);
@@ -52,6 +54,7 @@ plot(fusion_analyzer_data(:,15)*LOOP_TIME/TO_S, fusion_analyzer_data(:,8))
 ylabel('Map 2 error to R1')
 xlabel('Time(s)')
 grid on
+saveas (2, "errR1.jpg");
 
 % second relationship between M2, M3 and M4
 figure(3);
@@ -70,6 +73,7 @@ plot(fusion_analyzer_data(:,15)*LOOP_TIME/TO_S, fusion_analyzer_data(:,11))
 ylabel('Map 4 error to R2')
 xlabel('Time(s)')
 grid on
+saveas (3, "errR2.jpg");
 
 % third relationship between M4, M5, M6
 figure(4);
@@ -88,3 +92,4 @@ plot(fusion_analyzer_data(:,15)*LOOP_TIME/TO_S, fusion_analyzer_data(:,14))
 ylabel('Map 6 error to R3')
 xlabel('Time(s)')
 grid on
+saveas (4, "errR3.jpg");
