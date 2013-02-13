@@ -39,7 +39,6 @@ main (int UNUSED(argc), char** UNUSED(argv))
 
   int rand_edge = 0;
   int rand_map = 0;
-  int edges = 14;
 
   /* map initialization */
   /* for the current setup we populate the neighbor list by hand */
@@ -82,7 +81,7 @@ main (int UNUSED(argc), char** UNUSED(argv))
       /* start time */
       if( clock_gettime( CLOCK_REALTIME , &start) == -1 ) {
           exit( EXIT_FAILURE );
-        }
+      }
 
       /* non local goto for self-restarting */
       if(sigsetjmp(jmpbuf, 2)) {
@@ -117,147 +116,212 @@ main (int UNUSED(argc), char** UNUSED(argv))
         */
 
       /* get a map from the net */
-      rand_edge = (rand () % edges + 1);
 
-      for (int i = 0; i < MAP_SIZE; i++)
+
+      rand_map = (rand () % (MAPS_NUMBER) + 1);
+
+
+      if (rand_map == M1.id)
         {
-          for (int j = 0; j < MAP_SIZE; j++)
+          for (int i = 0; i < MAP_SIZE; i++)
             {
+              for (int j = 0; j < MAP_SIZE; j++)
+                {
+                  rand_edge = (rand() % (M1.links) + 1);
 
-              if(rand_edge==1){
-                  M1.data.cells[i][j].val[0] = M1.data.cells[i][j].val[0] * // compute new value for the map
-                      (1.0 + 20.0*ETA21*M2.data.cells[i][j].val[0] - 100.0*ETA21*pow(M1.data.cells[i][j].val[0], 2));
-                }
-              if(rand_edge==2){
-                  rand_map = 1;
-                  if(user_connected[rand_map] == 1){
-                      M1.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT1) * M1.data.cells[i][j].val[0] +
-                          2.0*ETA_EXT1*user_data[rand_map];
+                  if(rand_edge==1){
+                      M1.data.cells[i][j].val[0] = (1.0 - 2.0*ETA)*M1.data.cells[i][j].val[0] +
+                              2.0*ETA*sqrt(fabs(M2.data.cells[i][j].val[0])/5.0);
                     }
-                  if(sensor_connected[rand_map] == 1){
-                      M1.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT1) * M1.data.cells[i][j].val[0] +
-                          2.0*ETA_EXT1*sensor_data[rand_map];
+                  if(rand_edge==2){
+                      if(user_connected[rand_map] == 1){
+                          M1.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT1) * M1.data.cells[i][j].val[0] +
+                              2.0*ETA_EXT1*user_data[rand_map];
+                        }
+                      if(sensor_connected[rand_map] == 1){
+                          M1.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT1) * M1.data.cells[i][j].val[0] +
+                              2.0*ETA_EXT1*sensor_data[rand_map];
+                        }
                     }
-                }
 
-              if(rand_edge==3){
-                  M2.data.cells[i][j].val[0] =
-                      (1.0 - 2.0 * ETA12) * M2.data.cells[i][j].val[0] +
-                      10.0 * ETA12 * pow(M1.data.cells[i][j].val[0], 2);
-                }
+                  e1 = fabs(M1.data.cells[i][j].val[0] - M1ant); // update error
 
-              if(rand_edge==4){
-                  M2.data.cells[i][j].val[0] = M2.data.cells[i][j].val[0]+
-                      (2.0*ETA432*((M3.data.cells[i][j].val[0] - atan(M2.data.cells[i][j].val[0]) +
-                                    4.0*pow(M4.data.cells[i][j].val[0], 2))/(1.0+pow(M2.data.cells[i][j].val[0], 2))));
-                }
+                  M1ant = M1.data.cells[i][j].val[0]; // update history
 
-              if(rand_edge==5){
-                  rand_map = 2;
-                  if(user_connected[rand_map] == 1){
-                      M2.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT2) * M2.data.cells[i][j].val[0] +
-                          2.0*ETA_EXT2*user_data[rand_map];
+               }
+            }
+        }
+
+      if (rand_map == M2.id)
+        {
+          for (int i = 0; i < MAP_SIZE; i++)
+            {
+              for (int j = 0; j < MAP_SIZE; j++)
+                {
+                  rand_edge = (rand() % (M2.links) + 1);
+
+                  if(rand_edge==1){
+                              M2.data.cells[i][j].val[0] =
+                                  (1.0 - 2.0 * ETA12) * M2.data.cells[i][j].val[0] +
+                                  10.0 * ETA12 * pow(M1.data.cells[i][j].val[0], 2);
                     }
-                  if(sensor_connected[rand_map] == 1){
-                      M2.data.cells[i][j].val[0] = (1-2*ETA_EXT2) * M2.data.cells[i][j].val[0] +
-                          2.0*ETA_EXT2*sensor_data[rand_map];
+
+                  if(rand_edge==2){
+                      M2.data.cells[i][j].val[0] = (1.0 - 2.0*ETA)*M2.data.cells[i][j].val[0]+
+                              2.0*ETA*tan(M3.data.cells[i][j].val[0] + 4.0*pow(M4.data.cells[i][j].val[0], 2));
                     }
-                }
 
-              if(rand_edge==6){
-                  M3.data.cells[i][j].val[0] =
-                      (1.0 - 2.0 * ETA432) * M3.data.cells[i][j].val[0] +
-                      2.0 * ETA432 * atan(M2.data.cells[i][j].val[0]) -
-                      8.0*ETA432*pow(M4.data.cells[i][j].val[0], 2);
-                }
-
-              if(rand_edge==7){
-                  rand_map = 3;
-                  if(user_connected[rand_map] == 1){
-                      M3.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT3) * M3.data.cells[i][j].val[0] +
-                          2.0*ETA_EXT3*user_data[rand_map];
+                  if(rand_edge==3){
+                      if(user_connected[rand_map] == 1){
+                          M2.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT2) * M2.data.cells[i][j].val[0] +
+                              2.0*ETA_EXT2*user_data[rand_map];
+                        }
+                      if(sensor_connected[rand_map] == 1){
+                          M2.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT2) * M2.data.cells[i][j].val[0] +
+                              2.0*ETA_EXT2*sensor_data[rand_map];
+                        }
                     }
-                  if(sensor_connected[rand_map] == 1){
-                      M3.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT3) * M3.data.cells[i][j].val[0] +
-                          2.0*ETA_EXT3*sensor_data[rand_map];
+
+                  e2 = fabs(M2.data.cells[i][j].val[0] - M2ant);
+
+                  M2ant = M2.data.cells[i][j].val[0];
+                }
+            }
+        }
+
+      if (rand_map == M3.id)
+        {
+          for (int i = 0; i < MAP_SIZE; i++)
+            {
+              for (int j = 0; j < MAP_SIZE; j++)
+                {
+                  rand_edge = (rand() % (M3.links) + 1);
+
+                  if(rand_edge==1){
+                      M3.data.cells[i][j].val[0] =
+                                          (1.0 - 2.0 * ETA432) * M3.data.cells[i][j].val[0] +
+                                              2.0 * ETA*(atan(M2.data.cells[i][j].val[0]) - 4.0*pow(M4.data.cells[i][j].val[0] , 2));
                     }
-                }
 
-              if(rand_edge==8){
-                  M4.data.cells[i][j].val[0] = M4.data.cells[i][j].val[0]*
-                      (1.0 - 16.0*ETA234*M3.data.cells[i][j].val[0]+
-                       16.0*ETA234*atan(M2.data.cells[i][j].val[0]) -
-                       64.0*ETA234*pow(M4.data.cells[i][j].val[0], 2));
-
-                }
-
-              if(rand_edge==9){
-                  M4.data.cells[i][j].val[0] = (1.0-2.0*ETA654)*M4.data.cells[i][j].val[0] +
-                      16.0*ETA654*atan(M5.data.cells[i][j].val[0]) +
-                      2.0*ETA654*pow(M6.data.cells[i][j].val[0], 2);
-                }
-
-              if(rand_edge==10){
-                  rand_map = 4;
-                  if(user_connected[rand_map] == 1){
-                      M4.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT4) * M4.data.cells[i][j].val[0] +
-                          2.0*ETA_EXT4*user_data[rand_map];
+                  if(rand_edge==2){
+                      if(user_connected[rand_map] == 1){
+                          M3.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT3) * M3.data.cells[i][j].val[0] +
+                              2.0*ETA_EXT3*user_data[rand_map];
+                        }
+                      if(sensor_connected[rand_map] == 1){
+                          M3.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT3) * M3.data.cells[i][j].val[0] +
+                              2.0*ETA_EXT3*sensor_data[rand_map];
+                        }
                     }
-                  if(sensor_connected[rand_map] == 1){
-                      M4.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT4) * M4.data.cells[i][j].val[0] +
-                          2.0*ETA_EXT4*sensor_data[rand_map];
-                    }
+
+                  e3 = fabs(M3.data.cells[i][j].val[0] - M3ant);
+
+                  M3ant = M3.data.cells[i][j].val[0];
                 }
+            }
+        }
 
-              if(rand_edge==11){
-                  M5.data.cells[i][j].val[0] = M5.data.cells[i][j].val[0] +
-                      (16.0*ETA456*((M4.data.cells[i][j].val[0] - 8.0*atan(M5.data.cells[i][j].val[0]) - pow(M6.data.cells[i][j].val[0], 2)))/
-                       (1.0+pow(M5.data.cells[i][j].val[0], 2)));
+      if (rand_map == M4.id)
+        {
+          for (int i = 0; i < MAP_SIZE; i++)
+            {
+              for (int j = 0; j < MAP_SIZE; j++)
+                {
+                  rand_edge = (rand() % (M4.links) + 1);
+
+                  if(rand_edge==1){
+                      M4.data.cells[i][j].val[0] = (1.0 - 2.0*ETA)*M4.data.cells[i][j].val[0]+
+                              2.0*ETA*sqrt(fabs((atan(M2.data.cells[i][j].val[0]) - M3.data.cells[i][j].val[0]))/4.0);
+
+                    }
+
+                  if(rand_edge==2){
+                      M4.data.cells[i][j].val[0] = (1.0-2.0*ETA654)*M4.data.cells[i][j].val[0] +
+                              2.0*ETA*(8.0*atan(M5.data.cells[i][j].val[0]) + pow( M6.data.cells[i][j].val[0], 2));
+                    }
+
+                  if(rand_edge==3){
+                      if(user_connected[rand_map] == 1){
+                          M4.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT4) * M4.data.cells[i][j].val[0] +
+                              2.0*ETA_EXT4*user_data[rand_map];
+                        }
+                      if(sensor_connected[rand_map] == 1){
+                          M4.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT4) * M4.data.cells[i][j].val[0] +
+                              2.0*ETA_EXT4*sensor_data[rand_map];
+                        }
+                    }
+
+                  e4 = fabs(M4.data.cells[i][j].val[0] - M4ant);
+
+                  M4ant = M4.data.cells[i][j].val[0];
+                }
+            }
+        }
+
+      if (rand_map == M5.id)
+        {
+          for (int i = 0; i < MAP_SIZE; i++)
+            {
+              for (int j = 0; j < MAP_SIZE; j++)
+                {
+                  rand_edge = (rand() % (M5.links) + 1);
+
+                  if(rand_edge==1){
+                      M5.data.cells[i][j].val[0] = (1.0 - 2.0*ETA)*M5.data.cells[i][j].val[0] +
+                                                2.0*ETA*tan((M4.data.cells[i][j].val[0] - pow(M6.data.cells[i][j].val[0], 2))/8.0);
+
+
+                    }
+
+                  if(rand_edge==2){
+                      if(user_connected[rand_map] == 1){
+                          M5.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT5) * M5.data.cells[i][j].val[0] +
+                              2.0*ETA_EXT5*user_data[rand_map];
+                        }
+                      if(sensor_connected[rand_map] == 1){
+                          M5.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT5) * M5.data.cells[i][j].val[0] +
+                              2.0*ETA_EXT5*sensor_data[rand_map];
+                        }
+                    }
+
+                  e5 = fabs(M5.data.cells[i][j].val[0] - M5ant);
+
+                  M5ant = M5.data.cells[i][j].val[0];
 
                 }
+            }
+        }
 
-              if(rand_edge==12){
-                  rand_map = 5;
-                  if(user_connected[rand_map] == 1){
-                      M5.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT5) * M5.data.cells[i][j].val[0] +
-                          2.0*ETA_EXT5*user_data[rand_map];
+      if (rand_map == M6.id)
+        {
+          for (int i = 0; i < MAP_SIZE; i++)
+            {
+              for (int j = 0; j < MAP_SIZE; j++)
+                {
+                  rand_edge = (rand() % (M6.links) + 1);
+
+                  if(rand_edge==1){
+                      M6.data.cells[i][j].val[0] =  (1.0 - 2.0*ETA)*M6.data.cells[i][j].val[0] +
+                              2.0*ETA*sqrt(fabs(M4.data.cells[i][j].val[0] - 8.0*atan(M5.data.cells[i][j].val[0])));
+
                     }
-                  if(sensor_connected[rand_map] == 1){
-                      M5.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT5) * M5.data.cells[i][j].val[0] +
-                          2.0*ETA_EXT5*sensor_data[rand_map];
+
+                  if(rand_edge==2){
+                      if(user_connected[rand_map] == 1){
+                          M6.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT6) * M6.data.cells[i][j].val[0] +
+                              2.0*ETA_EXT6*user_data[rand_map];
+                        }
+                      if(sensor_connected[rand_map] == 1){
+                          M6.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT6) * M6.data.cells[i][j].val[0] +
+                              2.0*ETA_EXT6*sensor_data[rand_map];
+                        }
                     }
+
+                  e6 = fabs(M6.data.cells[i][j].val[0] - M6ant);
+
+                  M6ant = M6.data.cells[i][j].val[0];
+
                 }
-
-              if(rand_edge==13){
-                  M6.data.cells[i][j].val[0] =  M6.data.cells[i][j].val[0] *
-                      (1.0 + 4.0*ETA456*
-                       (M4.data.cells[i][j].val[0] - 8.0*atan(M5.data.cells[i][j].val[0]) - pow(M6.data.cells[i][j].val[0], 2)));
-
-                }
-
-              if(rand_edge==14){
-                  rand_map = 6;
-                  if(user_connected[rand_map] == 1){
-                      M6.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT6) * M6.data.cells[i][j].val[0] +
-                          2.0*ETA_EXT6*user_data[rand_map];
-                    }
-                  if(sensor_connected[rand_map] == 1){
-                      M6.data.cells[i][j].val[0] = (1.0-2.0*ETA_EXT6) * M6.data.cells[i][j].val[0] +
-                          2.0*ETA_EXT6*sensor_data[rand_map];
-                    }
-                }
-              e1 = fabs(M1.data.cells[i][j].val[0] - M1ant); // update error
-              M1ant = M1.data.cells[i][j].val[0]; // update history
-              e2 = fabs(M2.data.cells[i][j].val[0] - M2ant);
-              M2ant = M2.data.cells[i][j].val[0];
-              e3 = fabs(M3.data.cells[i][j].val[0] - M3ant);
-              M3ant = M3.data.cells[i][j].val[0];
-              e4 = fabs(M4.data.cells[i][j].val[0] - M4ant);
-              M4ant = M4.data.cells[i][j].val[0];
-              e5 = fabs(M5.data.cells[i][j].val[0] - M5ant);
-              M5ant = M5.data.cells[i][j].val[0];
-              e6 = fabs(M6.data.cells[i][j].val[0] - M6ant);
-              M6ant = M6.data.cells[i][j].val[0];
             }
         }
 
@@ -268,32 +332,31 @@ main (int UNUSED(argc), char** UNUSED(argv))
 
               // full errors
               // Map 1 with respect to R12
-              if(isnan(E1[0] = M1.data.cells[i][j].val[0]-sqrt(M2.data.cells[i][j].val[0]/5))!=0) E1[0] = 0.0f;
+              if(isnan(E1[0] = M1.data.cells[i][j].val[0]-sqrt(M2.data.cells[i][j].val[0]/5.0))!=0) E1[0] = 0.0f;
               E1[0] = fabs(E1[0]);
               // Map 2 with  respect to R12 and R34
-              if(isnan(E2[0] = M2.data.cells[i][j].val[0]-5*pow(M1.data.cells[i][j].val[0], 2))!=0) E2[0] = 0.0f;
+              if(isnan(E2[0] = M2.data.cells[i][j].val[0]-5.0*pow(M1.data.cells[i][j].val[0], 2))!=0) E2[0] = 0.0f;
               E2[0] = fabs(E2[0]);
-              if(isnan(E2[1] = M2.data.cells[i][j].val[0]- tan(M3.data.cells[i][j].val[0] + 4*pow(M4.data.cells[i][j].val[0], 2)))!=0) E2[1] = 0.0f;
+              if(isnan(E2[1] = M2.data.cells[i][j].val[0]- tan(M3.data.cells[i][j].val[0] + 4.0*pow(M4.data.cells[i][j].val[0], 2)))!=0) E2[1] = 0.0f;
               E2[1] = fabs(E2[1]);
               // Map 3 with respect to R34
-              if(isnan(E3[0] = M3.data.cells[i][j].val[0]-(atan(M2.data.cells[i][j].val[0]) - 4*pow(M4.data.cells[i][j].val[0], 2)))!=0) E3[0] = 0.0f;
+              if(isnan(E3[0] = M3.data.cells[i][j].val[0]-atan(M2.data.cells[i][j].val[0]) + 4*pow(M4.data.cells[i][j].val[0], 2))!=0) E3[0] = 0.0f;
               E3[0] = fabs(E3[0]);
               // Map 4 with  respect to R34 and R56
-              if(isnan(E4[0] = M4.data.cells[i][j].val[0]-sqrt((atan(M2.data.cells[i][j].val[0]) - M3.data.cells[i][j].val[0])/4))!=0) E4[0] = 0.0f;
+              if(isnan(E4[0] = M4.data.cells[i][j].val[0]-sqrt((atan(M2.data.cells[i][j].val[0]) - M3.data.cells[i][j].val[0])/4.0))!=0) E4[0] = 0.0f;
               E4[0] = fabs(E4[0]);
-              if(isnan(E4[1] = M4.data.cells[i][j].val[0]-(8*atan(fabs(M5.data.cells[i][j].val[0])) + pow(M6.data.cells[i][j].val[0], 2)))!=0) E4[1] = 0.0f;
+              if(isnan(E4[1] = M4.data.cells[i][j].val[0]-(8.0*atan(fabs(M5.data.cells[i][j].val[0])) + pow(M6.data.cells[i][j].val[0], 2)))!=0) E4[1] = 0.0f;
               E4[1] = fabs(E4[1]);
               // Map 5 with respect to R56
-              if(isnan(E5[0] = M5.data.cells[i][j].val[0]-tan((M4.data.cells[i][j].val[0] - pow(M6.data.cells[i][j].val[0], 2)/8)))!=0) E5[0] = 0.0f;
+              if(isnan(E5[0] = M5.data.cells[i][j].val[0]-tan(((M4.data.cells[i][j].val[0] - pow(M6.data.cells[i][j].val[0], 2))/8.0)))!=0) E5[0] = 0.0f;
               E5[0] = fabs(E5[0]);
               // Map 6 with respect to R56
-              if(isnan(E6[0] = M6.data.cells[i][j].val[0]-sqrt(M4.data.cells[i][j].val[0]-8*atan(M5.data.cells[i][j].val[0])))!=0) E6[0] =  0.0f;
+              if(isnan(E6[0] = M6.data.cells[i][j].val[0]-sqrt(M4.data.cells[i][j].val[0]-8.0*atan(M5.data.cells[i][j].val[0])))!=0) E6[0] =  0.0f;
               E6[0] = fabs(E6[0]);
             }
 
         }
 
-#ifdef VERBOSE
       if( clock_gettime( CLOCK_REALTIME, &stop) == -1 ) {
           perror( "clock gettime" );
           exit( EXIT_FAILURE );
@@ -303,28 +366,25 @@ main (int UNUSED(argc), char** UNUSED(argv))
       //        sprintf(log_bufferw, " Time: %f\n", (double) (stop.tv_nsec-start.tv_nsec)/1000000);
       //        fwrite(log_bufferw, strlen(log_bufferw), 1, f);
 
-
+#ifdef VERBOSE
       timer++;
-
-      if(timer%1000000==0){
-          sprintf(log_bufferw, "%f %f %f %f %f %f %f %f %f %f %f %f %f %f %ld\n",
-                  M1.data.cells[0][0].val[0],
-                  M2.data.cells[0][0].val[0],
-                  M3.data.cells[0][0].val[0],
-                  M4.data.cells[0][0].val[0],
-                  M5.data.cells[0][0].val[0],
-                  M6.data.cells[0][0].val[0],
-                  E1[0],
-                  E2[0],
-                  E2[1],
-                  E3[0],
-                  E4[0],
-                  E4[1],
-                  E5[0],
-                  E6[0],
-                  timer);
-          fwrite(log_bufferw, strlen(log_bufferw), 1, f);
-        }
+      sprintf(log_bufferw, "%f %f %f %f %f %f %f %f %f %f %f %f %f %f %ld\n",
+              M1.data.cells[0][0].val[0],
+              M2.data.cells[0][0].val[0],
+              M3.data.cells[0][0].val[0],
+              M4.data.cells[0][0].val[0],
+              M5.data.cells[0][0].val[0],
+              M6.data.cells[0][0].val[0],
+              E1[0],
+              E2[0],
+              E2[1],
+              E3[0],
+              E4[0],
+              E4[1],
+              E5[0],
+              E6[0],
+              timer);
+      fwrite(log_bufferw, strlen(log_bufferw), 1, f);
 #endif
     }
   return 0;
