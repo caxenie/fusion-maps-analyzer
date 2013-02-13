@@ -128,3 +128,16 @@ title('The dependency between M4, M5, and M6');
 legend('8*atan(M5) + M6^2 data', 'M4 data');
 grid on;
 xlabel('Time(s)');  
+
+
+% analize the dependency between M1 and M2
+figure(8);
+plot(fusion_analyzer_data(:,1), fusion_analyzer_data(:,2));
+hold on;
+xlabel('M1 values');
+ylabel('M2 values');
+grid on;
+t = min([min(fusion_analyzer_data(:,1)), min(fusion_analyzer_data(:,2))]):0.1:...
+    max([ max(fusion_analyzer_data(:,1)), max(fusion_analyzer_data(:,2))]);
+plot(t, 5*t.^2, '-r');
+legend('Data dependency','Analytic dependency')
