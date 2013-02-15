@@ -24,7 +24,7 @@ main (int UNUSED(argc), char** UNUSED(argv))
 {
     /* logging utils */
     iter = 0;
-    log_data = (struct log*)calloc(10000000, sizeof(struct log));
+    log_data = (struct log*)calloc(100000, sizeof(struct log));
 
     /* register signals */
     signal(SIGCONT, resume_network);
@@ -37,6 +37,9 @@ main (int UNUSED(argc), char** UNUSED(argv))
     int rand_edge = 0;
     int edges = 14;
     int rand_map = 0;
+
+    struct timeval start_time;
+    struct timeval stop_time;
 
     /* map initialization */
     /* for the current setup we populate the neighbor list by hand */
@@ -76,15 +79,12 @@ main (int UNUSED(argc), char** UNUSED(argv))
     /* starts the data transfer engine */
     start_data_transfer_engine();
 
-    /* some timing info */
-    struct timespec start, stop;
-
     /* loop the network */
     while (1)
     {
 #ifdef VERBOSE
         /* start time */
-        if( clock_gettime( CLOCK_REALTIME , &start) == -1 ) {
+        if(gettimeofday(&start_time, NULL)) {
             exit( EXIT_FAILURE );
         }
 #endif
@@ -320,12 +320,12 @@ main (int UNUSED(argc), char** UNUSED(argv))
         }
 
 #ifdef VERBOSE
-        if( clock_gettime( CLOCK_REALTIME, &stop) == -1 ) {
-            perror( "clock gettime" );
+        if(gettimeofday(&stop_time, NULL)) {
             exit( EXIT_FAILURE );
         }
 
-        log_message("Loop time: %f ms\n",(double) (stop.tv_nsec-start.tv_nsec)/1000000.0); // get time in ms
+
+        log_message("Loop time: %f ms\n", compute_dt(NULL, &stop_time, &start_time)/1000.0f); // get time in ms
         //        sprintf(log_bufferw, " Time: %f\n", (double) (stop.tv_nsec-start.tv_nsec)/1000000);
         //        fwrite(log_bufferw, strlen(log_bufferw), 1, f);
 

@@ -13,7 +13,7 @@ struct log{
 };
 
 /* file logging support iterator */
-long iter;
+int iter;
 
 struct log *log_data;
 

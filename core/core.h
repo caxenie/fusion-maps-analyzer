@@ -23,10 +23,9 @@
 
 #define MAP_SIZE 	   	     1
 #define MAPS_NUMBER 		     6
-#define SAMPLE_POINT                1
 #define RELAXATION_THRESHOLD         0.00001f
 #define VERBOSE 		     1
-#define ETA                         0.002
+#define ETA                         0.0002
 #define ETA12                        ETA//0.0002956f
 #define ETA21                        ETA// 0.0002106f
 #define ETA234                       ETA//0.0002884f
@@ -39,6 +38,7 @@
 #define ETA_EXT4                     ETA//0.0002003f
 #define ETA_EXT5                     ETA//0.0002023f
 #define ETA_EXT6                     ETA//0.0002343f
+
 
 /* fusion maps network code */
 
@@ -96,7 +96,11 @@ void restart_network();
 /* stops the network by exiting the main loop */
 void stop_network();
 /* the other commands (e.g.: pause, quit) are already embedded in the slots from the analyzer GUI */
-
+/* compute the time interval for integration or derivation */
+double compute_dt(struct timeval *difference,
+             struct timeval *end_time,
+             struct timeval *start_time
+            );
 
 
 
