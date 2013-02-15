@@ -132,13 +132,11 @@ main (int UNUSED(argc), char** UNUSED(argv))
         {
             for (int j = 0; j < MAP_SIZE; j++)
             {
-                if(rand_edge==1){
                     M1.data.cells[i][j].val[0] =
                             (1.0 - ETA21) * M1.data.cells[i][j].val[0] +
                             (1.0/3.0)*ETA21 * M2.data.cells[i][j].val[0]; // compute new value for the map
-                }
 
-                if(rand_edge==2){
+
                     rand_map = 1;
                     if(user_connected[rand_map] == 1){
                         M1.data.cells[i][j].val[0] = (1.0 - ETA_EXT1) * M1.data.cells[i][j].val[0] +
@@ -148,15 +146,12 @@ main (int UNUSED(argc), char** UNUSED(argv))
                         M1.data.cells[i][j].val[0] = (1.0 - ETA_EXT1) * M1.data.cells[i][j].val[0] +
                                 ETA_EXT1*sensor_data[rand_map];
                     }
-                }
 
-                if(rand_edge==3){
                     M2.data.cells[i][j].val[0] =
                             (1.0 - ETA12) * M2.data.cells[i][j].val[0] +
                             3.0 * ETA12 * M1.data.cells[i][j].val[0];
-                }
 
-                if(rand_edge==4){
+
                     if(isnan(M3.data.cells[i][j].val[0]/M4.data.cells[i][j].val[0])!=0 || isinf(M3.data.cells[i][j].val[0]/M4.data.cells[i][j].val[0])!=0){
                         M2.data.cells[i][j].val[0] =
                                 M2.data.cells[i][j].val[0];
@@ -166,9 +161,7 @@ main (int UNUSED(argc), char** UNUSED(argv))
                                 (1.0 - ETA432) * M2.data.cells[i][j].val[0] +
                                 ETA432*(M3.data.cells[i][j].val[0]/M4.data.cells[i][j].val[0]);
                     }
-                }
 
-                if(rand_edge==5){
                     rand_map = 2;
                     if(user_connected[rand_map] == 1){
                         M2.data.cells[i][j].val[0] = (1.0 - ETA_EXT2) * M2.data.cells[i][j].val[0] +
@@ -178,16 +171,12 @@ main (int UNUSED(argc), char** UNUSED(argv))
                         M2.data.cells[i][j].val[0] = (1.0 - ETA_EXT2) * M2.data.cells[i][j].val[0] +
                                 ETA_EXT2*sensor_data[rand_map];
                     }
-                }
 
-                if(rand_edge==6){
                     M3.data.cells[i][j].val[0] =
                             (1.0 - ETA432) * M3.data.cells[i][j].val[0] +
                             ETA432 * M2.data.cells[i][j].val[0] *
                             M4.data.cells[i][j].val[0];
-                }
 
-                if(rand_edge==7){
                     rand_map = 3;
                     if(user_connected[rand_map] == 1){
                         M3.data.cells[i][j].val[0] = (1.0 - ETA_EXT3) * M3.data.cells[i][j].val[0]  +
@@ -197,9 +186,7 @@ main (int UNUSED(argc), char** UNUSED(argv))
                         M3.data.cells[i][j].val[0] = (1.0 - ETA_EXT3) * M3.data.cells[i][j].val[0]  +
                                 ETA_EXT3*sensor_data[rand_map];
                     }
-                }
 
-                if(rand_edge==8){
                     if(isnan(M3.data.cells[i][j].val[0]/M2.data.cells[i][j].val[0])!=0 || isinf(M3.data.cells[i][j].val[0]/M2.data.cells[i][j].val[0])!=0){
                         M4.data.cells[i][j].val[0] =
                                 M4.data.cells[i][j].val[0];
@@ -210,16 +197,12 @@ main (int UNUSED(argc), char** UNUSED(argv))
                                 ETA234 * (M3.data.cells[i][j].val[0]/
                                           M2.data.cells[i][j].val[0]);
                     }
-                }
 
-                if(rand_edge==9){
                     M4.data.cells[i][j].val[0] =
                             (1.0 - ETA654) * M4.data.cells[i][j].val[0] +
                             ETA654 * (M5.data.cells[i][j].val[0] +
                                       2.0 * M6.data.cells[i][j].val[0]);
-                }
 
-                if(rand_edge==10){
                     rand_map = 4;
                     if(user_connected[rand_map] == 1){
                         M4.data.cells[i][j].val[0] =
@@ -230,15 +213,11 @@ main (int UNUSED(argc), char** UNUSED(argv))
                         M4.data.cells[i][j].val[0] = (1.0 - ETA_EXT4) * M4.data.cells[i][j].val[0] +
                                 ETA_EXT4*sensor_data[rand_map];
                     }
-                }
 
-                if(rand_edge==11){
                     M5.data.cells[i][j].val[0] =
                             (1.0 - ETA456) * M5.data.cells[i][j].val[0] +
                             ETA456 * (M4.data.cells[i][j].val[0] - 2.0 * M6.data.cells[i][j].val[0]);
-                }
 
-                if(rand_edge==12){
                     rand_map = 5;
                     if(user_connected[rand_map] == 1){
                         M5.data.cells[i][j].val[0] = (1.0 - ETA_EXT5) * M5.data.cells[i][j].val[0]  +
@@ -248,16 +227,12 @@ main (int UNUSED(argc), char** UNUSED(argv))
                         M5.data.cells[i][j].val[0] = (1.0 - ETA_EXT5) * M5.data.cells[i][j].val[0]  +
                                 ETA_EXT5*sensor_data[rand_map];
                     }
-                }
 
-                if(rand_edge==13){
                     M6.data.cells[i][j].val[0] =
                             (1.0 - ETA456) * M6.data.cells[i][j].val[0] +
                             ETA456 *(M4.data.cells[i][j].val[0] -
                                      M5.data.cells[i][j].val[0])/2.0;
-                }
 
-                if(rand_edge==14){
                     rand_map = 6;
                     if(user_connected[rand_map] == 1){
                         M6.data.cells[i][j].val[0] = (1.0 - ETA_EXT6) * M6.data.cells[i][j].val[0] +
@@ -267,7 +242,6 @@ main (int UNUSED(argc), char** UNUSED(argv))
                         M6.data.cells[i][j].val[0] = (1.0 - ETA_EXT6) * M6.data.cells[i][j].val[0] +
                                 ETA_EXT6*sensor_data[rand_map];
                     }
-                }
 
                 e1 = fabs(M1.data.cells[i][j].val[0] - M1ant); // update error
                 M1ant = M1.data.cells[i][j].val[0]; // update history
@@ -281,14 +255,6 @@ main (int UNUSED(argc), char** UNUSED(argv))
                 M5ant = M5.data.cells[i][j].val[0];
                 e6 = fabs(M6.data.cells[i][j].val[0] - M6ant);
                 M6ant = M6.data.cells[i][j].val[0];
-            }
-        }
-
-
-        for (int i = 0; i < MAP_SIZE; i++)
-        {
-            for (int j = 0; j < MAP_SIZE; j++)
-            {
 
                 // full errors
                 if(isnan(E1[0] = M1.data.cells[i][j].val[0]-M2.data.cells[i][j].val[0]/3)!=0 || isinf(E1[0] = M1.data.cells[i][j].val[0]-M2.data.cells[i][j].val[0]/3)!=0)
