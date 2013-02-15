@@ -18,18 +18,14 @@ short g_verbose = 0;
     fprintf(stderr,format,args); \
     } while(0);
 
-/* file logging support */
-FILE *f;
-char* log_bufferw;
-long timer;
-
 /* entry point */
 int
 main (int UNUSED(argc), char** UNUSED(argv))
 {
-    f = fopen("fusion-analyzer-data.log","w+");
-    log_bufferw = (char*)calloc(20000, sizeof(char));
-    timer = 0;
+    /* logging utils */
+    iter = 0;
+    log_data = (struct log*)calloc(10000000, sizeof(struct log));
+
     /* register signals */
     signal(SIGCONT, resume_network);
     signal(SIGUSR1, restart_network);
@@ -332,26 +328,24 @@ main (int UNUSED(argc), char** UNUSED(argv))
         log_message("Loop time: %f ms\n",(double) (stop.tv_nsec-start.tv_nsec)/1000000.0); // get time in ms
         //        sprintf(log_bufferw, " Time: %f\n", (double) (stop.tv_nsec-start.tv_nsec)/1000000);
         //        fwrite(log_bufferw, strlen(log_bufferw), 1, f);
-        timer++;
-        if(timer%SAMPLE_POINT==0){
-            sprintf(log_bufferw, "%f %f %f %f %f %f %f %f %f %f %f %f %f %f %ld\n",
-                    M1.data.cells[0][0].val[0],
-                    M2.data.cells[0][0].val[0],
-                    M3.data.cells[0][0].val[0],
-                    M4.data.cells[0][0].val[0],
-                    M5.data.cells[0][0].val[0],
-                    M6.data.cells[0][0].val[0],
-                    E1[0],
-                    E2[0],
-                    E2[1],
-                    E3[0],
-                    E4[0],
-                    E4[1],
-                    E5[0],
-                    E6[0],
-                    timer/SAMPLE_POINT);
-            fwrite(log_bufferw, strlen(log_bufferw), 1, f);
-        }
+
+        log_data->iter=iter;
+        log_data->vals[0] = M1.data.cells[0][0].val[0];
+        log_data->vals[1] = M2.data.cells[0][0].val[0];
+        log_data->vals[2] = M3.data.cells[0][0].val[0];
+        log_data->vals[3] = M4.data.cells[0][0].val[0];
+        log_data->vals[4] = M5.data.cells[0][0].val[0];
+        log_data->vals[5] = M6.data.cells[0][0].val[0];
+        log_data->vals[6] = E1[0];
+        log_data->vals[7] = E2[0];
+        log_data->vals[8] = E2[1];
+        log_data->vals[9] = E3[0];
+        log_data->vals[10] = E4[0];
+        log_data->vals[11] = E4[1];
+        log_data->vals[12] = E5[0];
+        log_data->vals[13] = E6[0];
+        iter++;
+
 #endif
 
         pthread_mutex_unlock(&net_data_mutex);

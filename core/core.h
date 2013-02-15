@@ -23,10 +23,10 @@
 
 #define MAP_SIZE 	   	     1
 #define MAPS_NUMBER 		     6
-#define SAMPLE_POINT                53562
+#define SAMPLE_POINT                1
 #define RELAXATION_THRESHOLD         0.00001f
 #define VERBOSE 		     1
-#define ETA                         0.0002
+#define ETA                         0.002
 #define ETA12                        ETA//0.0002956f
 #define ETA21                        ETA// 0.0002106f
 #define ETA234                       ETA//0.0002884f
@@ -39,7 +39,6 @@
 #define ETA_EXT4                     ETA//0.0002003f
 #define ETA_EXT5                     ETA//0.0002023f
 #define ETA_EXT6                     ETA//0.0002343f
-
 
 /* fusion maps network code */
 

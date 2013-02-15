@@ -43,8 +43,8 @@ for i=2:length(fusion_analyzer_data(:,1))
   set(h1,'xdata',[xd1(:) ; fusion_analyzer_data(i,15)/TO_S],'ydata',[yd1(:) ; fusion_analyzer_data(i,1)]) ;
   set(h2,'xdata',[xd2(:) ; fusion_analyzer_data(i,15)/TO_S],'ydata',[yd2(:) ; fusion_analyzer_data(i,2)]) ;
   set(h3,'xdata',[xd3(:) ; fusion_analyzer_data(i,1)],'ydata',[yd3(:) ; fusion_analyzer_data(i,2)]) ;
-  %drawnow;
-  pause(0.06);
+  drawnow;
+  %pause(0.06);
 end
 
 %--------------------------------------------------------------------------------------------------------
