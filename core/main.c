@@ -451,7 +451,6 @@ main (int UNUSED(argc), char** UNUSED(argv))
 
 #ifdef VERBOSE
         timer++;
-        if(timer%1000==0){
             sprintf(log_bufferw, "%f %f %f %f %f %f %f %f %f %f %f %f %f %f %ld\n",
                     M1.data.cells[0][0].val[0],
                     M2.data.cells[0][0].val[0],
@@ -469,7 +468,6 @@ main (int UNUSED(argc), char** UNUSED(argv))
                     E6[0],
                     timer);
             fwrite(log_bufferw, strlen(log_bufferw), 1, f);
-        }
 #endif
     }
     return EXIT_SUCCESS;
