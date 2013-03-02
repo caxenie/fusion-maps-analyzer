@@ -103,26 +103,27 @@ restart_network()
 int
 dump_log_file(char *fname, struct log* buffer, int buffer_size)
 {
-    FILE *f = fopen(fname, "w+");
-    if(f==NULL){
-        fprintf(stderr, "CORE: Cannot open log file!\n");
-        return 1;
+  FILE *f = fopen(fname, "w+");
+  if(f==NULL){
+      fprintf(stderr, "CORE: Cannot open log file!\n");
+      return 1;
     }
-    for(int i=0;i<buffer_size;i++){
-        for(int j=0;j<14;j++){
-            fprintf(f, "%lf ", buffer->vals[j]);
+  for(int i=0;i<buffer_size;i++){
+          for(int j=0;j<14;j++){
+              fprintf(f, "%lf ", buffer[i].vals[j]);
+            }
+          fprintf(f, "%d\n", buffer[i].iter);
         }
-        fprintf(f, "%d\n", i);
-    }
-    fclose(f);
-    return 0;
+  fclose(f);
+  return 0;
 }
+
 
 /* stops the network by exiting the main loop */
 void 
 stop_network()
 {
-    if(dump_log_file("fusion-analyzer-data.log", log_data, iter)==0){
+    //if(dump_log_file("fusion-analyzer-data.log", log_data, iter)==0){
         fprintf(stderr, "\nCORE: NETWORK IS STOPPED - CONTEXT IS DUMPED\n");
         for(int i=0;i<MAP_SIZE;i++){
             for(int j=0;j<MAP_SIZE;j++){
@@ -140,12 +141,13 @@ stop_network()
                 (stderr, "CORE: Errors: E1 = %lf | E2 = %lf - E2 = %lf | E3 = %lf | E4 = %lf - E4 = %lf | E5 = %lf | E6 = %lf \n",
                  E1[0], E2[0], E2[1], E3[0], E4[0], E4[1], E5[0],
                  E6[0]);
-    }
+   // }
     exit(0);
 }
 
 /* compute the time interval for integration or derivation */
-double compute_dt(struct timeval *difference,
+double
+compute_dt(struct timeval *difference,
                   struct timeval *end_time,
                   struct timeval *start_time
                   )

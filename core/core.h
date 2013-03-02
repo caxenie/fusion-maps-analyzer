@@ -23,8 +23,8 @@
 
 #define MAP_SIZE 	   	     1
 #define MAPS_NUMBER 		     6
-#define RELAXATION_THRESHOLD         0.00001f
-#define VERBOSE 		     1
+//#define VERBOSE 		     1
+#define SAMPLE_POINT                10//53562
 #define ETA                         0.0002
 #define ETA12                        ETA//0.0002956f
 #define ETA21                        ETA// 0.0002106f
@@ -81,6 +81,19 @@ typedef struct
 /* for self-restarting the app */
 sigjmp_buf jmpbuf;
 
+/* support for logging */
+struct log{
+    /* snapshot of the map data and errors */
+    double vals[14];
+    /* snapshot iteration */
+    int iter;
+};
+
+/* file logging support iterator */
+int iter;
+
+struct log *log_data;
+
 /* random number generator */
 double randomize();
 /* initialize a map with size, state and type */
@@ -101,7 +114,8 @@ double compute_dt(struct timeval *difference,
              struct timeval *end_time,
              struct timeval *start_time
             );
-
+/* dumps the memory saved log file to the disk */
+int dump_log_file(char *fname, struct log* buffer, int buffer_size);
 
 
 

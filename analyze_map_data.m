@@ -4,95 +4,156 @@ close('all');
 clear all;
 load fusion-analyzer-data.log
 %--------------------------------------------------------------------------------------------------------
-figure(1);
+fig2Handle = figure(2);
+set(fig2Handle, 'Position', [100, 100, 600, 1000]);
+%-------------------------
 subplot(3,1,1)
-title('Maps values during simulation')
-%plot(fusion_analyzer_data(:,15), fusion_analyzer_data(:,1))
-grid on
+% axis control and adjustment
+[ax1] = axescheck(fusion_analyzer_data(:,15), fusion_analyzer_data(:,1));
+ax1 = newplot(ax1);
+set(ax1,'XGrid','on');
+set(ax1,'YGrid','on');
+if ~ishold(ax1)
+  [minx1,maxx1] = minmax(fusion_analyzer_data(:,15));
+  [miny1,maxy1] = minmax(fusion_analyzer_data(:,1));
+  axis(ax1,[minx1 maxx1 miny1 maxy1])
+end
+title('Maps values during simulation');
 ylabel('Map 1 values')
 xlabel('Data points')
-hold on 
-h1 = plot(fusion_analyzer_data(1,15), fusion_analyzer_data(1,1),'g-') ;
-
+hc1 =  line('parent',ax1, 'linestyle','-','erase','xor','xdata',fusion_analyzer_data(1,15),'ydata',fusion_analyzer_data(1,1));
+ha1 = line('parent',ax1,'linestyle','-','erase','none','xdata',[],'ydata',[]);
+%-------------------------
 subplot(3,1,2)
-%plot(fusion_analyzer_data(:,15), fusion_analyzer_data(:,2))
+% axis control and adjustment
+[ax2] = axescheck(fusion_analyzer_data(:,15), fusion_analyzer_data(:,2));
+ax2 = newplot(ax2);
+set(ax2,'XGrid','on');
+set(ax2,'YGrid','on');
+if ~ishold(ax2)
+  [minx2,maxx2] = minmax(fusion_analyzer_data(:,15));
+  [miny2,maxy2] = minmax(fusion_analyzer_data(:,2));
+  axis(ax2,[minx2 maxx2 miny2 maxy2])
+end
 ylabel('Map 2 values')
 xlabel('Data points')
-grid on
-hold on
-h2 = plot(fusion_analyzer_data(1,15), fusion_analyzer_data(1,2),'r-') ;
-
+hc2 =  line('parent',ax2,'linestyle','-','erase','xor','xdata',fusion_analyzer_data(1,15),'ydata',fusion_analyzer_data(1,2));
+ha2 = line('parent',ax2,'linestyle','-','erase','none','xdata',[],'ydata',[]);
+%-------------------------
 subplot(3,1,3)
-t = -1:1;
+% axis control and adjustment
+[ax3] = axescheck(fusion_analyzer_data(:,1), fusion_analyzer_data(:,2));
+ax3 = newplot(ax3);
+if ~ishold(ax3)
+  [minx3,maxx3] = minmax(fusion_analyzer_data(:,1));
+  [miny3,maxy3] = minmax(fusion_analyzer_data(:,2));
+  axis(ax3,[minx3 maxx3 miny3 maxy3])
+end
+t = -1.0:1.0;
 plot(t, 3*t, '-m');
-hold on;
-h3 = plot(fusion_analyzer_data(1,1),fusion_analyzer_data(1,2),'b-') ;
-grid on;
+set(ax3,'XGrid','on');
+set(ax3,'YGrid','on');
+hc3 =  line('parent',ax3,'linestyle','-','erase','xor','xdata',fusion_analyzer_data(1,1),'ydata',fusion_analyzer_data(1,2));
+ha3 = line('parent',ax3,'linestyle','-','erase','none','xdata',[],'ydata',[]);
 title('M2 dependency on M1');
 xlabel('M1 values');
 ylabel('M2 values');
+% small pause to start recording with external device
+pause(5); % s
 % dynamic plot simulataneously in all subplots
-for i=2:length(fusion_analyzer_data(:,1))
-  xd1 = get(h1,'xdata') ;   
-  yd1 = get(h1,'ydata') ;
-  xd2= get(h2,'xdata') ;
-  yd2 = get(h2,'ydata') ;
-  xd3 = get(h3,'xdata') ;
-  yd3 = get(h3,'ydata') ;
-  set(h1,'xdata',[xd1(:) ; fusion_analyzer_data(i,15)],'ydata',[yd1(:) ; fusion_analyzer_data(i,1)]) ;
-  set(h2,'xdata',[xd2(:) ; fusion_analyzer_data(i,15)],'ydata',[yd2(:) ; fusion_analyzer_data(i,2)]) ;
-  set(h3,'xdata',[xd3(:) ; fusion_analyzer_data(i,1)],'ydata',[yd3(:) ; fusion_analyzer_data(i,2)]) ;
-  drawnow;
-  %pause(0.06);
+for i=2:length(fusion_analyzer_data(:,15))
+    j = i-1:i;
+    set(hc1,'xdata', fusion_analyzer_data(i,15), 'ydata', fusion_analyzer_data(i,1));
+    set(ha1,'xdata', fusion_analyzer_data(j,15), 'ydata', fusion_analyzer_data(j,1));
+    set(hc2,'xdata', fusion_analyzer_data(i,15), 'ydata', fusion_analyzer_data(i,2));
+    set(ha2,'xdata', fusion_analyzer_data(j,15), 'ydata', fusion_analyzer_data(j,2));
+    set(hc3,'xdata', fusion_analyzer_data(i,1), 'ydata', fusion_analyzer_data(i,2));
+    set(ha3,'xdata', fusion_analyzer_data(j,1), 'ydata', fusion_analyzer_data(j,2));
+    drawnow;
 end
 
 %--------------------------------------------------------------------------------------------------------
-figure(2);
+fig3Handle = figure(3);
+set(fig3Handle, 'Position', [900, 900, 600, 1200]);
 subplot(4,1,1)
+% axis control and adjustment
+[ax4] = axescheck(fusion_analyzer_data(:,15), fusion_analyzer_data(:,3));
+ax4 = newplot(ax4);
+set(ax4,'XGrid','on');
+set(ax4,'YGrid','on');
+if ~ishold(ax4)
+  [minx4,maxx4] = minmax(fusion_analyzer_data(:,15));
+  [miny4,maxy4] = minmax(fusion_analyzer_data(:,3));
+  axis(ax4,[minx4 maxx4 miny4 maxy4])
+end
 title('Maps values during simulation');
-hold on;
-h4 = plot(fusion_analyzer_data(1,15), fusion_analyzer_data(1,3));
+hc4 =  line('parent',ax4, 'linestyle','-','erase','xor','xdata',fusion_analyzer_data(1,15),'ydata',fusion_analyzer_data(1,3));
+ha4 = line('parent',ax4,'linestyle','-','erase','none','xdata',[],'ydata',[]);
 ylabel('Map 3 values')
 xlabel('Data points')
-grid on
 
 %-------------
 subplot(4,1,2)
-hold on;
-h5 = plot(fusion_analyzer_data(1,15), fusion_analyzer_data(1,4));
+% axis control and adjustment
+[ax5] = axescheck(fusion_analyzer_data(:,15), fusion_analyzer_data(:,4));
+ax5 = newplot(ax5);
+set(ax5,'XGrid','on');
+set(ax5,'YGrid','on');
+if ~ishold(ax5)
+  [minx5,maxx5] = minmax(fusion_analyzer_data(:,15));
+  [miny5,maxy5] = minmax(fusion_analyzer_data(:,4));
+  axis(ax5,[minx5 maxx5 miny5 maxy5])
+end
+hc5 =  line('parent',ax5, 'linestyle','-','erase','xor','xdata',fusion_analyzer_data(1,15),'ydata',fusion_analyzer_data(1,4));
+ha5 = line('parent',ax5,'linestyle','-','erase','none','xdata',[],'ydata',[]);
 ylabel('Map 4 values')
 xlabel('Data points')
-grid on
 %-------------
 subplot(4,1,3)
-hold on
-h6 = plot(fusion_analyzer_data(1,15), fusion_analyzer_data(1,5));
+% axis control and adjustment
+[ax6] = axescheck(fusion_analyzer_data(:,15), fusion_analyzer_data(:,5));
+ax6 = newplot(ax6);
+set(ax6,'XGrid','on');
+set(ax6,'YGrid','on');
+if ~ishold(ax6)
+  [minx6,maxx6] = minmax(fusion_analyzer_data(:,15));
+  [miny6,maxy6] = minmax(fusion_analyzer_data(:,5));
+  axis(ax6,[minx6 maxx6 miny6 maxy6])
+end
+hc6 = line('parent',ax6, 'linestyle','-','erase','xor','xdata',fusion_analyzer_data(1,15),'ydata',fusion_analyzer_data(1,5));
+ha6 = line('parent',ax6,'linestyle','-','erase','none','xdata',[],'ydata',[]);
 ylabel('Map 5 values')
 xlabel('Data points')
-grid on
 %------------
 subplot(4,1,4)
-hold on;
-h7 = plot(fusion_analyzer_data(1,15), fusion_analyzer_data(1,6));
+% axis control and adjustment
+[ax7] = axescheck(fusion_analyzer_data(:,15), fusion_analyzer_data(:,6));
+ax7 = newplot(ax7);
+set(ax7,'XGrid','on');
+set(ax7,'YGrid','on');
+if ~ishold(ax7)
+  [minx7,maxx7] = minmax(fusion_analyzer_data(:,15));
+  [miny7,maxy7] = minmax(fusion_analyzer_data(:,6));
+  axis(ax7,[minx7 maxx7 miny7 maxy7])
+end
+hc7 =  line('parent',ax7, 'linestyle','-','erase','xor','xdata',fusion_analyzer_data(1,15),'ydata',fusion_analyzer_data(1,6));
+ha7 = line('parent',ax7,'linestyle','-','erase','none','xdata',[],'ydata',[]);
 ylabel('Map 6 values')
 xlabel('Data points')
-grid on
-
-for i=2:length(fusion_analyzer_data(:,1))
-  xd4 = get(h4,'xdata') ;
-  yd4 = get(h4,'ydata') ;
-  xd5= get(h5,'xdata') ;
-  yd5 = get(h5,'ydata') ;
-  xd6 = get(h6,'xdata') ;
-  yd6 = get(h6,'ydata') ;
-  xd7 = get(h7,'xdata') ;
-  yd7 = get(h7,'ydata') ;
-  set(h4,'xdata',[xd4(:) ; fusion_analyzer_data(i,15)],'ydata',[yd4(:) ; fusion_analyzer_data(i,3)]) ;
-  set(h5,'xdata',[xd5(:) ; fusion_analyzer_data(i,15)],'ydata',[yd5(:) ; fusion_analyzer_data(i,4)]) ;
-  set(h6,'xdata',[xd6(:) ; fusion_analyzer_data(i,15)],'ydata',[yd6(:) ; fusion_analyzer_data(i,5)]) ;
-  set(h7,'xdata',[xd7(:) ; fusion_analyzer_data(i,15)],'ydata',[yd7(:) ; fusion_analyzer_data(i,6)]) ;
-  drawnow;
-  pause(0.06);
+% small pause to start recording with external device
+pause(5); % s
+% loop and dynamically shouw map convergence
+for i=2:length(fusion_analyzer_data(:,15))
+    j = i-1:i;
+    set(hc4,'xdata', fusion_analyzer_data(i,15), 'ydata', fusion_analyzer_data(i,3));
+    set(ha4,'xdata', fusion_analyzer_data(j,15), 'ydata', fusion_analyzer_data(j,3));
+    set(hc5,'xdata', fusion_analyzer_data(i,15), 'ydata', fusion_analyzer_data(i,4));
+    set(ha5,'xdata', fusion_analyzer_data(j,15), 'ydata', fusion_analyzer_data(j,4));
+    set(hc6,'xdata', fusion_analyzer_data(i,15), 'ydata', fusion_analyzer_data(i,5));
+    set(ha6,'xdata', fusion_analyzer_data(j,15), 'ydata', fusion_analyzer_data(j,5));
+    set(hc7,'xdata', fusion_analyzer_data(i,15), 'ydata', fusion_analyzer_data(i,6));
+    set(ha7,'xdata', fusion_analyzer_data(j,15), 'ydata', fusion_analyzer_data(j,6));
+    drawnow;
 end
 
 %--------------------------------------------------------------------------------------------------------
