@@ -22,11 +22,11 @@ short g_verbose = 0;
 int
 main (int UNUSED(argc), char** UNUSED(argv))
 {
+#ifdef VERBOSE
   FILE *f = fopen("fusion-analyzer-data.log","w+");
   char* log_bufferw = (char*)calloc(1000, sizeof(char));
   long timer = 0;
 
-#ifdef VERBOSE
   /* logging utils */
   iter = 0;
   log_data = (struct log*)calloc(100000, sizeof(struct log));
@@ -317,8 +317,6 @@ main (int UNUSED(argc), char** UNUSED(argv))
       log_data->vals[13] = E6[0];
       iter++;
 
-#endif
-
       // poor man's logging
       timer++;
       if(timer%SAMPLE_POINT==0){
@@ -340,7 +338,7 @@ main (int UNUSED(argc), char** UNUSED(argv))
                   timer/SAMPLE_POINT);
           fwrite(log_bufferw, strlen(log_bufferw), 1, f);
         }
-
+#endif
       pthread_mutex_unlock(&net_data_mutex);
     }
   return 0;
