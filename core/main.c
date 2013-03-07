@@ -9,7 +9,7 @@
 
 pthread_mutex_t net_data_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-short g_verbose = 1;
+short g_verbose = 0;
 
 #define log_message(format,args...) \
   do{ \
@@ -26,9 +26,11 @@ long timer;
 int
 main (int UNUSED(argc), char** UNUSED(argv))
 {
+#ifdef VERBOSE
   f = fopen("fusion-analyzer-data.log","w+");
   log_bufferw = (char*)calloc(20000, sizeof(char));
   timer = 0;
+#endif
   /* register signals */
   signal(SIGCONT, resume_network);
   signal(SIGUSR1, restart_network);
