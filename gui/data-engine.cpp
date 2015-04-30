@@ -25,10 +25,10 @@ DataEngine::DataEngine(QObject *parent) :
     running = 1;
     /* init dat and err variables */
     for(int i=0;i<MAPS_NUM;i++){
-        map_data[i] = 0.0001f;
+        map_data[i] = 0.0f;
     }
     for(int i=0;i<ERR_NUM;i++){
-        map_err[i] = 0.0001f;
+        map_err[i] = 0.0f;
     }
 }
 

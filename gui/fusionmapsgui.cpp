@@ -426,6 +426,39 @@ FusionMapsGui::FusionMapsGui(QWidget *parent) :
     ui->error_r3_plot6->enableAxis(QwtPlot::xBottom, true);
     ui->error_r3_plot6->setAutoReplot(true);
     grid->attach(ui->error_r3_plot6);
+
+    // maps labels
+    QString s;
+    s.sprintf("%.4f", this->data_engine->map_data[0]);
+    ui->map_val1->setText("Value of the map: " + s);
+    s.sprintf("%.4f", this->data_engine->map_data[1]);
+    ui->map_val2->setText("Value of the map: " + s);
+    s.sprintf("%.4f", this->data_engine->map_data[2]);
+    ui->map_val3->setText("Value of the map: " + s);
+    s.sprintf("%.4f", this->data_engine->map_data[3]);
+    ui->map_val4->setText("Value of the map: " + s);
+    s.sprintf("%.4f", this->data_engine->map_data[4]);
+    ui->map_val5->setText("Value of the map: " + s);
+    s.sprintf("%.4f", this->data_engine->map_data[5]);
+    ui->map_val6->setText("Value of the map: " + s);
+
+    // errors labels
+    s.sprintf("%.4f", this->data_engine->map_err[0]);
+    ui->err_r1_val1->setText("Error value with respect to R1:  " + s);
+    s.sprintf("%.4f", this->data_engine->map_err[1]);
+    ui->err_r1_val2->setText("Error value with respect to R1:  " + s);
+    s.sprintf("%.4f", this->data_engine->map_err[2]);
+    ui->err_r2_val2->setText("Error value with respect to R2:  " + s);
+    s.sprintf("%.4f", this->data_engine->map_err[3]);
+    ui->err_r2_val3->setText("Error value with respect to R2:  " + s);
+    s.sprintf("%.4f", this->data_engine->map_err[4]);
+    ui->err_r2_val4->setText("Error value with respect to R2:  " + s);
+    s.sprintf("%.4f", this->data_engine->map_err[5]);
+    ui->err_r3_val4->setText("Error value with respect to R3:  " + s);
+    s.sprintf("%.4f", this->data_engine->map_err[6]);
+    ui->err_r3_val5->setText("Error value with respect to R3:  " + s);
+    s.sprintf("%.4f", this->data_engine->map_err[7]);
+    ui->err_r3_val6->setText("Error value with respect to R3:  " + s);
 }
 
 
@@ -1110,7 +1143,7 @@ void FusionMapsGui::on_user_data_slider6_valueChanged(double value)
           this->data_engine->send_signal(value, USER_DATA_CHANGED_SIGNAL, 6);
       }
       else{
-          this->data_engine->send_signal(0.001f, USER_DATA_CHANGED_SIGNAL, 6);
+          this->data_engine->send_signal(0.0001f, USER_DATA_CHANGED_SIGNAL, 6);
       }
     }
 }
