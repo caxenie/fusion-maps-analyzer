@@ -14,5 +14,5 @@ HEADERS += \
     core.h
 
 INCLUDEPATH += /usr/include/dbus-1.0
-INCLUDEPATH += /usr/lib/i386-linux-gnu/dbus-1.0/include/
+INCLUDEPATH += /usr/lib/i386-linux-gnu/dbus-1.0/include/ -I/usr/lib/x86_64-linux-gnu/dbus-1.0/include/
 QMAKE_CFLAGS_DEBUG += -std=gnu99
