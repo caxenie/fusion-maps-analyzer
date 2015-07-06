@@ -21,19 +21,20 @@
 
 #define _GNU_SOURCE
 
-#define MAP_SIZE 					 1
-#define MAPS_NUMBER 				 6
-#define RELAXATION_THRESHOLD         0.00001f
-//#define VERBOSE                      1
-#define ETA			     0.002
+#define MAP_SIZE 	   	     1
+#define MAPS_NUMBER 		     6
+#define VERBOSE 		     1 
+#define RELAXATION_THRESHOLD 0.0001f
+#define SAMPLE_TIME		     100
+#define ETA                          0.02
 #define ETA12                        ETA//0.0002956f
-#define ETA21                        ETA//0.0002106f
+#define ETA21                        ETA// 0.0002106f
 #define ETA234                       ETA//0.0002884f
 #define ETA432                       ETA//0.0002423f
 #define ETA456                       ETA//0.0002576f
 #define ETA654                       ETA//0.0002345f
 #define ETA_EXT1                     ETA//0.0002343f
-#define ETA_EXT2                     ETA
+#define ETA_EXT2                     ETA//0.0002243f
 #define ETA_EXT3                     ETA//0.0002143f
 #define ETA_EXT4                     ETA//0.0002003f
 #define ETA_EXT5                     ETA//0.0002023f
@@ -80,15 +81,22 @@ typedef struct
     data data;			/* the actual map data encapsuled */
 } map;
 
-/* globals */
-/* maps in the net */
-map M1, M2, M3, M4, M5, M6;
-/* errors values */
-double *E1, *E2, *E3, *E4, *E4, *E5, *E6;
-/* error marking how close is a map to the good value */
-double e1, e2, e3, e4, e5, e6;
+
 /* for self-restarting the app */
 sigjmp_buf jmpbuf;
+
+/* support for logging */
+struct log{
+    /* snapshot of the map data and errors */
+    double vals[14];
+    /* snapshot iteration */
+    int iter;
+};
+
+/* file logging support iterator */
+int iter;
+
+struct log *log_data;
 
 /* random number generator */
 double randomize();

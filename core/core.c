@@ -4,7 +4,7 @@
  * Core functionality implementation.
  */
 
-#include "core.h"
+#include "shared-data.h"
 
 /* random number generator */
 double
@@ -98,6 +98,18 @@ restart_network()
 {
     siglongjmp(jmpbuf, 2);
 }
+
+/* dumps the memory saved log file to the disk */
+int
+dump_log_data(FILE *f, struct log* buffer)
+{
+          for(int j=0;j<14;j++){
+              fprintf(f, "%lf ", buffer->vals[j]);
+            }
+          fprintf(f, "%d\n", buffer->iter);
+  return 0;
+}
+
 
 /* stops the network by exiting the main loop */
 void 

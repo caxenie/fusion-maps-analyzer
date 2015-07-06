@@ -5,8 +5,10 @@
  * Entry point.
  */
 
-#include "data-engine.h"
-#include "core.h"
+#include "shared-data.h"
+
+/* mutex to access the network data safely when requested by analyzer */
+pthread_mutex_t net_data_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 short g_verbose = 0;
 
@@ -16,21 +18,16 @@ short g_verbose = 0;
     fprintf(stderr,format,args); \
     } while(0);
 
-/* file logging support */
-#ifdef VERBOSE
-FILE *f;
-char* log_bufferw;
-long timer;
-#endif
-
 /* entry point */
 int
 main (int UNUSED(argc), char** UNUSED(argv))
 {
 #ifdef VERBOSE
-    f = fopen("fusion-analyzer-data.log","w+");
-    log_bufferw = (char*)calloc(20000, sizeof(char));
-    timer = 0;
+    FILE *f = fopen("fusion-analyzer-data.log","w+");
+    long timer = 0;
+    /* logging utils */
+    iter = 0;
+    log_data = (struct log*)calloc(1, sizeof(struct log));
 #endif
 
     /* register signals */
@@ -47,9 +44,12 @@ main (int UNUSED(argc), char** UNUSED(argv))
 
     /* map initialization */
     /* for the current setup we populate the neighbor list by hand */
-    M1 = init_map (1, 1, MAP_1D, LINK2); M2 = init_map (2, 1, MAP_1D, LINK3);
-    M3 = init_map (3, 1, MAP_1D, LINK2); M4 = init_map (4, 1, MAP_1D, LINK3);
-    M5 = init_map (5, 1, MAP_1D, LINK2); M6 = init_map (6, 1, MAP_1D, LINK2);
+    M1 = init_map (1, 1, MAP_1D, LINK2);
+    M2 = init_map (2, 1, MAP_1D, LINK3);
+    M3 = init_map (3, 1, MAP_1D, LINK2);
+    M4 = init_map (4, 1, MAP_1D, LINK3);
+    M5 = init_map (5, 1, MAP_1D, LINK2);
+    M6 = init_map (6, 1, MAP_1D, LINK2);
 
     E1 = (double *) calloc (LINK1, sizeof (double));
     E2 = (double *) calloc (LINK2, sizeof (double));
@@ -58,10 +58,16 @@ main (int UNUSED(argc), char** UNUSED(argv))
     E5 = (double *) calloc (LINK1, sizeof (double));
     E6 = (double *) calloc (LINK1, sizeof (double));
 
-    E1[0] = 0.0; E2[0] = 0.0; E2[1] = 0.0; E3[0] = 0.0;
-    E4[0] = 0.0; E4[1] = 0.0; E5[0] = 0.0; E6[0] = 0.0;
+    E1[0] = 0.0f;
+    E2[0] = 0.0f;
+    E2[1] = 0.0f;
+    E3[0] = 0.0f;
+    E4[0] = 0.0f;
+    E4[1] = 0.0f;
+    E5[0] = 0.0f;
+    E6[0] = 0.0f;
 
-    e1 = 0; e2 = 0; e3 = 0; e4 = 0; e5 = 0; e6 = 0;
+    e1 = 0.0f; e2 = 0.0f; e3 = 0.0f; e4 = 0.0f; e5 = 0.0f; e6 = 0.0f;
 
     /* history init */
     double M1ant = 0.0f;
@@ -108,6 +114,7 @@ main (int UNUSED(argc), char** UNUSED(argv))
             srand (time (NULL));
             rand_map = 0;
             rand_edge = 0;
+            pthread_mutex_lock(&net_data_mutex);
             for(int i=0;i<MAPS_NUM+1;i++){
                 update_state[i] = 0;
                 user_connected[i] = 0;
@@ -116,9 +123,10 @@ main (int UNUSED(argc), char** UNUSED(argv))
             M1 = init_map (1, 1, MAP_1D, LINK2); M2 = init_map (2, 1, MAP_1D, LINK3); M3 = init_map (3, 1, MAP_1D, LINK2);
             M4 = init_map (4, 1, MAP_1D, LINK3); M5 = init_map (5, 1, MAP_1D, LINK2); M6 = init_map (6, 1, MAP_1D, LINK2);
 
-            E1[0] = 0.0; E2[0] = 0.0; E2[1] = 0.0; E3[0] = 0.0; E4[0] = 0.0; E4[1] = 0.0; E5[0] = 0.0; E6[0] = 0.0;
-            e1 = 0.0; e2 = 0.0; e3 = 0.0; e4 = 0.0; e5 = 0.0; e6 = 0.0;
-            M1ant = 0.0f; M2ant = 0.0f; M3ant = 0.0f; M4ant = 0.0f; M5ant = 0.0f; M6ant = 0.0f;
+            E1[0] = 0.0f; E2[0] = 0.0f; E2[1] = 0.0f; E3[0] = 0.0f; E4[0] = 0.0f; E4[1] = 0.0f; E5[0] = 0.0f; E6[0] = 0.0f;
+            e1 = 0.0f; e2 = 0.0f; e3 = 0.0f; e4 = 0.0f; e5 = 0.0f; e6 = 0.0f;
+            pthread_mutex_unlock(&net_data_mutex);
+            M1ant = 0.0f, M2ant = 0.0f, M3ant = 0.0f, M4ant = 0.0f, M5ant = 0.0f, M6ant = 0.0f;
 
             if( clock_gettime(CLOCK_REALTIME, &M1_tant)==-1 ){
                 exit(EXIT_FAILURE);
@@ -127,6 +135,8 @@ main (int UNUSED(argc), char** UNUSED(argv))
             integral = 0.0f;
             dtk = 0.0f;
         }
+
+        pthread_mutex_lock(&net_data_mutex);
 
         /*
           The relationships hardcoded in the network:
@@ -449,26 +459,32 @@ main (int UNUSED(argc), char** UNUSED(argv))
 
         log_message("Loop time: %lf ms\n",(double) compute_dt(&stop, &start)/1000000); // get time in ms
 
-#ifdef VERBOSE
-        timer++;
-            sprintf(log_bufferw, "%f %f %f %f %f %f %f %f %f %f %f %f %f %f %ld\n",
-                    M1.data.cells[0][0].val[0],
-                    M2.data.cells[0][0].val[0],
-                    M3.data.cells[0][0].val[0],
-                    M4.data.cells[0][0].val[0],
-                    M5.data.cells[0][0].val[0],
-                    M6.data.cells[0][0].val[0],
-                    E1[0],
-                    E2[0],
-                    E2[1],
-                    E3[0],
-                    E4[0],
-                    E4[1],
-                    E5[0],
-                    E6[0],
-                    timer);
-            fwrite(log_bufferw, strlen(log_bufferw), 1, f);
+#ifdef VERBOSE  
+	if(timer%SAMPLE_TIME==0){      
+	log_data->iter=iter;
+        log_data->vals[0] = M1.data.cells[0][0].val[0];
+        log_data->vals[1] = M2.data.cells[0][0].val[0];
+        log_data->vals[2] = M3.data.cells[0][0].val[0];
+        log_data->vals[3] = M4.data.cells[0][0].val[0];
+        log_data->vals[4] = M5.data.cells[0][0].val[0];
+        log_data->vals[5] = M6.data.cells[0][0].val[0];
+        log_data->vals[6] = E1[0];
+        log_data->vals[7] = E2[0];
+        log_data->vals[8] = E2[1];
+        log_data->vals[9] = E3[0];
+        log_data->vals[10] = E4[0];
+        log_data->vals[11] = E4[1];
+        log_data->vals[12] = E5[0];
+        log_data->vals[13] = E6[0];
+	iter++;
+	dump_log_data(f, log_data);
+	}
+	timer++;
 #endif
+        pthread_mutex_unlock(&net_data_mutex);
     }
-    return EXIT_SUCCESS;
+#ifdef VERBOSE 
+   fclose(f);
+#endif
+    return 0;
 }

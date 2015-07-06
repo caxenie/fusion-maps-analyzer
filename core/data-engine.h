@@ -58,18 +58,6 @@ DBusConnection* conn;
 /* error handler */
 DBusError err;
 
-/* mask arrays for user data or sensor data inputs */
-int user_connected[MAPS_NUM+1];
-int sensor_connected[MAPS_NUM+1];
-/* stores the data update rate for sensors */
-double update_rate_sensor[MAPS_NUM+1];
-/* stores the data update rate for user data */
-double update_rate_user[MAPS_NUM+1];
-/* stores the data from the user */
-double  user_data[MAPS_NUM+1];
-/* stores the data from the connected sensor */
-double sensor_data[MAPS_NUM+1];
-
 /* init connection to the system bus and add signal filters */
 void init_system_bus_connection();
 /* handle client method calls coming on the system bus to request data updates */
