@@ -101,22 +101,15 @@ restart_network()
 
 /* dumps the memory saved log file to the disk */
 int
-dump_log_file(char *fname, struct log* buffer, int buffer_size)
+dump_log_data(FILE *f, struct log* buffer)
 {
-    FILE *f = fopen(fname, "w+");
-    if(f==NULL){
-        fprintf(stderr, "CORE: Cannot open log file!\n");
-        return 1;
-    }
-    for(int i=0;i<buffer_size;i++){
-        for(int j=0;j<14;j++){
-            fprintf(f, "%lf ", buffer->vals[j]);
-        }
-        fprintf(f, "%d\n", i);
-    }
-    fclose(f);
-    return 0;
+          for(int j=0;j<14;j++){
+              fprintf(f, "%lf ", buffer->vals[j]);
+            }
+          fprintf(f, "%d\n", buffer->iter);
+  return 0;
 }
+
 
 /* stops the network by exiting the main loop */
 void 

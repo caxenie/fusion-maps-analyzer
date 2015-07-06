@@ -4,19 +4,6 @@
 /* mutex to access the network data safely when requested by analyzer */
 extern pthread_mutex_t net_data_mutex;
 
-/* support for logging */
-struct log{
-    /* snapshot of the map data and errors */
-    double vals[14];
-    /* snapshot iteration */
-    int iter;
-};
-
-/* file logging support iterator */
-int iter;
-
-struct log *log_data;
-
 /* globals */
 /* maps in the net */
 map M1, M2, M3, M4, M5, M6;
