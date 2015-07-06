@@ -1,0 +1,2 @@
+# fusion-maps-analyzer
+Simple implementation of the distributed cognitive maps for environment interpretation. Use artificial data selected / given by user. The input activity mildly influences the belief of the cortically inspired relaxation network. The network dynamics ensures convergence to a stable state in which all quantities are in agreement given the linear / nonlinear mathematical constraints.
