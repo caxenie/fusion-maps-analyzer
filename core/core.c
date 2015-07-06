@@ -101,20 +101,12 @@ restart_network()
 
 /* dumps the memory saved log file to the disk */
 int
-dump_log_file(char *fname, struct log* buffer, int buffer_size)
+dump_log_data(FILE *f, struct log* buffer)
 {
-  FILE *f = fopen(fname, "w+");
-  if(f==NULL){
-      fprintf(stderr, "CORE: Cannot open log file!\n");
-      return 1;
-    }
-  for(int i=0;i<buffer_size;i++){
           for(int j=0;j<14;j++){
-              fprintf(f, "%lf ", buffer[i].vals[j]);
+              fprintf(f, "%lf ", buffer->vals[j]);
             }
-          fprintf(f, "%d\n", buffer[i].iter);
-        }
-  fclose(f);
+          fprintf(f, "%d\n", buffer->iter);
   return 0;
 }
 
@@ -141,7 +133,7 @@ stop_network()
                 (stderr, "CORE: Errors: E1 = %lf | E2 = %lf - E2 = %lf | E3 = %lf | E4 = %lf - E4 = %lf | E5 = %lf | E6 = %lf \n",
                  E1[0], E2[0], E2[1], E3[0], E4[0], E4[1], E5[0],
                  E6[0]);
-   // }
+    //}
     exit(0);
 }
 

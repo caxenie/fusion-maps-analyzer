@@ -25,16 +25,10 @@ main (int UNUSED(argc), char** UNUSED(argv))
 
 #ifdef VERBOSE
     FILE *f = fopen("fusion-analyzer-data.log","w+");
-    char* log_bufferw = (char*)calloc(1000, sizeof(char));
     long timer = 0;
-
     /* logging utils */
     iter = 0;
-    log_data = (struct log*)calloc(100000, sizeof(struct log));
-
-    struct timeval start_time;
-    struct timeval stop_time;
-
+    log_data = (struct log*)calloc(1, sizeof(struct log));
 #endif
     /* register signals */
     signal(SIGCONT, resume_network);
@@ -89,13 +83,6 @@ main (int UNUSED(argc), char** UNUSED(argv))
     /* loop the network */
     while (1)
     {
-#ifdef VERBOSE
-        /* start time */
-        if(gettimeofday(&start_time, NULL)) {
-            exit( EXIT_FAILURE );
-        }
-#endif
-
         /* non local goto for self-restarting */
         if(sigsetjmp(jmpbuf, 2)) {
             fprintf(stderr, "\nCORE: RESTARTED NETWORK\n");
@@ -325,59 +312,32 @@ main (int UNUSED(argc), char** UNUSED(argv))
             }
 
         }
-
-#ifdef VERBOSE
-        if(gettimeofday(&stop_time, NULL)) {
-            exit( EXIT_FAILURE );
-        }
-
-
-        log_message("Loop time: %f ms\n", compute_dt(NULL, &stop_time, &start_time)/1000.0f); // get time in ms
-        //        sprintf(log_bufferw, " Time: %f\n", (double) (stop.tv_nsec-start.tv_nsec)/1000000);
-        //        fwrite(log_bufferw, strlen(log_bufferw), 1, f);
-
-        log_data[iter].iter=iter;
-        log_data[iter].vals[0] = M1.data.cells[0][0].val[0];
-        log_data[iter].vals[1] = M2.data.cells[0][0].val[0];
-        log_data[iter].vals[2] = M3.data.cells[0][0].val[0];
-        log_data[iter].vals[3] = M4.data.cells[0][0].val[0];
-        log_data[iter].vals[4] = M5.data.cells[0][0].val[0];
-        log_data[iter].vals[5] = M6.data.cells[0][0].val[0];
-        log_data[iter].vals[6] = E1[0];
-        log_data[iter].vals[7] = E2[0];
-        log_data[iter].vals[8] = E2[1];
-        log_data[iter].vals[9] = E3[0];
-        log_data[iter].vals[10] = E4[0];
-        log_data[iter].vals[11] = E4[1];
-        log_data[iter].vals[12] = E5[0];
-        log_data[iter].vals[13] = E6[0];
-
-        iter++;
-
-
-        // poor man's logging
-        timer++;
-        if(timer%SAMPLE_POINT==0){
-            sprintf(log_bufferw, "%f %f %f %f %f %f %f %f %f %f %f %f %f %f %ld\n",
-                    M1.data.cells[0][0].val[0],
-                    M2.data.cells[0][0].val[0],
-                    M3.data.cells[0][0].val[0],
-                    M4.data.cells[0][0].val[0],
-                    M5.data.cells[0][0].val[0],
-                    M6.data.cells[0][0].val[0],
-                    E1[0],
-                    E2[0],
-                    E2[1],
-                    E3[0],
-                    E4[0],
-                    E4[1],
-                    E5[0],
-                    E6[0],
-                    timer/SAMPLE_POINT);
-            fwrite(log_bufferw, strlen(log_bufferw), 1, f);
-        }
+#ifdef VERBOSE  
+	if(timer%SAMPLE_TIME==0){      
+	log_data->iter=iter;
+        log_data->vals[0] = M1.data.cells[0][0].val[0];
+        log_data->vals[1] = M2.data.cells[0][0].val[0];
+        log_data->vals[2] = M3.data.cells[0][0].val[0];
+        log_data->vals[3] = M4.data.cells[0][0].val[0];
+        log_data->vals[4] = M5.data.cells[0][0].val[0];
+        log_data->vals[5] = M6.data.cells[0][0].val[0];
+        log_data->vals[6] = E1[0];
+        log_data->vals[7] = E2[0];
+        log_data->vals[8] = E2[1];
+        log_data->vals[9] = E3[0];
+        log_data->vals[10] = E4[0];
+        log_data->vals[11] = E4[1];
+        log_data->vals[12] = E5[0];
+        log_data->vals[13] = E6[0];
+	iter++;
+	dump_log_data(f, log_data);
+	}
+	timer++;
 #endif
         pthread_mutex_unlock(&net_data_mutex);
     }
+#ifdef VERBOSE 
+   fclose(f);
+#endif
     return 0;
 }

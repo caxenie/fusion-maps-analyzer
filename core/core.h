@@ -23,9 +23,9 @@
 
 #define MAP_SIZE 	   	     1
 #define MAPS_NUMBER 		     6
-//#define VERBOSE 		     1
-#define SAMPLE_POINT                10//53562
-#define ETA                         0.0002
+#define VERBOSE 		     1 
+#define SAMPLE_TIME		     100
+#define ETA                          0.02
 #define ETA12                        ETA//0.0002956f
 #define ETA21                        ETA// 0.0002106f
 #define ETA234                       ETA//0.0002884f
@@ -115,7 +115,7 @@ double compute_dt(struct timeval *difference,
              struct timeval *start_time
             );
 /* dumps the memory saved log file to the disk */
-int dump_log_file(char *fname, struct log* buffer, int buffer_size);
+int dump_log_data(FILE *fname, struct log* buffer);
 
 
 
