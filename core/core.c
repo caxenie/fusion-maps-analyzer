@@ -99,27 +99,41 @@ restart_network()
     siglongjmp(jmpbuf, 2);
 }
 
+/* dumps the memory saved log file to the disk */
+int
+dump_log_data(FILE *f, struct log* buffer)
+{
+          for(int j=0;j<14;j++){
+              fprintf(f, "%lf ", buffer->vals[j]);
+            }
+          fprintf(f, "%d\n", buffer->iter);
+  return 0;
+}
+
+
 /* stops the network by exiting the main loop */
 void 
 stop_network()
 {
-	fprintf(stderr, "\nCORE: NETWORK IS STOPPED - CONTEXT IS DUMPED\n");
-	for(int i=0;i<MAP_SIZE;i++){
-		for(int j=0;j<MAP_SIZE;j++){
-			fprintf
-			(stderr, "CORE: network state: M1: %f | M2 %f | M3 %f | M4 %f | M5 %f | M6 %f\n",
-					 M1.data.cells[i][j].val[0],
-					 M2.data.cells[i][j].val[0],
-					 M3.data.cells[i][j].val[0],
-					 M4.data.cells[i][j].val[0],
-					 M5.data.cells[i][j].val[0],
-					 M6.data.cells[i][j].val[0]);	
-		}
-	}
-	fprintf
-	(stderr, "CORE: Errors: E1 = %lf | E2 = %lf - E2 = %lf | E3 = %lf | E4 = %lf - E4 = %lf | E5 = %lf | E6 = %lf \n",
-     E1[0], E2[0], E2[1], E3[0], E4[0], E4[1], E5[0],
-     E6[0]);
-	exit(0);
+    //if(dump_log_file("fusion-analyzer-data.log", log_data, iter)==0){
+        fprintf(stderr, "\nCORE: NETWORK IS STOPPED - CONTEXT IS DUMPED\n");
+        for(int i=0;i<MAP_SIZE;i++){
+            for(int j=0;j<MAP_SIZE;j++){
+                fprintf
+                        (stderr, "CORE: network state: M1: %f | M2 %f | M3 %f | M4 %f | M5 %f | M6 %f\n",
+                         M1.data.cells[i][j].val[0],
+                         M2.data.cells[i][j].val[0],
+                         M3.data.cells[i][j].val[0],
+                         M4.data.cells[i][j].val[0],
+                         M5.data.cells[i][j].val[0],
+                         M6.data.cells[i][j].val[0]);
+            }
+        }
+        fprintf
+                (stderr, "CORE: Errors: E1 = %lf | E2 = %lf - E2 = %lf | E3 = %lf | E4 = %lf - E4 = %lf | E5 = %lf | E6 = %lf \n",
+                 E1[0], E2[0], E2[1], E3[0], E4[0], E4[1], E5[0],
+                 E6[0]);
+    //}
+    exit(0);
 }
 
