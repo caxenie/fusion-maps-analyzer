@@ -24,7 +24,7 @@
 #define MAP_SIZE 	   	     1
 #define MAPS_NUMBER 		     6
 #define VERBOSE 		     1 
-#define SAMPLE_TIME		     100
+#define SAMPLE_TIME		     100000
 #define ETA                          0.02
 #define ETA12                        ETA//0.0002956f
 #define ETA21                        ETA// 0.0002106f

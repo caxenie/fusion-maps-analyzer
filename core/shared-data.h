@@ -1,7 +1,6 @@
-#include <core.h>
-#include <data-engine.h>
+#include "core.h"
+#include "data-engine.h"
 
-/* mutex to access the network data safely when requested by analyzer */
 extern pthread_mutex_t net_data_mutex;
 
 /* globals */
